@@ -1,0 +1,1627 @@
+#
+# SurvivalBoom Network 2023
+# Головний конфігураційний файл SurvivalBoom Discord Service.
+#
+
+#
+# УВАГА! SurvivalBoom Discord Service НЕ НАПИСАНИЙ ДЛЯ ВИКОРИСТАННЯ НА РІЗНИХ СЕРВЕРАХ ОДНОЧАСНО!!!
+# ВИ НЕ МОЖЕТЕ ВИКОРИСТОВУВАТИ БОТА НА ДЕКІЛЬКОХ ДИСКОРД СЕРВЕРАХ!
+#
+
+# Налаштування головного дискорд бота.
+main-discord-bot-settings:
+
+  token: "" # Токен головного дискорд бота.
+
+  # Налаштування дій при помилках дискорд бота.
+  errors:
+
+    # Відправлення повідомлень із помилками у спеціальний канал.
+    send-to-debug-channel:
+
+      enabled: true # Увімкнено?
+
+      errors-channel-id: 1066158783614693406 # ID каналу куди будуть відправлятись помилки.
+
+    # Відправляти помилку бота користувачу.
+    # Якщо увімкнено, коли буде виникати помилка користувач побачить назву помилки, наприклад якщо виниклне помилка "list out of range",
+    # користувачу буде надіслано повідомлення "Упсь! Виникла помилка: list out of range."
+    # Якщо вимкнено, коли буде виникати помилка користувачу буде надіслано повідомлення "Упсь! Виникла невідома помилка!" без тексту помилки.
+    send-error-details-to-user: true
+
+    # Відправляти traceback помилки у консоль?
+    # Якщо значенння true, у консоль SurvivalBoom Discord Service буде відправлено traceback критичних внутрішних помилок бота.
+    send-error-traceback-to-console: true
+
+    # Embed повідомлення які помилок.
+    # Не змінюйте назви embed повідомлень, інакше можете отримати дофігіще помилок.
+    embeds:
+
+      # Embed повідомлення яке буде відправлятись користувачу у відповідь якщо при виконанні його запиту виникла помилка.
+      # (Конкретно це embed повідомлення буде використовуватись при значенні "send-error-details-to-user" = true)
+      # Плейсхолдери: {ERROR} -> помилка.
+      ERROR-TO-USER-WITH-DETAILS:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":radioactive: Упсь! При обробці вашого запиту виникла помилка! \n:t_rex: Схоже що динозаврик щось недописав.... \n:bell: Допоможіть SurvivalBoom стати кращим повідомивши у <#1077243862667509790> про цю помилку."
+        color: 0xff0000
+        fields:
+
+          - title: "Помилка:"
+            value: "`{{ERROR}}`"
+
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      # Embed повідомлення яке буде відправлятись користувачу у відповідь якщо при виконанні його запиту виникла помилка.
+      # (Конкретно це embed повідомлення буде використовуватись при значенні "send-error-details-to-user" = false)
+      ERROR-TO-USER-NO-DETAILS:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":radioactive: Упсь! При обробці вашого запиту виникла невідома помилка! \n:t_rex: Схоже що динозаврик щось недописав.... \n:bell: Допоможіть SurvivalBoom стати кращим повідомивши у <#1077243862667509790> про цю помилку."
+        color: 0xff0000
+
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      # Embed повідомлення яке буде відправлятись у спеціальний канал при будь-якій помилці у SurvivalBoom Discord Service.
+      # Плейсхолдери: {ERROR} -> помилка, {MODULE} -> назва модулю, {PLACE} -> у якому конкретному місці сталася помилка.
+      ERROR-TO-DEBUG-CHANNEL:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":radioactive: Виникла помилка у **SurvivalBoom Discord Service**. \n:file_folder: Модуль: `{{MODULE}}`. \n:beginner: Де саме: `{{PLACE}}`."
+        color: 0xff0000
+        fields:
+
+          - title: "Помилка:"
+            value: "`{{ERROR}}`"
+
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+  # SurvivalBoom Discord Service потребує бази даних для роботи. У базі даних буде зберігатись уся інформація про користувачів і подібного...
+  # Тут ви можете налаштувати базу даних.
+  discord-service-database:
+
+    database-host: "" # Посилання на базу даних.
+
+    # Дані для підключення до бази даних.
+    login-credentials:
+
+      database-name: "" # Назва бази даних.
+      username: "" # Користувач бази даних.
+      password: "" # Пароль від користувача.
+
+    # Назви таблиць у базі даних.
+    table-settings:
+
+      table-prefix: "sbds__" # Префікс який буде додаватись до назви таблиці.
+
+      userdata-table-name: "userdata" # Назва таблиці із даними користувачів.
+
+  # Налаштування логування.
+  logging:
+
+    # Увімкнути збереження усіх логів SurvivalBoomDiscordService у файл?
+    enable-logs-saving: true
+
+    # Час через який старі лог файли будуть видалені. Число вказується у днях.
+    delete-saved-logs-after: 3
+
+# Конфігурація модулів дискорд бота.
+modules:
+
+  # Налаштування музичного модуля.
+  # Ну по назві думаю зрозуміло що робить цей модуль.
+  music-module:
+
+    # Налаштування сервісів які буде підтримувати SurvivalBoomMusic.
+    youtube-support-enabled: true # Увімкнена підтримка youtube? Якщо ні, користувач не зможе програвати youtube та шукати пісні за ключовими словами.
+
+    # Підтримка прямих посилань на файл. Це дуже зручна функція для програвання просто файлів, радіо, та багато чого іншого.
+    # Але є нюанс. Щоб програти музику з прямого посилання на файл, бот підправляє HTTP запит на це посилання, щоб отримати аудіо файл.
+    # Зловмисники можуть написати свій власний вебсервер (наприклад на python) і коли бот здійснить HTTP запит, зловмисники зможуть подивитись
+    # з якої ip адреси було здійснено запит. Тим самим вони можуть дізнатись IP адресу машини на якій працює бот.
+    direct-media-support-enabled: true
+
+    # Для того щоб музика працювала стабільно, SurvivalBoomMusic використовує LavaLink медіа сервер.
+    # https://github.com/lavalink-devs/Lavalink
+    # Впишіть нижче дані від вашого lavalink сервера.
+    lavalink:
+      host: "" # IP адреса сервера.
+      port: 25524 # Порт сервера.
+      password: "" # Пароль до медіа сервера.
+
+    # Налаштування підтримки Spotify.
+    # Увага! Бот не грає музику зі Spotify напряму! Бот шукає музику на youtube по назві й автору Spotify Треку.
+    # Для підтримки Spotify, підтримка YouTube повинна бути увімкнена.
+    spotify:
+
+      enabled: false # Увімкнено?
+
+      # Токени для використовування API Spotify. Зареєструйтесь на сайті Spotify.
+      spotify-api-client-id: "" # id клієнту Spotify API.
+      spotify-api-client-secret: "" # Секретний токен Spotify API.
+
+    # Чорний список каналів у яких музичний бот не буде працювати.
+    channels-black-list:
+      - 1060186127371341824
+      - 1013029769857744966
+      - 983849250767134780
+
+    # Чорний список назв, посилань піснь.
+    # Працює так: Користувач вписує у полі data команди /play посилання або пошуковий запит (нема різниці), якщо текст у data містить
+    # щось із цього списку, користувачу буде виведена помилка.
+    music-name-black-list:
+      - "крінж"
+
+    # Список ID ролей які будуть обходити чорний список пісень.
+    music-name-black-list-bypass-roles:
+      - 988782658337259562
+
+
+    # Список музикальних ботів.
+    # SurvivalBoom Discord Service підтримує технологію декільких музикальних ботів.
+    # Це означає що буде використовуватись декілька музичних ботів на вашому дискорд сервері. Але ви повинні спочатку їх додати на ваш сервер.
+    # Працює це так: Користувач виконує команду /play, головний бот починає шукати вільного музичного бота і підключає його до голосового каналу користувача.
+    # Ви можете вказати скільки завгодно музичних ботів, і всі вони будуть паралельно працювати.
+    music-bots:
+      - name: SurvivalBoomMusic1 # Назва музичного бота.
+        token: "" # Токен цього музичного бота.
+      - name: SurvivalBoomMusic2
+        token: ""
+      - name: SurvivalBoomMusic3
+        token: ""
+
+    # Налаштування команд музичного модуля.
+    commands:
+
+      # Команда музичного бану. Ця команда дозволяє заблокувати користувача у музичному боті. Заблокований користувач не зможе використовувати музичного бота.
+      ban-command:
+
+        enabled: true # Чи увімкнена команда? Якщо ні, команда не буде працювати (логічно, так?)
+
+        block-self-use: true # Заборонити користувачам використовувати цю команду на самому собі.
+
+        block-stuff-use: true # Заборонити блокувати користувачів які мають доступ до цієї команди.
+
+        # Список ролей який дозволено використовувати цю команду.
+        # Тут потрібно вказувати ID ролей на вашому дискорд сервері.
+        allowed-roles:
+          - 988782658337259562
+          - 1105854085103624242
+          - 996031331563753574
+
+      # Команда блокування музичного бота.
+      # Ця команда забороняє використовувати поточного музичного бота усім, крім тих хто має доступ до команди блокування бота
+      lock-command:
+
+        enabled: true # Увімкнено?
+
+        # ID ролей які зможуть використовувати цю команду і використовувати бота під час блокування.
+        allowed-roles:
+          - 988782658337259562
+
+      # Команда увімкнення 24/7 режиму. Цей режим не дозволяє музичному боту покинути голосовий канал якщо у ньому нікого немає.
+      24_7-mode-command:
+
+        enabled: true
+
+        allowed-roles:
+          - 988782658337259562
+
+    # Embed повідомлення музичного модуля. Ви можете їх змінити якщо вам не подобається дизайн, але не змінюйте назву інакше станете ще одною жертвою помилок SurvivalBoom Discord Service.
+    embeds:
+
+      LOADING:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: "<a:loading:1086970461549756536> Обробка вашої команди, зачекайте..."
+        color: 0xfbff00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      NO-PERMISSION:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: ":no_entry_sign: Упсь! Схоже що у вас немає доступу до цієї команди!"
+        color: 0xff0000
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      COMMAND-DISABLED:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: ":no_entry_sign: Ця команда вимкнена адміністратором."
+        color: 0xff0000
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      BLOCKED-CHANNEL:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: ":no_entry_sign: Музичний бот заблокований у каналі {{CHANNEL}}."
+        color: 0xff0000
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      NOT-VALID-URL:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: "<:9752barrierblockmc:1013463226752696392> Ви вказали невірне посилання! \n \n :hamsa: SurvivalBoomMusic підтримує: **Spotify**, **YouTube**, **Прямі посилання на медіа**."
+        color: 0xff0000
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      BLACK-LISTED-WORDS-FOUND:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: "<:9752barrierblockmc:1013463226752696392> Ця пісня була заблокована адміністратором. \n \n :middle_finger: Може перестанеш вмикати крінж?"
+        color: 0xff0000
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      USER-NOT-IN-VOICE-CHANNEL:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: "<:9752barrierblockmc:1013463226752696392> Ви не знаходитесь у голосовому каналі."
+        color: 0xff0000
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      NO-BOT-IN-USER-VOICE:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: "<:9752barrierblockmc:1013463226752696392> У вашому голосовому каналі немає музичного бота."
+        color: 0xff0000
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      FREE-BOT-NOT-FOUND:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: ":no_mobile_phones: Вільного музичного бота не знайдено! \n:t_rex: Спробуйте ще раз трішки пізніше..."
+        color: 0xff7300
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+
+      BOT-LOCKED:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: ":closed_lock_with_key: Бот {{BOT}} **заблокований**. \n \n :hand_with_index_finger_and_thumb_crossed: Ним може керувати тільки адміністрація."
+        color: 0xff7300
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      BOT-LOCK-ENABLE:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: ":lock: Музичного бота {{BOT}} **заблоковано!** \n \n :paperclip: Тепер тільки адміністрація може ним керувати."
+        color: 0xdbeb34
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      BOT-LOCK-DISABLE:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: ":unlock: Музичного бота {{BOT}} **розблоковано!**"
+        color: 0xdbeb34
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      BOT-24_7-MODE-TOGGLE:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: ":postal_horn: Режим 24/7 бота {{BOT}} **{{STATE}}**."
+        color: 0xdbeb34
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+
+      NO-RESULT-FOUND:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: "<:google_dinosaur:1077358570091319337> Результатів за запитом `{{QUERY}}` не знайдено!"
+        color: 0xff0000
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      LOADING-STREAM-URL:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: ":arrows_clockwise: Завантажуємо медіа файл у бота..."
+        color: 0xfcba03
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      ADDED-TO-PLAYLIST:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: "<:blurple_verified:1024732810667364414> Пісню додано у чергу! \n \n:ticket: Назва: `{{NAME}}` \n \n:clock4: Тривалість: `{{DURATION}}` \n \n:robot: Бот: {{BOT}}"
+        color: 0x09ff00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      BOT-CONNECTED:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: "<:blurple_verified:1024732810667364414> Підключено {{BOT}} до {{CHANNEL}} \n \n:ticket: Зараз грає: `{{NAME}}` \n \n:clock4: Тривалість: `{{DURATION}}`"
+        color: 0x09ff00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      SONG-SKIPPED:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: "<:blurple_verified:1024732810667364414> Пропущено `{{SKIPPED_SONG_NAME}}`. \n \n:ticket: Зараз грає: `{{PLAYING_SONG_NAME}}` \n \n:clock4: Тривалість: `{{PLAYING_SONG_DURATION}}` \n \n:robot: Бот: {{BOT}}"
+        color: 0x09ff00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      CANNOT-SKIP-LOOP-MODE:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: ":postal_horn: Неможливо пропустити пісню у режимі повторення одного треку."
+        color: 0xff0000
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      SONG-BACKKED:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: "<:blurple_verified:1024732810667364414> Увімкнено минулу пісню. \n \n:ticket: Зараз грає: `{{NAME}}` \n \n:clock4: Тривалість: `{{DURATION}}` \n \n:robot: Бот: {{BOT}}"
+        color: 0x09ff00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      BOT-STOPPED:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: "<:blurple_verified:1024732810667364414> Стоп! Музичного бота {{BOT}} зупинено!"
+        color: 0x1eff00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      LOOP-DISABLED:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: ":arrows_counterclockwise: Режим {{BOT}} повторення **вимкнено**."
+        color: 0x0099ff
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      LOOP-SET:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: ":arrows_counterclockwise: Режим повторення {{BOT}} змінено на: **{{MODE}}**."
+        color: 0x0099ff
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      USER-MUSIC-BANNED:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: ":plunger: Користувач {{USER}} заблокований у музичному боті. \n \n:baby: Тепер цей користувач не зможе ним користуватись."
+        color: 0x0099ff
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      USER-MUSIC-UNBANNED:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: ":plunger: Користувач {{USER}} розблокований у музичному боті. \n \n:toilet: Тепер цей користувач зможе ним користуватись."
+        color: 0x0099ff
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      YOU-MUSIC-BANNED:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: ":smiling_imp: Ви заблоковані у музичному боті! \n \n <:troll:1077552713367302185> Ну ти і лох... Сдайся у жертву динозаврику."
+        color: 0x0099ff
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      CANNOT-USE-SELF:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: "<:9752barrierblockmc:1013463226752696392> Ви не можете використати цю команду на собі."
+        color: 0xff0000
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      CANNOT-USE-BOT:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: "<:9752barrierblockmc:1013463226752696392> Ви не можете використати цю команду на боті."
+        color: 0xff0000
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      CANNOT-BLOCK-STUFF:
+        title: ":musical_note: SurvivalBoomMusic :musical_note:"
+        description: "<:9752barrierblockmc:1013463226752696392> Ви не можете використати цю команду на іншому модераторі."
+        color: 0xff0000
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+  # Налаштування модуля статусу SurvivalBoomNetwork.
+  # Модуль який перевіряє статус вказаних сервісів і виводить у спеціальний канал повідомлення зі статусом сервісів.
+  network-status-module:
+
+    status-channel-id: 1087370237629976687 # ID каналу куди буде відправлятись статус систем.
+
+    message-update-interval: 10 # Час (у секундах) між оновленнями повідомлення зі статусом систем. Має бути не меньше 10-ти секунд.
+
+    status-update-interval: 15 # Час (у секундах) між оновленнями статусів систем. Має бути не меньше 10-ти секунд.
+
+    # Системи які буде моніторити дискорд бот.
+    services:
+
+      - name: Java_proxy # Назва сервісу. Назва довільна, але пишіть так щоб вам було зручно використовувати цю назву у плейсхолдерах нижче.
+        type: JAVA_SERVER # Тип системи. Може бути JAVA_SERVER -> java сервер майнкрафт; BEDROCK_SERVER -> bedrock майнкрафт сервер.
+        host: "mc.survivalboom.net" # ip майнкрафт серверу.
+
+      - name: Auth
+        type: JAVA_SERVER
+        host: "162.55.83.203:25502"
+
+      - name: Lobby
+        type: JAVA_SERVER
+        host: "162.55.83.203:25503"
+
+      - name: Survival
+        type: JAVA_SERVER
+        host: "162.55.83.203:25504"
+
+      - name: OneBlock
+        type: JAVA_SERVER
+        host: "162.55.83.203:25506"
+
+      - name: Anarchy
+        type: JAVA_SERVER
+        host: "162.55.83.203:25505"
+
+      - name: BedWars
+        type: JAVA_SERVER
+        host: "162.55.83.203:25507"
+
+      - name: Tnt_Run
+        type: JAVA_SERVER
+        host: "162.55.83.203:25508"
+
+      - name: EventServer
+        type: JAVA_SERVER
+        host: "162.55.83.203:25510"
+
+      - name: BuilderServer
+        type: JAVA_SERVER
+        host: "162.55.83.203:25512"
+
+      - name: Bedrock_proxy
+        type: BEDROCK_SERVER
+        host: "pe.survivalboom.net:25523"
+
+      - name: DonateService
+        type: SERVICE # SERVICE -> якийсь інший сервіс (Щоб бот зрозумів що сервіс онлайн, боту повинна надійти відповідь {"status": "OK"} при HTTP запиті на посилання вказане у полі host)
+        host: "http://162.55.83.203:25513/status" # URL сервіса. Рекомендуємо зробити сторінку за адресою "https://вашдомен.ua/status", і щоб вона відповідала JSON текстом {"status": "OK"}
+
+    # Embed повідомлення які буде надсилати бот.
+    embeds:
+
+      # Повідомлення при завантаженні даних статусу. Не змінюйте, інакше бот вас з'їсть.
+      LOADING:
+        title: ":satellite: SurvivalBoomStatus :satellite:"
+        description: "<a:loading:1086970461549756536> Отримаємо дані про статус SurvivalBoom, зачекайте..."
+        color: 0xfbff00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      # Головне embed повідомлення. Назву не змінюйте, інакше бот відправить вас далеко і надовго.
+      MAIN:
+        title: ":satellite: SurvivalBoomStatus :satellite:"
+        description: ":bulb: Статус систем **SurvivalBoom Network**. \n :warning: Якщо щось не працює, динозаврик все зламав. \n \n:dvd: Останнє оновлення: {{LAST_UPDATE}} \n :bar_chart: **Загальний онлайн:** `{{GLOBAL$ONLINE}}`"
+        thumbnail_url: "https://cdn.discordapp.com/attachments/983845556902322187/1078416436046860358/sb1lld_2.png"
+        color: 41983
+        fields:
+
+          - title: "Java"
+            value: "Статус: `{{Java_proxy$STATUS}}`\nОнлайн: `{{Java_proxy$ONLINE}}`"
+            inline: true
+
+          - title: "Bedrock"
+            value: "Статус: `{{Bedrock_proxy$STATUS}}`\nОнлайн: `{{Bedrock_proxy$ONLINE}}`"
+            inline: true
+
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+        buttons: # Кнопки які є на цьому embed'y.
+
+          - name: "SurvivalBoomStatus_All" # Назва кнопки. (Унікальний ID кнопки, який буде використовуватись у коді бота)
+            emoji: "📖" # Емодзі кнопки.
+            text: "Детальний статус усіх систем SurvivalBoom" # Текст який буде на кнопці.
+            style: SECONDARY # Стиль вигляду кнопки.
+            row: 1 # Рядок на якому буде кнопка. Повинно бути не більше 5-и.
+            send-embed: 'all_services' # Embed повідомлення яке буде відправлено користувачу який натиснув кнопку.
+
+          - name: "SurvivalBoomStatus_Services"
+            emoji: "📑"
+            text: "Статус технічних систем SurvivalBoom"
+            style: SECONDARY
+            row: 1
+            send-embed: 'services_status' # Embed повідомлення яке буде відправлено користувачу який натиснув кнопку.
+
+      all_services:
+        title: ":satellite: SurvivalBoomStatus :satellite:"
+        description: ":bulb: Статус майнкрафт серверів та інших важливих сервісів.\n:warning: Якщо щось не працює, значить динозаврик знову щось зламав."
+        thumbnail_url: "https://cdn.discordapp.com/attachments/983845556902322187/1078416436046860358/sb1lld_2.png"
+        color: 41983
+        fields:
+
+          - title: ":satellite_orbital: Проксі-сервер :satellite_orbital:"
+            value: "> Проксі-сервер майнкрафт серверу SurvivalBoom\n> **Статус:** `{{Java_proxy$STATUS}}`\n> **Онлайн:** `{{Java_proxy$ONLINE}}`"
+
+          - title: ":airplane_small: Bedrock Проксі :airplane_small:"
+            value: "> Bedrock Проксі-сервер майнкрафт серверу SurvivalBoom\n> **Статус:** `{{Bedrock_proxy$STATUS}}`\n> **Онлайн:** `{{Bedrock_proxy$ONLINE}}`"
+
+          - title: ":lock: Сервер Авторизації :lock:"
+            value: "> Майнкрафт сервер авторизації SurvivalBoom\n> **Статус:** `{{Auth$STATUS}}`\n> **Онлайн:** `{{Auth$ONLINE}}`"
+
+          - title: ":hourglass: Майнкрафт Лоббі :hourglass:"
+            value: "> Лоббі майнкрафт серверу SurvivalBoom\n> **Статус:** `{{Lobby$STATUS}}`\n> **Онлайн:** `{{Lobby$ONLINE}}`"
+
+          - title: ":pick: Виживання :pick:"
+            value: "> Режим Виживання на майнкрафт сервері SurvivalBoom\n> **Статус:** `{{Survival$STATUS}}`\n> **Онлайн:** `{{Survival$ONLINE}}`"
+
+          - title: ":island: OneBlock :island:"
+            value: "> Режим OneBlock на майнкрафт сервері SurvivalBoom\n> **Статус:** `{{OneBlock$STATUS}}`\n> **Онлайн:** `{{OneBlock$ONLINE}}`"
+
+          - title: ":bed: BedWars :bed:"
+            value: "> Режим BedWars на майнкрафт сервері SurvivalBoom\n> **Статус:** `{{BedWars$STATUS}}`\n> **Онлайн:** `{{BedWars$ONLINE}}`"
+
+          - title: ":money_with_wings: DonateService :money_with_wings:"
+            value: "> Сервіс автодонату SurvivalBoom\n> **Статус:** `{{DonateService$STATUS}}`\n\n:scissors: **Загальний онлайн на сервері: `{{GLOBAL$ONLINE}}`**"
+
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      services_status:
+        title: ":satellite:  SurvivalBoomStatus :satellite:"
+        description: ":radioactive: Статус технічних сервісів SurvivalBoomNetwork"
+        thumbnail_url: "https://cdn.discordapp.com/attachments/983845556902322187/1078416436046860358/sb1lld_2.png"
+        color: 41983
+        fields:
+
+          - title: "Discord Service"
+            value: "Статус: `Працює`"
+            inline: true
+
+          - title: "Donate Service"
+            value: "Статус: `{{DonateService$STATUS}}`"
+            inline: true
+
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+    # Налаштування плейсхолдерів.
+    placeholders-settings:
+
+      # Налаштування тексту який буде видавати плейсхолдер {{СЕРВІС$STATUS}}
+      status-placeholder-result:
+        online: "Працює" # Якщо сервіс працює.
+        offline: "Не Працює" # Якщо сервіс не працює.
+        no-players: "Немає" # Заміна числа онлайну якщо сервіс не працює.
+
+      # Список серверів онлайн яких буде сплюсовуватись і виводитись у плейсхолдері "{{GLOBAL$ONLINE}}"
+      how-to-count-global-online:
+        - Bedrock_proxy
+        - Java_proxy
+
+  # Налаштування модуля приватних голосовоих каналів.
+  # Створює приватні голосові канали для кожного користувача.
+  private-voices-module:
+
+    create-voice-channel-id: 1013029769857744966 # ID каналу при заході у який учасником буде створено його особистий голосовий канал.
+
+    backup-voice-channel-id: 984012535122505758 # ID каналу у який будуть переміщені користувачі якщо вони були кікнуті із приватного каналу.
+
+    use-backup-channel: true # Використовувати бекап канал? Які ні, користувачі будуть відключені, а не перекинуті у бекап канал.
+
+    auto-whitelist: true # Автоматично додавати під'єднаних учасників каналу у вайтліст коли натиснуто кнопку "заблокувати канал".
+
+    # Список ID ролей які будуть вважатись "модераторами". Тобто користувача із цими ролями зможуть змінювати голосовий канал навіть якщо вони не є власником.
+    # Також "модератори" зможуть заходити у закриті приватні канали, і навіть бачити приховані приватні канали.
+    bypass-roles-ids:
+      - 988782658337259562
+      - 1105854085103624242
+      - 996031331563753574
+
+    # Налаштування вигляду панелі керування голосовим каналом.
+    control-panel-settings:
+
+      dropdowns:
+
+        placeholders:
+          edit-channel-dropdown: "Налаштування каналу"
+          users-dropdown: "Користувачі і приватність"
+
+        lock-channel:
+          title: "Заблокувати канал"
+          description: "Закрити канал для інших користувачів."
+
+        unlock-channel:
+          title: "Розблокувати канал"
+          description: "Відкрити канал для інших користувачів."
+
+        show-channel:
+          title: "Показати канал"
+          description: "Показати канал для інших користувачів."
+
+        hide-channel:
+          title: "Приховати канал"
+          description: "Приховати канал для інших користувачів."
+
+        block-control:
+          title: "Блоування користувачів"
+          description: "Керування блоуваннями користувачів у каналі."
+
+        whitelist-control:
+          title: "Дозволення користувачів"
+          description: "Керування дозволеними користувачами у каналі."
+
+        mute-control:
+          title: "Керування мутами"
+          description: "Замутити/Розмутити користувача у каналі."
+
+        give-ownership:
+          title: "Передати канал"
+          description: "Передати права на канал."
+
+        take-ownership:
+          title: "Забрати канал"
+          description: "Забрати права на канал."
+
+        set-name:
+          title: "Назва каналу"
+          description: "Змінити назву каналу."
+
+        set-limit:
+          title: "Ліміт користувачів"
+          description: "Змінити назву каналу."
+
+        set-bitrate:
+          title: "Бітрейт"
+          description: "Змінити бітрейт каналу."
+
+        delete-channel:
+          title: "Видалити"
+          description: "Переміщає усіх учасників і видаляє канал."
+
+    # Embed повідомлення модуля.
+    embeds:
+
+      CONTROL-PANEL:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":level_slider: Панель керування голосовим каналом. \n :loud_sound: Голосовий канал: {{CHANNEL}} \n :crown: Власник: {{OWNER}} \n\n:lock: Заблоковано: `{{LOCKED}}` \n:eyeglasses: Приховано: `{{HIDDEN}}` \n\n:white_check_mark: Дозволені користувачі: `{{ALLOWED_USERS}}` \n:beginner: Заблоковані користувачі: `{{BLOCKED_USERS}}` \n:microphone2: Замучені користувачі: `{{MUTED_USERS}}` \n\n:eight_spoked_asterisk: Загубили панель? Напишіть `+` щоб відправити панель знову."
+        color: 0x41983
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      TIMED-OUT:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":skull: Таймаут! Ви занадто довго уводили дані. Спробуйте ще раз!"
+        color: 0xffbb00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      NOT-IN-PRIVATE-VOICE-CHANNEL:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: "<:9752barrierblockmc:1013463226752696392> Ви не знаходитесь у приватному голосовому каналі."
+        color: 0xffbb00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      NO-PERMISSION:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: "<:9752barrierblockmc:1013463226752696392> Ви не є власником цього приватного каналу."
+        color: 0xffbb00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      NOT-INT:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: "<:9752barrierblockmc:1013463226752696392> Текст `{{TEXT}}` не є числом."
+        color: 0xf2ff00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      WRONG-BITRATE:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: "<:9752barrierblockmc:1013463226752696392> Бітрейт повинен бути від **8** до **256**."
+        color: 0xf2ff00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      CHANNEL-RENAMED:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":pencil2: Назву каналу {{CHANNEL}} змінено на `{{NAME}}`."
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      WAIT-BEFORE-RENAME:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":clock1030: Не так швидко сер! Зачекайте `{{TIME}}` перед тим як перейменувати канал ще раз! \n :mouse_trap: Ви ж не хочете зламати **SurvivalBoomDiscordService**?"
+        color: 0xf2ff00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      CHANNEL-SET-BITRATE:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":pencil2: Бітрейт канала {{CHANNEL}} змінено на `{{BITRATE}}`."
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      CHANNEL-SET-LIMIT:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":pencil2: Ліміт користувачів у каналі {{CHANNEL}} змінено на `{{LIMIT}}`."
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      CHANNEL-LOCKED:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":lock: Канал {{CHANNEL}} **заблоковано**. \n :bookmark_tabs: Тепер ніхто не зможе зайти у цей канал."
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      CHANNEL-UNLOCKED:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":unlock: Канал {{CHANNEL}} **розблоковано**."
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      CHANNEL-HIDDEN:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":dark_sunglasses: Канал {{CHANNEL}} **сховано**. \n :bookmark_tabs: Тепер цей канал ніхто не бачить."
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      CHANNEL-SHOWN:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":eyeglasses: Канал {{CHANNEL}} **показано**."
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      CHANNEL-DELETING:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":boom: Видаляємо канал {{CHANNEL}}..."
+        color: 0xf2ff00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      OWNERSHIP-TAKEN:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: "<a:Evolving_badge_Nitro_a_scaling:1081978177825546251> Вітаємо! Ви стали власником {{CHANNEL}}!"
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      YOU-ARE-AN-OWNER:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: "<a:Evolving_badge_Nitro_a_scaling:1081978177825546251> Ви вже є власником {{CHANNEL}}!"
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      OWNER-STILL-IN-VOICE:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":pig: Власник каналу {{CHANNEL}} все ще знаходиться у каналі!"
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      NO-USERS-IN-CHANNEL:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":pig: У каналі {{CHANNEL}} немає нікого окрім вас!"
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      GIVEN-OWNERSHIP:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":credit_card: Ви передали канал {{CHANNEL}} користувачу {{NEW_OWNER}}."
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      USER-BLOCKED:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":pushpin: Ви **заблокували** користувача {{USER}} у каналі {{CHANNEL}}."
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      USER-UNBLOCKED:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":pushpin: Ви **розблокували** користувача {{USER}} у каналі {{CHANNEL}}."
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      MUST-BE-NOT-BOT:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":electric_plug: Цю дію неможливо виконати на боті. На що ти сподівався?."
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      CANNOT-DO-THIS-MODERATOR:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":electric_plug: Ви не можете зробити це із модератором!. На що ти сподівався?."
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      SELF-USE:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":electric_plug: Ви не можете виконати цю дію на самому собі. На що ти сподівався?."
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      USER-MUTED:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":microphone2: Ви **замутили** користувача {{USER}} у каналі {{CHANNEL}}."
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      USER-UNMUTED:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":microphone2: Ви **розмутили** користувача {{USER}} у каналі {{CHANNEL}}."
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      USER-ALLOWED:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":microphone2: Ви **дозволили** користувача {{USER}} у каналі {{CHANNEL}}."
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      USER-UNALLOWED:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":microphone2: Ви **unдозволили** користувача {{USER}} у каналі {{CHANNEL}}."
+        color: 0x00ff9d
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+  # Налаштування модуля прив'язки акаунтів майнкрафт серверу до дискорд серверу.
+  # Цей модуль відповідає за видачу ролей на дискорд сервері та видачу привілегії бустер на майнкрафт сервері.
+  linking-module:
+
+    # Порт на якому буде працювати вебсервер модуля.
+    # Linking module приймає http запити на генерацію коду, отримання інформації про користувача та інших дій.
+    linking-web-server-port: 25746
+
+    # Discord Service підключається до бази даних LuckPerms, щоб отримати інформацію про привілегії гравця.
+    # Тут ви повинні вказати дані від бази даних LuckPerms.
+    luckperms-database:
+
+      host: "" # Посилання на базу даних.
+      port: 3306 # Порт на якій працює база даних.
+      database: "" # Назва бази даних LuckPerms
+      user: "" # Користувач бази даних.
+      password: "" # Пароль від користувача.
+
+      lp-users-table-name: "luckperms_players" # Назва таблиці із зареєстрованими гравцями LuckPerms.
+      lp-permissions-table-name: "luckperms_user_permissions" # Назва таблиці із пермішонами гравців LuckPerms.
+
+    # Функція видачі (і забирання) ролей донатерів.
+    sync-groups-to-roles:
+
+      enabled: true # Увімкнено?
+
+      sync-task-interval: 10 # Інтервал спрацювання події перевірки й видачі донатерських ролей.
+
+      # Список із групами (привілегіями) на майнкрафт сервері та ID відповідних ним ролей.
+      groups-list:
+
+        - group-name: iron
+          role-id: 1072468735996203108
+
+        - group-name: gold
+          role-id: 1072467986536988713
+
+        - group-name: platinum
+          role-id: 1072466910702206976
+
+        - group-name: raptor
+          role-id: 1072465984297910344
+
+    # Функція видачі привілегії бустер на майнкрафт сервері.
+    sync-booster:
+
+      enabled: true # Увімкнено?
+
+      sync-task-interval: 10 # Інтервал спрацювання події перевірки й видачі групи бустера (У секундах).
+
+      # RCON підключення це таке підключення до вашого майнкрафт серверу яке дозволяє виконувати команди на сервері віддалено.
+      # Щоб Discord Service міг видати гравцю привілігію або забрати, Discord Service виконує команду на сервері за допомогою RCON.
+      # Увімкніть RCON у налаштуваннях сервера й впишіть дані нижче ввід RCON вашого сервера.
+      rcon-connection:
+        host: "" # IP або домен вашого сервера.
+        port: 25588 # Порт вашого сервера який приймає RCON.
+        password: "" # Пароль від вашого RCON підключення.
+
+      # Список команд які будуть виконані через RCON на майнкрафт сервері для видачі групи (привілегії) "бустер"
+      # Плейсхолдери: {PLAYER} - нік гравця.
+      give-booster-group-command:
+       - "lp user {PLAYER} parent addtemp booster 1w"
+
+      # Список команд які будуть виконані через RCON на майнкрафт сервері, щоб забрати групу (привілегію) "бустер".
+      # Плейсхолдери: {PLAYER} - нік гравця.
+      revoke-booster-group-command:
+       - "lp user {PLAYER} parent removetemp booster"
+       - "lp user {PLAYER} parent remove booster"
+
+      booster-group-name: booster # Назва групи (привілегії) бустера на майнкрафт серверу.
+
+    # Функція видачі (і забирання) ролі прив'язаного учасника. Роль буде видаватись користувачам які прив'язали свій акаунт.
+    sync-linked-role:
+
+      enabled: true # Увімкнено?
+
+      sync-task-interval: 10 # Інтервал спрацювання події перевірки й видачі ролі.
+
+      linked-role-id: 1102544868246573097 # ID ролі прив'язаного учасника.
+
+    # Функція зміни нікнейма учасника на майнкрафт нікнейм.
+    sync-nickname:
+
+      enabled: true
+
+      sync-task-interval: 10
+
+      nickname-format: "{{DISCORD_NICKNAME}} ({{MINECRAFT_NICKNAME}})"
+
+    # Embed повідомлення модуля.
+    embeds:
+
+      LOADING:
+        title: ":satellite: SurvivalBoomStatus :satellite:"
+        description: "<a:loading:1086970461549756536> Обробка вашої команди, зачекайте..."
+        color: 0xfbff00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      SEARCHING-IN-DATABASE:
+        title: ":satellite_orbital: SurvivalBoomLinking :satellite_orbital:"
+        description: ":mag_right: Шукаємо `{{CODE}}` у базі даних..."
+        color: 0xffbb00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      CODE-NOT-FOUND:
+        title: ":satellite_orbital: SurvivalBoomLinking :satellite_orbital:"
+        description: ":parrot: Код `{{CODE}}` не знайдено у базі даних. \n \n :bookmark_tabs: Перевірте правильніть коду або спробуйте згенерувати новий код."
+        color: 0xff2f00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      INVALID-CODE:
+        title: ":satellite_orbital: SurvivalBoomLinking :satellite_orbital:"
+        description: ":pig: Ви вказали безглузду хуйню замість коду."
+        color: 0xff2f00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      TIMED-OUT:
+        title: ":satellite_orbital: SurvivalBoomLinking :satellite_orbital:"
+        description: ":skull: Таймаут! Ви занадто довго уводили дані. Спробуйте ще раз!"
+        color: 0xffbb00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      DISCORD-ALREADY-LINKED:
+        title: ":satellite_orbital: SurvivalBoomLinking :satellite_orbital:"
+        description: ":lock_with_ink_pen: Ваш дискорд акаунт вже прив'язано до `{{MINECRAFT_USERNAME}}`. \n \n :bookmark_tabs: Напишіть `/unlink` щоб відв'язати свій акаунт."
+        color: 0xffbb00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      MINECRAFT-ALREADY-LINKED:
+        title: ":satellite_orbital: SurvivalBoomLinking :satellite_orbital:"
+        description: ":lock_with_ink_pen: Акаунт `{{MINECRAFT_USERNAME}}` вже прив'язано до {{DISCORD_USERNAME}}. \n \n :bookmark_tabs: Якщо ви думаєте що це помилка, зверніться до адміністрації."
+        color: 0xffbb00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      NOT-LINKED:
+        title: ":satellite_orbital: SurvivalBoomLinking :satellite_orbital:"
+        description: ":headstone: Ваш дискорд акаунт не прив'язано до майнкрафт акаунта. \n \n :bookmark_tabs: Напишіть `/link` щоб прив'язати свій акаунт."
+        color: 0xffbb00
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      SUCCESSFULY-LINKED:
+        title: ":satellite_orbital: SurvivalBoomLinking :satellite_orbital:"
+        description: ":white_check_mark: Вітаємо! Ваш дискорд акаунт прив'язано до майнкрафт акаунту! \n :incoming_envelope: У ваші особисті повідомлення було надіслано деяку інформацію..."
+        color: 0x00ffaa
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+        fields:
+
+          - title: "Майнкрафт акаунт:"
+            value: "`{{MINECRAFT_USERNAME}}`"
+            inline: true
+
+          - title: "Дискорд акаунт:"
+            value: "{{DISCORD_USERNAME}}"
+            inline: true
+
+      SUCCESSFULY-LINKED-DM:
+        title: ":satellite_orbital: SurvivalBoomLinking :satellite_orbital:"
+        description: "<a:Evolving_badge_Nitro_a_scaling:1081978177825546251> Вітаємо! Ваш дискорд акаунт прив'язано до майнкрафт акаунту! \n :cyclone: Привілегії й інші нагороди за прив'язку будуть видані вам впродовж **10 хвилин**. \n\n :mouse_trap: У майбутньому, за допомогою прив'язки акаунта можна буде взаємодіяти із сервером.  \n :thumbsup: Тож скажіть дякую динозаврику, і слідкуйте за новинами!"
+        color: 0x00ffaa
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      SUCCESSFULY-UNLINKED:
+        title: ":satellite_orbital: SurvivalBoomLinking :satellite_orbital:"
+        description: ":boom: Ваш дискорд акаунт відв'язано від майнкрафт акаунту! \n :bee: Усі переваги які були надані вам за прив'язку були зняті."
+        color: 0x00ffaa
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+        fields:
+
+          - title: "Майнкрафт акаунт:"
+            value: "`{{MINECRAFT_USERNAME}}`"
+            inline: true
+
+          - title: "Дискорд акаунт:"
+            value: "{{DISCORD_USERNAME}}"
+            inline: true
+
+      NICKNAME-CHANGED:
+        title: ":satellite_orbital: SurvivalBoom :satellite_orbital:"
+        description: ":minidisc: Ваш нікнейм було змінено! \n :notepad_spiral: Це було зроблено щоб адміністрації було зручніше розуміти хто ви. \n :identification_card: Ваш нікнейм повинен містити ваш нікнейм на майнкрафт сервері."
+        color: 0x00ffaa
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+        fields:
+
+          - title: "Старий нікнейм:"
+            value: "`{{OLD_NICKNAME}}`"
+            inline: true
+
+          - title: "Новий нікнейм:"
+            value: "`{{NICKNAME}}`"
+            inline: true
+
+  # Налаштування модуля статуса головнога бота.
+  # Модуль який змінює статус головного бота на один з випадкових вказаних тут із заданим інтервалом.
+  change-status-module:
+
+    # Налаштування статусу головного дискорд бота.
+    # Назви активностей: PLAYING -> грає у; WATCHING -> дивиться; STREAMING -> Стрімить; LISTENING -> слухає;
+    # Назва статусів: INVISIBLE -> невидимий; IDLE -> неактивний; DND -> (Do Not Distirb) не турбувати; STREAMING -> стрімить
+    # Ви можете вказати декілька статусів, тоді буде вибиратись один випадковий статус.
+    bot-statuses:
+
+      - text: "Jurassic World VR"
+        type: PLAYING
+        status: IDLE
+
+      - text: "Парк Юрського Періоду"
+        type: WATCHING
+        status: IDLE
+
+      - text: "за сервером"
+        type: WATCHING
+        status: IDLE
+
+      - text: "ваньку-Встаньку"
+        type: STREAMING
+        status: IDLE
+
+      - text: "за москалями"
+        type: WATCHING
+        status: IDLE
+
+      - text: "ричання динозаврика"
+        type: LISTENING
+        status: IDLE
+
+      - text: "пиздить москаля"
+        type: PLAYING
+        status: IDLE
+
+      - text: "mc.SurvivalBoom.net"
+        type: PLAYING
+        status: IDLE
+
+      - text: "базу даних"
+        type: LISTENING
+        status: IDLE
+
+      - text: "OneBlock"
+        type: PLAYING
+        status: IDLE
+
+    # Час зміни статусу головного бота.
+    bot-status-changing-interval: 21600 # Час вказується у секундах.
+
+  # Налаштування модуля заміни tiktok посилань на файл відео.
+  # Цей модуль прослуховує повідомлення учасників у вказаних каналах і якщо знаходить посилання на тікток відео, видаляє це повідомлення і замінює його саме файлом із цим відео.
+  tiktok-replace-module:
+
+    # Канали у яких буде працювати модуль.
+    allowed-channels-ids:
+      - 989102301828493362
+      - 983845556902322187
+
+    # Назва папки у файлах бота з відео які завантажив модуль. (Файли одразу видаляються після відправлення)
+    tiktok-cache-folder-name: "tiktok-cache"
+
+    max-links-to-process: 1
+
+    webhook-name: "SB-DS-TIKTOK-REPLACE"
+
+  # Налаштування модуля інформації.
+  # Цей модуль створює повідомлення в інформаційному каналі із кнопочками (які ви можете налаштувати).
+  # При натисканні на кнопку буде відправлятись embed повідомлення яке ви вкажете.
+  information-module:
+
+    main-embed-name: main # Назва головного embed повідомлення яке буде відправлятись при виконанні команди.
+
+    delete-ephemeral-after: 300 # Час у секундах видалення повідомлення з інформацією (відповіді на кнопочки).
+
+    # Список ID ролей які можуть виконати цю команду.
+    allowed-roles-ids:
+      - 988782658337259562
+
+    # Embed повідомлення.
+    embeds:
+
+      # Головне Embed повідомлення
+      main:
+        title: ":wave: Вітаємо вас на SurvivalBoom!" # Заголовок повідомлення
+        # Текст embed повідомлення.
+        description: "**SurvivalBoom** це один з найкращих українських майкрафт серверів. 
+        \nНаша мета стати тим самим замінником, а можливо і конкурентом, рашиських недо-серверів. 
+        \n Граючи в нас, ти підтримуєш українські сервери, і допомагаєш нам бути конкурентами руснявих серверів.
+        \n\n Тож чого ти чекаєш?! \nЗаходь ***вже зараз*** і насолодись якістю режимів на **SurvivalBoom**! "
+        color: 41983 # Колір Embed повідомлення.
+
+        # Футер повідомлення.
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+        buttons: # Кнопки які є на цьому embed'y.
+
+          - name: "SurvivalBoomInformation_Start"
+            emoji: "🎮"
+            text: "Почати грати"
+            style: SUCCESS
+            row: 1
+            send-embed: 'start'
+
+          - name: "SurvivalBoomInformation_Rules" # Назва кнопки. (Унікальний ID кнопки, який буде використовуватись у коді бота)
+            emoji: "🔖" # Емодзі кнопки.
+            text: "Правила" # Текст який буде на кнопці.
+            style: RED # Стиль вигляду кнопки.
+            row: 1 # Рядок на якому буде кнопка. Повинно бути не більше 5-и.
+            send-embed: 'rules' # Embed повідомлення яке буде відправлено користувачу який натиснув кнопку.
+
+          - name: "SurvivalBoomInformation_Navigtor"
+            emoji: "🧭"
+            text: "Навігатор (описи каналів)"
+            style: BLURPLE
+            row: 1
+            send-embed: 'navigator'
+
+          - name: "SurvivalBoomInformation_Donate"
+            emoji: "💶"
+            text: "Привілегії"
+            style: LINK
+            url: "https://survivalboom.net"
+            row: 1
+            send-embed: 'donate'
+
+          - name: "SurvivalBoomInformation_Site"
+            emoji: "📰"
+            text: "Наш сайт"
+            style: LINK
+            url: "https://survivalboom.net"
+            row: 1
+            send-embed: 'site'
+
+      start:
+        title: ":video_game: Почати грати!"
+        description: ":bookmark_tabs: SurvivalBoom працює на **Bedrock** і **Java** версіях майнкрафту. \n\n :computer: **Java:** комп'ютерная версія майнкрафт. \n Можна зайти з **1.16.5** по **1.20.1**. \n Рекомендуємо завжди грати з останніх версій. \n\n :mobile_phone: **Bedrock:** будь-яка інша платформа. \n Можна зайти тільки з останньої версії Minecraft Bedrock."
+        color: 0x41983
+        fields:
+
+          - title: "Адреса Java версії"
+            value: "`mc.survivalboom.net`"
+            inline: true
+
+          - title: "Адреса Bedrock версії"
+            value: "`pe.survivalboom.net` \n Порт: `25523`"
+            inline: true
+
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      rules:
+        title: ":scroll: Правила"
+        description: ":t_rex: Дотримуйся правил, інакше станеш ще одною жертвою динозаврика \n\n**Загальні правила**
+          \n1.1 Будьте адекватними людьми (або динозаврами) з якими приємно спілкуватись. А саме: 
+          \n- Не розводьте будь-які срачі 
+          \n- Не ображайте інших учасників.
+          \n- Поводьте себе нормально у голосових каналах. Налаштуйте правильно свій мікрофон, приготуйтесь до спілкування. Не видавайте неприємних звуків, сопіння, ригання, і подібне.
+          \n1.2 Не поширюйте будь-який російський контент/меми/ютуберів/відомих особистостей.
+          \n1.3 Не відправляйте крінж, шкідливі посилання на віруси/скрімери/фішинги й інше сміття інтернету у чат.
+          \n1.4 Не встановлюйте нікнейми із матами, нецензурщиною, який неможливо/соромно читати, та будь чим що порушує інші правила.
+          \n1.5 Не спамте. Спам не допоможе вам звернути увагу адміністрації, навіть навпаки.
+          \n1.6 Не видавайте себе за адміністрацію. Це стосується також змінення аватарки/банеру/нікнейму на схожий до адміністрції.
+          \n1.7 Не обходьте будь-які покарання, бо адміністрація може розізлитись і заблокувати вас назавжди. (Або вас згризе тиранозавр)
+          \n
+          \n**Правила майнкрафт серверу**
+          \n2.1 Не створюйте лаги та просадки TPS серверу.
+          \n2.2 Не використовуйте будь-які баги у свою користь. Краще, сповістіть адміністрацію та отримайте нагороду!
+          \n2.3 Не використовуйте будь-які чіти та моди які можна назвати чітами.
+          \n2.5 Ви маєте право на реєстрування і використання 3-ох акаунтів.
+          \n
+          \n**Правила режиму виживання**
+          \n3.1 Не псуйте світ випадковими блоками/стовпами/ямами/дірками/недорубані дерева та іншим що порушує правила.
+          \n3.2 Не заважайте іншим гравцям грати. Приклад: Ходити біля гравця заважаючи йому щось робити.
+          \n3.3 Не гріферіть. До цього правила відноситься усе що зв'язано із крадіжкою русурсів, вбивством гравців, псування майна гравців.
+          \n
+          \n**Правила режиму OneBlock**
+          \n4.1 Не гріферіть. До цього правила відноситься усе що зв'язано із крадіжкою русерсів, вбивством гравців, псування майна гравців. 
+          
+          \n**Правила донатних послуг SurvivalBoom**
+          \n- Не використовуйте свої донатні можливості, щоб тролити/бісити/заважати іншим гравцям.
+          \n- Навіть не намагайтесь обійти систему та отримати донатну послугу за допомогою багу.
+          \n- Ми не повертаємо гроші за будь-які послуги (донат) якщо куплена вами послуга не сподобалась вам або адміністратор забокував вас за взловживання донатом.
+          \n- Донатні послуги це у першу чергу спосіб підтримати розвиток серверу, і спосіб не дати нашому серверу обінкротитись.
+          \n
+          \nПравила написані тільки для того щоб ви випадково не зловили бан. Ми можемо вас забанити просто так і назавжди якщо це буде потрібно.
+          \nSurvivalBoom є власністю адміністрації. Адміністрація серверу може робити щозавгодно на своєму сервері без дозволу гравців серверу.
+          \n
+          \n***Незнання правил не захищає вас від зубів тиранозавра!***
+          \n**Приємної гри на SurvivalBoom!**"
+        color: 0x41983
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      navigator:
+        title: ":compass: Навігатор по каналам дискорд серверу."
+        description: "## Важливе
+          \n <#983845556902322188> усі важливі новини SurvivalBoom Network.
+          \n <#1082641762885058620> тут ви можете проголосувати у різних голосуваннях які ми будемо проводити.
+          \n <#1039629227949047840> блог розробки SurvivalBoom. Тут ви можете побачити список усіх змін і оновлень.
+          \n <#1033692244944891955> контент по SurvivalBoom від нас і наших контент мейкерів.
+          \n <#1087370237629976687> моніторинг усіх систем SurvivalBoom Network. Якщо ви не можете зайти, перевірте статус систем SurvivalBoom.
+          \n <#1154287424772509696> плани майбутніх оновлень SurvivalBoom.
+          \n## Зв'язок з адміністрацією
+          \n <#1077260676768206888> скарги на гравців. Тут ви можете подати скаргу на гравця за порушення правил.
+          \n <#1077243862667509790> канал із багами і проблемами нашого серверу. Тут ви можете повідомити нас про баг або проблему на майнкарфт сервері або у іншому місці.
+          \n <#1076925156175400980> канал із пропозиціями. Тут ви можете запропонувати нам свою ідею для майбутніх оновлень SurvivalBoom або запропонувати щось змінити.
+          \n <#1077244219271421972> відповіді на ваші запитання. Тут ви можете задати питання по нашому серверу щоб адміністрація відповіла вам на ваше питання.
+          \n <#1082022609052508291> набір на різні посади. Ви можете подати заявку на різні посади на нашому сервері. Модератори, контент мейкери і т.п.
+          \n <#1077347433002049596> список із покараннями які отримали гравці за порушення правил.
+          \n## Спілкування
+          \n <#983845556902322187> глобальний чат SurvivalBoom. Спілкуйтесь з іншими гравцями і не порушуйте правила!
+          \n <#989102301828493362> усілякий крінж який не модерується. Якщо у вас срачка, можете відправити сюди свій крінж. Усі правила окрім правила про крінж все ще діють у цьому каналі.
+          \n <#989118577573511180> спам-канал де можна відправляти команди для ботів.
+          \n## Голосові канали
+          \n <#1021498333950398585> трибуна у якій гравці SurvivalBoom збираються під час подій.
+          \n <#984012535122505758> Публічний голосовий канал №1
+          \n <#1110978692043251792> Публічний голосовий канал №2
+          \n <#1007372049024569375> Публічний голосовий канал №3
+          \n <#989820172602843156> Публічний канал для прослуховування музики. У цьому каналі не можна говорити.
+          \n <#1060186127371341824> Канал де 24 на 7 грають різні українські радіостанції.
+          \n <#983849250767134780> AFK канал.
+          \n <#1013029769857744966> створити свій приватний голосовий канал."
+        color: 0x41983
+
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+  # Налаштування модуля повідомлень користувачам про приєднання нового учасника, вихід учасника, буст сервера учасником.
+  # Цей модуль буде відправляти повідомлення при заході/виході/бусті сервера учасником у спеціальні канали та в особисті повідомлення учасника.
+  user-alerts-module:
+
+    # Плейсхолдери:   (працюють у всіх повідомленнях)
+    # - {{USERNAME}} - ім'я користувача (globalname, наприклад timurishche).
+    # - {{DISPLAYNAME}} - відображуваний нік користувача (displayname, наприклад TIMURishche).
+    # - {{USER-MENTION}} - згадування користувача (mention, наприклад <@572505632024952834>).
+    # - {{GUILDNAME}} - назва дискорд сервера (наприклад SurvivalBoom).
+    # - {{BOOST-LEVEL}} - рівень бустів дискорд сервера.
+    # - {{BOOST-COUNT}} - кількість бустів дискорд сервера.
+
+    # Дії при приєднанні учасника.
+    member-join:
+
+      # Повідомлення яке буде відправлене учаснику в особисті повідомлення.
+      dm-message:
+        title: ":wave: Вітаємо на SurvivalBoom!" # Заголовок повідомлення
+        # Текст embed повідомлення.
+        description: "Привіт {{USER-MENTION}}! Ми дуже раді що ти приєднався до нашого проекту!"
+        color: 41983 # Колір Embed повідомлення.
+        # Поля embed повідомлення.
+        fields:
+
+          - title: "Тож... Хто ми такі?"
+            value: "**SurvivalBoom** це один з найкращих українських майкрафт серверів. \nНаша мета стати тим самим замінником, а можливо і конкурентом, рашиських недо-серверів. \nГраючи в нас, ти підтримуєш українські сервери, і допомагаєш нам бути конкурентами руснявих серверів."
+            inline: false
+
+          - title: "Додаткова інформація"
+            value: "Інструкція як почати грати, правила проекту та інша корисна інформація знаходяться у каналі <#983846821275271248>"
+            inline: false
+
+          - title: "Приємної вам гри!"
+            value: "Інструкція як почати грати, правила проекту та інша корисна інформація знаходяться у каналі <#983846821275271248>"
+            inline: false
+
+        # Футер повідомлення.
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      # Канали й повідомлення які будуть відправлені у них при приєднанні учасника.
+      guild-messages:
+        - channel-id: 989111157656797214
+          message: "Користувач {{USER-MENTION}} приєднався до {{GUILDNAME}}."
+
+    # Дії при виході учасника.
+    member-leave:
+
+      # Повідомлення яке буде відправлене учаснику в особисті повідомлення.
+      # Скоріш за все бот не зможе відправити повідомлення, тому що у користувача не буде спільних серверів із ботом. Але... Може й спрацює.
+      dm-message:
+
+      # Канали й повідомлення які будуть відправлені у них при виході учасника.
+      guild-messages:
+        - channel-id: 989111157656797214
+          message: "Користувач {{USER-MENTION}} покинув {{GUILDNAME}}."
+
+        - channel-id: 983845556902322187
+          message: "Користувач {{USER-MENTION}} покинув нас..."
+
+    # Дії при бусті дискорд сервера учасником.
+    member-boost:
+
+      # Повідомлення яке буде відправлене учаснику в особисті повідомлення.
+      # Щоб не було спаму, особисте повідомлення про буст сервера буде відправлене учаснику тільки якщо він не має ролі бустера.
+      dm-message:
+        title: "Дякуємо за буст!" # Заголовок повідомлення
+        # Текст embed повідомлення.
+        description: ":heartbeat: Дякуємо вам, {{USER-MENTION}} за буст нашого серверу! 
+          \n<a:Evolving_badge_Nitro_a_scaling:1081978177825546251> Ми дуже вдячні вам, а тому ви можете **прив'язати свій акаунт** щоб отримати привілегію **бустер** на нашому сервері! 
+          \n
+          \n:track_next: Напишіть команду `/link` на **дискорд** сервері щоб прив'язати акаунт.
+          \n:arrows_counterclockwise: Привілегія буде автоматично видана впродовж 5-10хв після прив'язки.
+          
+          \n\nЯкщо ви з якоїсь причини перестанете нас бустити, вас чекає наступне:
+            \n - Автоматичне зняття привілегії **бустер** і вимкнення усіх її можливостей.\n- **Злий** і **голодний** динозаврик, жертвою якого ви скоріш за все станете."
+        color: 0xff00fb # Колір Embed повідомлення.
+
+        # Футер повідомлення.
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      # Канали й повідомлення які будуть відправлені у них при бусті сервера учасником.
+      guild-messages:
+        - channel-id: 989111157656797214
+          message: "Користувач {{USER-MENTION}} забустив {{GUILDNAME}}! Тепер SurvivalBoom має **{{BOOST-LEVEL}}** рівень і **{{BOOST-COUNT}}** бустів!"
+
+        - channel-id: 983845556902322187
+          message: "Користувач {{USER-MENTION}} забустив {{GUILDNAME}}! Тепер SurvivalBoom має **{{BOOST-LEVEL}}** рівень і **{{BOOST-COUNT}}** бустів!"
+
+    # Дії коли учасник перестає бустити сервер.
+    member-unboost:
+
+      # Повідомлення яке буде відправлене учаснику в особисті повідомлення.
+      # Щоб не було спаму, особисте повідомлення про буст сервера буде відправлене учаснику тільки якщо він не має ролі бустера.
+      dm-message:
+        title: "Чому ви перестали нас бустити :(" # Заголовок повідомлення
+        # Текст embed повідомлення.
+        description: ":broken_heart: Як ви могли, {{USER-MENTION}} перестати бустити наш сервер... 
+          \n:skull: Ну що ж... Динозаврик прийде до вас вночі, і... 
+          \n
+          \n:boom: Усі ваші можливості від привілегії бустера було **вимкнено**.
+          \n
+          \n:pensive: Нам дуже шкода що ви перестали нас бустити.
+          \n:information_source: Якщо це пов'язано із тим що вам не подобається наш проект, обов'язково розкажіть нам про це!"
+        color: 0xff0000 # Колір Embed повідомлення.
+
+        # Футер повідомлення.
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      # Канали й повідомлення які будуть відправлені у них при бусті сервера учасником.
+      guild-messages:
+        - channel-id: 989111157656797214
+          message: "Користувач {{USER-MENTION}} перестав бустити {{GUILDNAME}}... Тепер SurvivalBoom має **{{BOOST-LEVEL}}** рівень і **{{BOOST-COUNT}}** бустів."
+
+        - channel-id: 983845556902322187
+          message: "Користувач {{USER-MENTION}} перестав бустити {{GUILDNAME}}... Тепер SurvivalBoom має **{{BOOST-LEVEL}}** рівень і **{{BOOST-COUNT}}** бустів."
+
+    # Повідомлення які будуть надсилатись користувачу якщо він натиснув на кнопки на повідомленні від цього модуля.
+    # Ви можете зробити embed повідомленя із кнопками й налаштувати тут повідомлення яке отримає користувач при натисканні кнопки.
+    buttons-responses: {}
+
+  # Модуль генерації й переадресації посилання на дискорд сервер бота.
+  # Генерує дискорд посилання у відповідь на всі HTTP запити.
+  generate-discord-link-module:
+
+    # Порт вебсервера модуля.
+    web-server-port: 25586
+
+
+  # Модуль сповіщень про DDoS атаки на ваш OVH сервер.
+  # Підключається до API ovh і сповіщає вас якщо вказані сервери ддосять.
+  ovh-ddos-alerts-module:
+
+    # Налаштування даних для ovh api.
+    ovh-api-credentials:
+      endpoint: "ovh-ca"
+      application-key: ""
+      application-secret: ""
+      consumer-key: ""
+
+    # Інтервал з яким модуль буде перевіряти статус серверів. Вказується у секундах.
+    check-interval: 10
+
+    # ID ролей учасники яких отримають сповіщення про DDoS у особисті повідомлення.
+    ddos-alert-roles-ids:
+      - 988782658337259562
+
+    embeds:
+
+      DDOS_DETECTED:
+        title: ":shield: SurvivalBoomProtect :shield:"
+        description: ":bangbang: **Увага!** Виявлено DDoS атаку на сервер!"
+        color: 0xff00d9
+        fields:
+
+          - title: "Сервер"
+            value: "`{{SERVER}}`"
+            inline: true
+
+          - title: "IP"
+            value: "||{{ADDRESS}}||"
+            inline: true
+
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+      DDOS_END:
+        title: ":shield: SurvivalBoomProtect :shield:"
+        description: ":dragon_face: DDoS атаку на сервер припинено."
+        color: 0x00ffc3
+        fields:
+
+          - title: "Сервер"
+            value: "`{{SERVER}}`"
+            inline: true
+
+          - title: "IP"
+            value: "||{{ADDRESS}}||"
+            inline: true
+
+        footer:
+          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
+
+    # Сервера які буде перевіряти модуль.
+    servers:
+
+      - name: "Proxy" # Назва сервера. Буде відображатись в повідомленнях.
+        address: "127.0.0.1" # IP адреса сервера.
+
+      - name: "Backend"
+        address: "127.0.0.2"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,13 @@
+disnake
+mysql-connector-python
+PyYAML
+colorama
+requests
+validators
+spotipy
+aioconsole
+ovh
+aiohttp
+wavelink
+mcstatus
+asyncrcon
