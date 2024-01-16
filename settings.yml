@@ -30,7 +30,7 @@ main-discord-bot-settings:
     send-error-details-to-user: true
 
     # Відправляти traceback помилки у консоль?
-    # Якщо значенння true, у консоль SurvivalBoom Discord Service буде відправлено traceback критичних внутрішних помилок бота.
+    # Якщо значення true, у консоль SurvivalBoom Discord Service буде відправлено traceback критичних внутрішних помилок бота.
     send-error-traceback-to-console: true
 
     # Embed повідомлення які помилок.
