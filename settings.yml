@@ -50,7 +50,7 @@ main-discord-bot-settings:
             value: "`{{ERROR}}`"
 
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       # Embed повідомлення яке буде відправлятись користувачу у відповідь якщо при виконанні його запиту виникла помилка.
@@ -61,7 +61,7 @@ main-discord-bot-settings:
         color: 0xff0000
 
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       # Embed повідомлення яке буде відправлятись у спеціальний канал при будь-якій помилці у SurvivalBoom Discord Service.
@@ -76,7 +76,7 @@ main-discord-bot-settings:
             value: "`{{ERROR}}`"
 
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
   # SurvivalBoom Discord Service потребує бази даних для роботи. У базі даних буде зберігатись уся інформація про користувачів і подібного...
@@ -218,7 +218,7 @@ modules:
         description: "<a:loading:1086970461549756536> Обробка вашої команди, зачекайте..."
         color: 0xfbff00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       NO-PERMISSION:
@@ -226,7 +226,7 @@ modules:
         description: ":no_entry_sign: Упсь! Схоже що у вас немає доступу до цієї команди!"
         color: 0xff0000
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       COMMAND-DISABLED:
@@ -234,7 +234,7 @@ modules:
         description: ":no_entry_sign: Ця команда вимкнена адміністратором."
         color: 0xff0000
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       BLOCKED-CHANNEL:
@@ -242,7 +242,7 @@ modules:
         description: ":no_entry_sign: Музичний бот заблокований у каналі {{CHANNEL}}."
         color: 0xff0000
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       NOT-VALID-URL:
@@ -250,7 +250,7 @@ modules:
         description: "<:9752barrierblockmc:1013463226752696392> Ви вказали невірне посилання! \n \n :hamsa: SurvivalBoomMusic підтримує: **Spotify**, **YouTube**, **Прямі посилання на медіа**."
         color: 0xff0000
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       BLACK-LISTED-WORDS-FOUND:
@@ -258,7 +258,7 @@ modules:
         description: "<:9752barrierblockmc:1013463226752696392> Ця пісня була заблокована адміністратором. \n \n :middle_finger: Може перестанеш вмикати крінж?"
         color: 0xff0000
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       USER-NOT-IN-VOICE-CHANNEL:
@@ -266,7 +266,7 @@ modules:
         description: "<:9752barrierblockmc:1013463226752696392> Ви не знаходитесь у голосовому каналі."
         color: 0xff0000
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       NO-BOT-IN-USER-VOICE:
@@ -274,7 +274,7 @@ modules:
         description: "<:9752barrierblockmc:1013463226752696392> У вашому голосовому каналі немає музичного бота."
         color: 0xff0000
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       FREE-BOT-NOT-FOUND:
@@ -282,7 +282,7 @@ modules:
         description: ":no_mobile_phones: Вільного музичного бота не знайдено! \n:t_rex: Спробуйте ще раз трішки пізніше..."
         color: 0xff7300
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
 
@@ -291,7 +291,7 @@ modules:
         description: ":closed_lock_with_key: Бот {{BOT}} **заблокований**. \n \n :hand_with_index_finger_and_thumb_crossed: Ним може керувати тільки адміністрація."
         color: 0xff7300
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       BOT-LOCK-ENABLE:
@@ -299,7 +299,7 @@ modules:
         description: ":lock: Музичного бота {{BOT}} **заблоковано!** \n \n :paperclip: Тепер тільки адміністрація може ним керувати."
         color: 0xdbeb34
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       BOT-LOCK-DISABLE:
@@ -307,7 +307,7 @@ modules:
         description: ":unlock: Музичного бота {{BOT}} **розблоковано!**"
         color: 0xdbeb34
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       BOT-24_7-MODE-TOGGLE:
@@ -315,7 +315,7 @@ modules:
         description: ":postal_horn: Режим 24/7 бота {{BOT}} **{{STATE}}**."
         color: 0xdbeb34
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
 
@@ -324,7 +324,7 @@ modules:
         description: "<:google_dinosaur:1077358570091319337> Результатів за запитом `{{QUERY}}` не знайдено!"
         color: 0xff0000
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       LOADING-STREAM-URL:
@@ -332,7 +332,7 @@ modules:
         description: ":arrows_clockwise: Завантажуємо медіа файл у бота..."
         color: 0xfcba03
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       ADDED-TO-PLAYLIST:
@@ -340,7 +340,7 @@ modules:
         description: "<:blurple_verified:1024732810667364414> Пісню додано у чергу! \n \n:ticket: Назва: `{{NAME}}` \n \n:clock4: Тривалість: `{{DURATION}}` \n \n:robot: Бот: {{BOT}}"
         color: 0x09ff00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       BOT-CONNECTED:
@@ -348,7 +348,7 @@ modules:
         description: "<:blurple_verified:1024732810667364414> Підключено {{BOT}} до {{CHANNEL}} \n \n:ticket: Зараз грає: `{{NAME}}` \n \n:clock4: Тривалість: `{{DURATION}}`"
         color: 0x09ff00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       SONG-SKIPPED:
@@ -356,7 +356,7 @@ modules:
         description: "<:blurple_verified:1024732810667364414> Пропущено `{{SKIPPED_SONG_NAME}}`. \n \n:ticket: Зараз грає: `{{PLAYING_SONG_NAME}}` \n \n:clock4: Тривалість: `{{PLAYING_SONG_DURATION}}` \n \n:robot: Бот: {{BOT}}"
         color: 0x09ff00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       CANNOT-SKIP-LOOP-MODE:
@@ -364,7 +364,7 @@ modules:
         description: ":postal_horn: Неможливо пропустити пісню у режимі повторення одного треку."
         color: 0xff0000
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       SONG-BACKKED:
@@ -372,7 +372,7 @@ modules:
         description: "<:blurple_verified:1024732810667364414> Увімкнено минулу пісню. \n \n:ticket: Зараз грає: `{{NAME}}` \n \n:clock4: Тривалість: `{{DURATION}}` \n \n:robot: Бот: {{BOT}}"
         color: 0x09ff00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       BOT-STOPPED:
@@ -380,7 +380,7 @@ modules:
         description: "<:blurple_verified:1024732810667364414> Стоп! Музичного бота {{BOT}} зупинено!"
         color: 0x1eff00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       LOOP-DISABLED:
@@ -388,7 +388,7 @@ modules:
         description: ":arrows_counterclockwise: Режим {{BOT}} повторення **вимкнено**."
         color: 0x0099ff
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       LOOP-SET:
@@ -396,7 +396,7 @@ modules:
         description: ":arrows_counterclockwise: Режим повторення {{BOT}} змінено на: **{{MODE}}**."
         color: 0x0099ff
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       USER-MUSIC-BANNED:
@@ -404,7 +404,7 @@ modules:
         description: ":plunger: Користувач {{USER}} заблокований у музичному боті. \n \n:baby: Тепер цей користувач не зможе ним користуватись."
         color: 0x0099ff
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       USER-MUSIC-UNBANNED:
@@ -412,7 +412,7 @@ modules:
         description: ":plunger: Користувач {{USER}} розблокований у музичному боті. \n \n:toilet: Тепер цей користувач зможе ним користуватись."
         color: 0x0099ff
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       YOU-MUSIC-BANNED:
@@ -420,7 +420,7 @@ modules:
         description: ":smiling_imp: Ви заблоковані у музичному боті! \n \n <:troll:1077552713367302185> Ну ти і лох... Сдайся у жертву динозаврику."
         color: 0x0099ff
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       CANNOT-USE-SELF:
@@ -428,7 +428,7 @@ modules:
         description: "<:9752barrierblockmc:1013463226752696392> Ви не можете використати цю команду на собі."
         color: 0xff0000
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       CANNOT-USE-BOT:
@@ -436,7 +436,7 @@ modules:
         description: "<:9752barrierblockmc:1013463226752696392> Ви не можете використати цю команду на боті."
         color: 0xff0000
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       CANNOT-BLOCK-STUFF:
@@ -444,7 +444,7 @@ modules:
         description: "<:9752barrierblockmc:1013463226752696392> Ви не можете використати цю команду на іншому модераторі."
         color: 0xff0000
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
   # Налаштування модуля статусу SurvivalBoomNetwork.
@@ -517,7 +517,7 @@ modules:
         description: "<a:loading:1086970461549756536> Отримаємо дані про статус SurvivalBoom, зачекайте..."
         color: 0xfbff00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       # Головне embed повідомлення. Назву не змінюйте, інакше бот відправить вас далеко і надовго.
@@ -537,7 +537,7 @@ modules:
             inline: true
 
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
         buttons: # Кнопки які є на цьому embed'y.
@@ -588,7 +588,7 @@ modules:
             value: "> Сервіс автодонату SurvivalBoom\n> **Статус:** `{{DonateService$STATUS}}`\n\n:scissors: **Загальний онлайн на сервері: `{{GLOBAL$ONLINE}}`**"
 
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       services_status:
@@ -607,7 +607,7 @@ modules:
             inline: true
 
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
     # Налаштування плейсхолдерів.
@@ -712,7 +712,7 @@ modules:
         description: ":level_slider: Панель керування голосовим каналом. \n :loud_sound: Голосовий канал: {{CHANNEL}} \n :crown: Власник: {{OWNER}} \n\n:lock: Заблоковано: `{{LOCKED}}` \n:eyeglasses: Приховано: `{{HIDDEN}}` \n\n:white_check_mark: Дозволені користувачі: `{{ALLOWED_USERS}}` \n:beginner: Заблоковані користувачі: `{{BLOCKED_USERS}}` \n:microphone2: Замучені користувачі: `{{MUTED_USERS}}` \n\n:eight_spoked_asterisk: Загубили панель? Напишіть `+` щоб відправити панель знову."
         color: 0x41983
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       TIMED-OUT:
@@ -720,7 +720,7 @@ modules:
         description: ":skull: Таймаут! Ви занадто довго уводили дані. Спробуйте ще раз!"
         color: 0xffbb00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       NOT-IN-PRIVATE-VOICE-CHANNEL:
@@ -728,7 +728,7 @@ modules:
         description: "<:9752barrierblockmc:1013463226752696392> Ви не знаходитесь у приватному голосовому каналі."
         color: 0xffbb00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       NO-PERMISSION:
@@ -736,7 +736,7 @@ modules:
         description: "<:9752barrierblockmc:1013463226752696392> Ви не є власником цього приватного каналу."
         color: 0xffbb00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       NOT-INT:
@@ -744,7 +744,7 @@ modules:
         description: "<:9752barrierblockmc:1013463226752696392> Текст `{{TEXT}}` не є числом."
         color: 0xf2ff00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       WRONG-BITRATE:
@@ -752,7 +752,7 @@ modules:
         description: "<:9752barrierblockmc:1013463226752696392> Бітрейт повинен бути від **8** до **256**."
         color: 0xf2ff00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       CHANNEL-RENAMED:
@@ -760,7 +760,7 @@ modules:
         description: ":pencil2: Назву каналу {{CHANNEL}} змінено на `{{NAME}}`."
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       WAIT-BEFORE-RENAME:
@@ -768,7 +768,7 @@ modules:
         description: ":clock1030: Не так швидко сер! Зачекайте `{{TIME}}` перед тим як перейменувати канал ще раз! \n :mouse_trap: Ви ж не хочете зламати **SurvivalBoomDiscordService**?"
         color: 0xf2ff00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       CHANNEL-SET-BITRATE:
@@ -776,7 +776,7 @@ modules:
         description: ":pencil2: Бітрейт канала {{CHANNEL}} змінено на `{{BITRATE}}`."
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       CHANNEL-SET-LIMIT:
@@ -784,7 +784,7 @@ modules:
         description: ":pencil2: Ліміт користувачів у каналі {{CHANNEL}} змінено на `{{LIMIT}}`."
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       CHANNEL-LOCKED:
@@ -792,7 +792,7 @@ modules:
         description: ":lock: Канал {{CHANNEL}} **заблоковано**. \n :bookmark_tabs: Тепер ніхто не зможе зайти у цей канал."
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       CHANNEL-UNLOCKED:
@@ -800,7 +800,7 @@ modules:
         description: ":unlock: Канал {{CHANNEL}} **розблоковано**."
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       CHANNEL-HIDDEN:
@@ -808,7 +808,7 @@ modules:
         description: ":dark_sunglasses: Канал {{CHANNEL}} **сховано**. \n :bookmark_tabs: Тепер цей канал ніхто не бачить."
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       CHANNEL-SHOWN:
@@ -816,7 +816,7 @@ modules:
         description: ":eyeglasses: Канал {{CHANNEL}} **показано**."
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       CHANNEL-DELETING:
@@ -824,7 +824,7 @@ modules:
         description: ":boom: Видаляємо канал {{CHANNEL}}..."
         color: 0xf2ff00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       OWNERSHIP-TAKEN:
@@ -832,7 +832,7 @@ modules:
         description: "<a:Evolving_badge_Nitro_a_scaling:1081978177825546251> Вітаємо! Ви стали власником {{CHANNEL}}!"
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       YOU-ARE-AN-OWNER:
@@ -840,7 +840,7 @@ modules:
         description: "<a:Evolving_badge_Nitro_a_scaling:1081978177825546251> Ви вже є власником {{CHANNEL}}!"
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       OWNER-STILL-IN-VOICE:
@@ -848,7 +848,7 @@ modules:
         description: ":pig: Власник каналу {{CHANNEL}} все ще знаходиться у каналі!"
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       NO-USERS-IN-CHANNEL:
@@ -856,7 +856,7 @@ modules:
         description: ":pig: У каналі {{CHANNEL}} немає нікого окрім вас!"
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       GIVEN-OWNERSHIP:
@@ -864,7 +864,7 @@ modules:
         description: ":credit_card: Ви передали канал {{CHANNEL}} користувачу {{NEW_OWNER}}."
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       USER-BLOCKED:
@@ -872,7 +872,7 @@ modules:
         description: ":pushpin: Ви **заблокували** користувача {{USER}} у каналі {{CHANNEL}}."
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       USER-UNBLOCKED:
@@ -880,7 +880,7 @@ modules:
         description: ":pushpin: Ви **розблокували** користувача {{USER}} у каналі {{CHANNEL}}."
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       MUST-BE-NOT-BOT:
@@ -888,7 +888,7 @@ modules:
         description: ":electric_plug: Цю дію неможливо виконати на боті. На що ти сподівався?."
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       CANNOT-DO-THIS-MODERATOR:
@@ -896,7 +896,7 @@ modules:
         description: ":electric_plug: Ви не можете зробити це із модератором!. На що ти сподівався?."
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       SELF-USE:
@@ -904,7 +904,7 @@ modules:
         description: ":electric_plug: Ви не можете виконати цю дію на самому собі. На що ти сподівався?."
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       USER-MUTED:
@@ -912,7 +912,7 @@ modules:
         description: ":microphone2: Ви **замутили** користувача {{USER}} у каналі {{CHANNEL}}."
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       USER-UNMUTED:
@@ -920,7 +920,7 @@ modules:
         description: ":microphone2: Ви **розмутили** користувача {{USER}} у каналі {{CHANNEL}}."
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       USER-ALLOWED:
@@ -928,7 +928,7 @@ modules:
         description: ":microphone2: Ви **дозволили** користувача {{USER}} у каналі {{CHANNEL}}."
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       USER-UNALLOWED:
@@ -936,7 +936,7 @@ modules:
         description: ":microphone2: Ви **unдозволили** користувача {{USER}} у каналі {{CHANNEL}}."
         color: 0x00ff9d
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
   # Налаштування модуля прив'язки акаунтів майнкрафт серверу до дискорд серверу.
@@ -1036,7 +1036,7 @@ modules:
         description: "<a:loading:1086970461549756536> Обробка вашої команди, зачекайте..."
         color: 0xfbff00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       SEARCHING-IN-DATABASE:
@@ -1044,7 +1044,7 @@ modules:
         description: ":mag_right: Шукаємо `{{CODE}}` у базі даних..."
         color: 0xffbb00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       CODE-NOT-FOUND:
@@ -1052,7 +1052,7 @@ modules:
         description: ":parrot: Код `{{CODE}}` не знайдено у базі даних. \n \n :bookmark_tabs: Перевірте правильніть коду або спробуйте згенерувати новий код."
         color: 0xff2f00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       INVALID-CODE:
@@ -1060,7 +1060,7 @@ modules:
         description: ":pig: Ви вказали безглузду хуйню замість коду."
         color: 0xff2f00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       TIMED-OUT:
@@ -1068,7 +1068,7 @@ modules:
         description: ":skull: Таймаут! Ви занадто довго уводили дані. Спробуйте ще раз!"
         color: 0xffbb00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       DISCORD-ALREADY-LINKED:
@@ -1076,7 +1076,7 @@ modules:
         description: ":lock_with_ink_pen: Ваш дискорд акаунт вже прив'язано до `{{MINECRAFT_USERNAME}}`. \n \n :bookmark_tabs: Напишіть `/unlink` щоб відв'язати свій акаунт."
         color: 0xffbb00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       MINECRAFT-ALREADY-LINKED:
@@ -1084,7 +1084,7 @@ modules:
         description: ":lock_with_ink_pen: Акаунт `{{MINECRAFT_USERNAME}}` вже прив'язано до {{DISCORD_USERNAME}}. \n \n :bookmark_tabs: Якщо ви думаєте що це помилка, зверніться до адміністрації."
         color: 0xffbb00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       NOT-LINKED:
@@ -1092,7 +1092,7 @@ modules:
         description: ":headstone: Ваш дискорд акаунт не прив'язано до майнкрафт акаунта. \n \n :bookmark_tabs: Напишіть `/link` щоб прив'язати свій акаунт."
         color: 0xffbb00
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       SUCCESSFULY-LINKED:
@@ -1100,7 +1100,7 @@ modules:
         description: ":white_check_mark: Вітаємо! Ваш дискорд акаунт прив'язано до майнкрафт акаунту! \n :incoming_envelope: У ваші особисті повідомлення було надіслано деяку інформацію..."
         color: 0x00ffaa
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
         fields:
@@ -1118,7 +1118,7 @@ modules:
         description: "<a:Evolving_badge_Nitro_a_scaling:1081978177825546251> Вітаємо! Ваш дискорд акаунт прив'язано до майнкрафт акаунту! \n :cyclone: Привілегії й інші нагороди за прив'язку будуть видані вам впродовж **10 хвилин**. \n\n :mouse_trap: У майбутньому, за допомогою прив'язки акаунта можна буде взаємодіяти із сервером.  \n :thumbsup: Тож скажіть дякую динозаврику, і слідкуйте за новинами!"
         color: 0x00ffaa
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       SUCCESSFULY-UNLINKED:
@@ -1126,7 +1126,7 @@ modules:
         description: ":boom: Ваш дискорд акаунт відв'язано від майнкрафт акаунту! \n :bee: Усі переваги які були надані вам за прив'язку були зняті."
         color: 0x00ffaa
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
         fields:
@@ -1144,7 +1144,7 @@ modules:
         description: ":minidisc: Ваш нікнейм було змінено! \n :notepad_spiral: Це було зроблено щоб адміністрації було зручніше розуміти хто ви. \n :identification_card: Ваш нікнейм повинен містити ваш нікнейм на майнкрафт сервері."
         color: 0x00ffaa
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
         fields:
@@ -1254,7 +1254,7 @@ modules:
 
         # Футер повідомлення.
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
         buttons: # Кнопки які є на цьому embed'y.
@@ -1311,7 +1311,7 @@ modules:
             inline: true
 
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       rules:
@@ -1355,7 +1355,7 @@ modules:
           \n**Приємної гри на SurvivalBoom!**"
         color: 0x41983
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       navigator:
@@ -1390,7 +1390,7 @@ modules:
         color: 0x41983
 
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
   # Налаштування модуля повідомлень користувачам про приєднання нового учасника, вихід учасника, буст сервера учасником.
@@ -1431,7 +1431,7 @@ modules:
 
         # Футер повідомлення.
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       # Канали й повідомлення які будуть відправлені у них при приєднанні учасника.
@@ -1474,7 +1474,7 @@ modules:
 
         # Футер повідомлення.
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       # Канали й повідомлення які будуть відправлені у них при бусті сервера учасником.
@@ -1504,7 +1504,7 @@ modules:
 
         # Футер повідомлення.
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       # Канали й повідомлення які будуть відправлені у них при бусті сервера учасником.
@@ -1562,7 +1562,7 @@ modules:
             inline: true
 
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
       DDOS_END:
@@ -1580,7 +1580,7 @@ modules:
             inline: true
 
         footer:
-          text: "SurvivalBoomNetwork 2023 | SurvivalBoom Discord Service"
+          text: "SurvivalBoomNetwork 2024 | SurvivalBoom Discord Service"
           icon_url: "https://cdn.discordapp.com/attachments/989118577573511180/1086802085594533928/5d20db24052f7bb86af58292c295710a.png"
 
     # Сервера які буде перевіряти модуль.
