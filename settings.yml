@@ -1592,6 +1592,191 @@ modules:
       - name: "Backend"
         address: "127.0.0.2"
 
+  ticket-module:
+
+    # id каналу куди буде надсилатись ембед з кнопкою для створенння тікетів.
+    ticket-channel-id: 1182197284721676359
+
+    # id категорії, в якій будуть створюватися тікети.
+    category-id: 1182197254627541053
+
+    # id каналу, де будуть логуватися дії пов'язані з тікетами
+    log-channel-id: 1195021958757232670
+
+    # Список ID ролей персоналу, які будуть мати доступ до тікетів.
+    roles-ticket-mod:
+      - 1156496541087961150
+
+    commands:
+
+      add:
+
+        enabled: true # Чи увімкнена команда? Якщо ні, команда не буде працювати
+
+        block-self-use: true # Заборонити користувачам використовувати цю команду на самому собі.
+
+        block-stuff-use: true # Заборонити використовувати команду на користувачах які мають доступ до цієї команди.
+
+    embeds:
+
+      TICKED-CREATED:
+        title: "🎫 PolitWayTickets Logs 🎟️"
+        description: "Користувач {{MEMBER_MENTION}}, створив тікет"
+        color: 0x2F3136
+        footer:
+          text: "PolitWay 2024 | PolitWay Discord"
+          icon_url: "https://cdn.discordapp.com/icons/1154513199807352932/3516d56a0fb1f3bc3694ea29ab731bc0.png?size=1024"
+        fields:
+
+          - title: "**Тип тікету:**"
+            value: "{{TYPE_TICKET}}"
+            inline: False
+
+          - title: "**Канал:**"
+            value: "{{CHANNEL_NAME}} ({{CHANNEL_MENTION}})"
+            inline: False
+
+      MAIN-EMBED:
+        title: "🎫 PolitWayTickets 🎟️"
+        description: "Оберіть тип тікета"
+        color: 0x2F3136
+        footer:
+          text: "PolitWay 2024 | PolitWay Discord"
+          icon_url: "https://cdn.discordapp.com/icons/1154513199807352932/3516d56a0fb1f3bc3694ea29ab731bc0.png?size=1024"
+
+      ERROR-OUTSIDE-THE-TICKET:
+        title: "Помилка"
+        description: "Ви не знаходитеся у каналі тікета"
+        color: 0xff0000
+        footer:
+          text: "PolitWay 2024 | PolitWay Discord"
+          icon_url: "https://cdn.discordapp.com/icons/1154513199807352932/3516d56a0fb1f3bc3694ea29ab731bc0.png?size=1024"
+
+      ERROR-CANNOT-REMOVE-ME-FROM-TICKET:
+        title: "Помилка"
+        description: "Ви не можете видалити себе з тікета"
+        color: 0xff0000
+        footer:
+          text: "PolitWay 2024 | PolitWay Discord"
+          icon_url: "https://cdn.discordapp.com/icons/1154513199807352932/3516d56a0fb1f3bc3694ea29ab731bc0.png?size=1024"
+
+      # Плейсхолдери:
+      # {{MEMBER_MENTION}} - Згадати доданого користувача
+      SUCCESSFULY-ADDED:
+        title: "Успіх!"
+        description: "Додано {{MEMBER_MENTION}} у **тікет**"
+        color: 0xff0000
+        footer:
+          text: "PolitWay 2024 | PolitWay Discord"
+          icon_url: "https://cdn.discordapp.com/icons/1154513199807352932/3516d56a0fb1f3bc3694ea29ab731bc0.png?size=1024"
+
+      # Плейсхолдери:
+      # {{MEMBER_MENTION}} - Згадати видаленого користувача
+      SUCCESSFULY-REMOVED:
+        title: "Успіх!"
+        description: "Видалено {{MEMBER_MENTION}} з **тікета**"
+        color: 0xff0000
+        footer:
+          text: "PolitWay 2024 | PolitWay Discord"
+          icon_url: "https://cdn.discordapp.com/icons/1154513199807352932/3516d56a0fb1f3bc3694ea29ab731bc0.png?size=1024"
+
+      LOADING:
+        title: "🎫 PolitWayTickets 🎟️"
+        description: "<a:loading:1147458039239151746> Обробка вашої команди, зачекайте..."
+        color: 0xfbff00
+        footer:
+          text: "PolitWay 2024 | PolitWay Discord"
+          icon_url: "https://cdn.discordapp.com/icons/1154513199807352932/3516d56a0fb1f3bc3694ea29ab731bc0.png?size=1024"
+
+      COMMAND-DISABLED:
+        title: "🎫 PolitWayTickets 🎟️"
+        description: ":no_entry_sign: Ця команда вимкнена адміністратором."
+        color: 0xff0000
+        footer:
+          text: "PolitWay 2024 | PolitWay Discord"
+          icon_url: "https://cdn.discordapp.com/icons/1154513199807352932/3516d56a0fb1f3bc3694ea29ab731bc0.png?size=1024"
+
+      CANNOT-USE-SELF:
+        title: "🎫 PolitWayTickets 🎟️"
+        description: "<:barrier_block_mc:1147457853272109086> Ви не можете використати цю команду на собі."
+        color: 0xff0000
+        footer:
+          text: "PolitWay 2024 | PolitWay Discord"
+          icon_url: "https://cdn.discordapp.com/icons/1154513199807352932/3516d56a0fb1f3bc3694ea29ab731bc0.png?size=1024"
+
+      CANNOT-USE-BOT:
+        title: "🎫 PolitWayTickets 🎟️"
+        description: "<:barrier_block_mc:1147457853272109086> Ви не можете використати цю команду на боті."
+        color: 0xff0000
+        footer:
+          text: "PolitWay 2024 | PolitWay Discord"
+          icon_url: "https://cdn.discordapp.com/icons/1154513199807352932/3516d56a0fb1f3bc3694ea29ab731bc0.png?size=1024"
+
+      CANNOT-USE-STUFF:
+        title: "🎫 PolitWayTickets 🎟️"
+        description: "<:barrier_block_mc:1147457853272109086> Ви не можете використати цю команду на модераторі."
+        color: 0xff0000
+        footer:
+          text: "PolitWay 2024 | PolitWay Discord"
+          icon_url: "https://cdn.discordapp.com/icons/1154513199807352932/3516d56a0fb1f3bc3694ea29ab731bc0.png?size=1024"
+
+      CONFIRM-CLOSE:
+        title: "🎫 PolitWayTickets 🎟️ (test)"
+        description: "Ви впевнені, що хочете закрити цей тікет?"
+        color: 0xff0000
+        footer:
+          text: "test"
+          icon_url: "{{GUILD_AVATAR}}"
+
+
+      TICKET-DELETED:
+        title: "🎫 PolitWayTickets 🎟️ (test)"
+        description: "Тікет буде видалено через декілька секунд"
+        color: 0xff0000
+        footer:
+          text: "PolitWay 2024 | PolitWay Discord"
+          icon_url: "https://cdn.discordapp.com/icons/1154513199807352932/3516d56a0fb1f3bc3694ea29ab731bc0.png?size=1024"
+
+    # Налаштування вигляду панелі керування голосовим каналом.
+    tickets-create-panel:
+
+      dropdowns:
+
+        Help:
+          title: "Питання та допомога"
+          description: "Натисніть, якщо у вас є запитання."
+          emoji: "❕"
+
+        Nation:
+          title: "Реєстр країн"
+          description: "Натисніть, щоб зареєструвати країну."
+          emoji: "👑"
+
+        Structure:
+          title: "Реєстр будівель"
+          description: "Натисніть, щоб зареєструвати будівлю."
+          emoji: "🕍"
+
+        Gazeta:
+          title: "Реєстр газети"
+          description: "Натисніть, щоб зареєструвати газету"
+          emoji: "📰"
+
+        War:
+          title: "Реєстр війни"
+          description: "Натисніть, щоб зареєструвати війну."
+          emoji: "🔥"
+
+        Revolt:
+          title: "Реєстр повстання"
+          description: "Натисніть, щоб зареєструвати повстання."
+          emoji: "✊"
+
+        Report:
+          title: "Подання скарг"
+          description: "Натисніть, щоб подати скаргу."
+          emoji: "🤬"
+
 
 
 
