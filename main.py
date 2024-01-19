@@ -41,6 +41,7 @@ except ImportError as e:
         wavelink
         mcstatus
         asyncrcon
+        tiktok_downloader
         """)
 
     sys.exit()
