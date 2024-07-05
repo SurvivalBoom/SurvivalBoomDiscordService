@@ -32,7 +32,7 @@ class Api:
     class MusicBot(commands.Cog):
 
         # Встановлюємо змінну бота із аргументу класса.
-        def __init__(self, bot: commands.InteractionBot, name: str):
+        def __init__(self, bot: commands.InteractionBot, name: str, node: wavelink.Node):
 
             self._bot: commands.InteractionBot = bot
             self._name: str = name
@@ -52,19 +52,12 @@ class Api:
             self._player: wavelink.Player = ...
             self._last_text_channel: disnake.TextChannel = ... # Останній канал де була виконана команда бота. У цей канал бот буде відправляти повідомлення про пісню яка зараз грає.
 
-            self._lavalink: wavelink.Node = ...
+            self._node: wavelink.Node = node
 
             async def started():
 
                 await self._bot.change_presence(status=disnake.Status.offline)
 
-                lavalink_settings = SBDS.settings.createSection(path="modules.music-module.lavalink")
-                host = lavalink_settings.get("host")
-                port = lavalink_settings.get("port")
-                password = lavalink_settings.get("password")
-                self._lavalink = wavelink.Node(uri=f"http://{host}:{port}", password=password)
-                # noinspection PyTypeChecker
-                await wavelink.NodePool.connect(client=bot, nodes=[self._lavalink])
 
             self._bot.add_listener(started, "on_ready")
 
@@ -86,7 +79,7 @@ class Api:
                 channel: disnake.VoiceChannel = self._bot.get_channel(channel.id)
 
                 # noinspection PyTypeChecker
-                self._player: wavelink.Player = await channel.connect(cls=wavelink.Player(client=self._bot, nodes=[self._lavalink]))
+                self._player: wavelink.Player = await channel.connect(cls=wavelink.Player(client=self._bot, nodes=[self._node]))
 
                 self._playlist.append(track)
 
@@ -127,7 +120,7 @@ class Api:
                 self.disconnect()
                 return "STOP"
 
-        @tasks.loop(seconds=1)  # Головний таск який відповідає за роботу музичного бота.
+        @tasks.loop(seconds=1)  # Головна такса яка відповідає за роботу музичного бота.
         async def _song_task(self):
 
             try:
@@ -162,7 +155,9 @@ class Api:
 
                 # noinspection PyTypeChecker
                 self._connected_channel: disnake.VoiceChannel = self._bot.get_channel(self._bot.voice_clients[0].channel.id)  # Встановлюємо змінну поточного голосового каналу.
-                is_playing = self._player.is_playing()  # Перевіряємо чи грає бот і встановлюємо змінну.
+                is_playing = self._player.playing  # Перевіряємо чи грає бот і встановлюємо змінну.
+
+                print(is_playing)
 
                 # Перевірка чи грає зараз бот і дії якщо бот не грає.
                 if self.busy is True and not is_playing:
@@ -213,7 +208,7 @@ class Api:
         def bot(self): return self._bot
 
         @property
-        def node(self): return self._lavalink
+        def node(self): return self._node
 
     def __init__(self):
         self._music_bots: dict[str, Api.MusicBot] = {}
@@ -225,7 +220,7 @@ class Api:
             token = music_bot_info['token']
             name = music_bot_info['name']
             bot = commands.InteractionBot(intents=disnake.Intents.all())
-            bot_cog = self.MusicBot(bot, name)
+            bot_cog = self.MusicBot(bot, name, _cog.wavelink_node)
 
             async def start_bot(bott: commands.InteractionBot, tokenn: str, bot_cogg: Api.MusicBot):
 
@@ -275,6 +270,8 @@ class _MusicModuleCog(commands.Cog):
 
     def __init__(self):
 
+        self.wavelink_pool: wavelink.Pool = ...
+        self.wavelink_node: wavelink.Node = ...
         self.logger: SBDS.mainlogger.createModuleLogger() = ...
         self.module_settings: SBDS.settings.SettingsSection = ...
         self.spotify: spotipy.Spotify = ...
@@ -318,6 +315,21 @@ class _MusicModuleCog(commands.Cog):
 
             self.black_list = self.module_settings.get("music-name-black-list")
             self.channels_black_list = self.module_settings.get("channels-black-list")
+
+            lavalink_settings = SBDS.settings.createSection(path="modules.music-module.lavalink")
+            host = lavalink_settings.get("host")
+            port = lavalink_settings.get("port")
+            password = lavalink_settings.get("password")
+            self.wavelink_node = wavelink.Node(uri=f"http://{host}:{port}", password=password)
+
+            self.wavelink_pool = wavelink.Pool()
+
+            async def connect_to_lavalink():
+                await self.wavelink_pool.connect(nodes=[self.wavelink_node], client=SBDS.main_bot)
+
+                # await self.wavelink_node._connect(client=SBDS.main_bot)
+
+            asyncio.create_task(connect_to_lavalink(), name=f"{this_module_name} - Connect To MediaServer")
 
 
             # Якщо підтримка Spotify увімкнена, запустити сессію Spotify API.
@@ -476,7 +488,7 @@ class _MusicModuleCog(commands.Cog):
 
             # Якщо це посилання на ютуб відео або просто пошуковий запит, шукаємо на ютубі.
             if data_type == "SearchText" or data_type == "YoutubeVideo":
-                tracks = await wavelink.YouTubeTrack.search(data, node=bot.node)
+                tracks = await wavelink.Pool().fetch_tracks(f"ytsearch:{data}")
                 if not tracks:
                     await ctx.edit_original_response(embed=SBDS.utils.buildEmbed(path_to_embed="modules.music-module.embeds.NO-RESULT-FOUND", placehoders={"{{QUERY}}": data}))
                     return
@@ -490,7 +502,7 @@ class _MusicModuleCog(commands.Cog):
                 spotify_track_name = self.spotify.track(track_id=spotify_id)['name']
                 spotify_track_author = self.spotify.track(track_id=spotify_id)['album']['artists'][0]['name']
 
-                tracks = await wavelink.YouTubeTrack.search(f"{spotify_track_author} + {spotify_track_name}", node=bot.node)
+                tracks = await self.wavelink_pool.fetch_tracks(f"ytsearch:{spotify_track_author} + {spotify_track_name}")
                 if not tracks:
                     await ctx.edit_original_response(embed=SBDS.utils.buildEmbed(path_to_embed="modules.music-module.embeds.NO-RESULT-FOUND", placehoders={"{{QUERY}}": data}))
                     return
@@ -500,9 +512,8 @@ class _MusicModuleCog(commands.Cog):
             # Якщо це пряме посилання, генеруємо об'єкт Track із цим посиланням.
             elif data_type == "DirectUrl":
 
-                track = await bot.node.get_tracks(query=data, cls=wavelink.Playable)
+                track = await self.wavelink_pool.fetch_tracks(data)
                 track = track[0]
-                if track.title == "Unknown title": track.title = "Невідомо - Пряме посилання на медіа"
 
             # Якщо нічого не спрацювало, значить це не те посилання яке підтримує бот.
             else:

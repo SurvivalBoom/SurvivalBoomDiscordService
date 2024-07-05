@@ -11,3 +11,5 @@ aiohttp
 wavelink
 mcstatus
 asyncrcon
+google-generativeai
+free-proxy

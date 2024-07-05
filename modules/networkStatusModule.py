@@ -59,17 +59,11 @@ class Service:
             return data.players.online
 
         else:
-
             try:
-                data = await self._http_get(self._host)
-                if data['status'] == "OK":
-                    self._last_status = True
-                    return True
-
-                else:
-                    self._last_status = False
-                    return False
-
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(self._host) as resp:
+                        self._last_status = resp.status == 200
+                        return resp.status == 200
             except:
                 self._last_status = False
                 return False
@@ -83,15 +77,6 @@ class Service:
             return self._last_online
         else:
             return 0
-
-    @staticmethod
-    async def _http_get(url: str):
-
-        async with aiohttp.ClientSession() as session:
-
-            async with session.get(url) as resp:
-
-                return await resp.json()
 
 class NetworkStatusCog(commands.Cog):
 
