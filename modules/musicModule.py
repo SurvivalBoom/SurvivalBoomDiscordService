@@ -14,7 +14,7 @@ import disnake
 import requests
 import validators
 import spotipy
-import wavelink
+import mafic
 
 from disnake.ext import commands, tasks
 from main import SurvivalBoomDiscordService as SBDS
@@ -32,7 +32,7 @@ class Api:
     class MusicBot(commands.Cog):
 
         # Встановлюємо змінну бота із аргументу класса.
-        def __init__(self, bot: commands.InteractionBot, name: str, node: wavelink.Node):
+        def __init__(self, bot: commands.InteractionBot, name: str, node: mafic.Node):
 
             self._bot: commands.InteractionBot = bot
             self._name: str = name
@@ -40,7 +40,7 @@ class Api:
             self.crashed: bool = False
             self.crash_error: str = ...
 
-            self._playlist: list[wavelink.Playable] = []  # Плейліст цього музичного бота.
+            self._playlist: list[mafic.Track] = []  # Плейліст цього музичного бота.
             self._current_song_index: int = -1 # Індекс поточної пісні у плейлісті.
 
             self.busy: bool = False  # Змінна зайнятості цього бота.
@@ -49,10 +49,10 @@ class Api:
             self.locked = False # Змінна блокування цього бота.
 
             self._connected_channel: disnake.VoiceChannel = ... # Канал до якого підключений цей бот.
-            self._player: wavelink.Player = ...
+            self._player: mafic.Player = ...
             self._last_text_channel: disnake.TextChannel = ... # Останній канал де була виконана команда бота. У цей канал бот буде відправляти повідомлення про пісню яка зараз грає.
 
-            self._node: wavelink.Node = node
+            self._node: mafic.Node = node
 
             async def started():
 
@@ -62,7 +62,7 @@ class Api:
             self._bot.add_listener(started, "on_ready")
 
         # Додавання пісні у плейліст цього бота.
-        async def playlist_add(self, track: wavelink.Playable):
+        async def playlist_add(self, track: mafic.Track):
             if self.busy is True:
                 self._playlist.append(track)
 
@@ -71,7 +71,7 @@ class Api:
             asyncio.create_task(self._player.disconnect(force=True))
 
         # Запуск музичного бота (підключення)
-        async def connect(self, channel: disnake.VoiceChannel, track: wavelink.Playable):
+        async def connect(self, channel: disnake.VoiceChannel, track: mafic.Track):
 
             if self.busy is False:
 
@@ -79,7 +79,7 @@ class Api:
                 channel: disnake.VoiceChannel = self._bot.get_channel(channel.id)
 
                 # noinspection PyTypeChecker
-                self._player: wavelink.Player = await channel.connect(cls=wavelink.Player(client=self._bot, nodes=[self._node]))
+                self._player: mafic.Player = await channel.connect(cls=mafic.Player(client=self._bot, nodes=[self._node]))
 
                 self._playlist.append(track)
 
@@ -105,7 +105,7 @@ class Api:
                 return "STOP"
 
         # Повернення минулої пісні.
-        def back(self) -> str | wavelink.Playable:
+        def back(self) -> str | mafic.Track:
             if self._current_song_index > 0:
 
                 i = self._current_song_index
@@ -270,8 +270,8 @@ class _MusicModuleCog(commands.Cog):
 
     def __init__(self):
 
-        self.wavelink_pool: wavelink.Pool = ...
-        self.wavelink_node: wavelink.Node = ...
+        self.wavelink_pool: mafic.Node = ...
+        self.wavelink_node: mafic.Node = ...
         self.logger: SBDS.mainlogger.createModuleLogger() = ...
         self.module_settings: SBDS.settings.SettingsSection = ...
         self.spotify: spotipy.Spotify = ...
@@ -320,12 +320,12 @@ class _MusicModuleCog(commands.Cog):
             host = lavalink_settings.get("host")
             port = lavalink_settings.get("port")
             password = lavalink_settings.get("password")
-            self.wavelink_node = wavelink.Node(uri=f"http://{host}:{port}", password=password)
+            self.wavelink_node = mafic.NodePool.create_node(host=host, port=port, label="Node", password=password)
 
-            self.wavelink_pool = wavelink.Pool()
+            self.wavelink_pool = mafic.Node()
 
             async def connect_to_lavalink():
-                await self.wavelink_pool.connect(nodes=[self.wavelink_node], client=SBDS.main_bot)
+                await self.wavelink_pool.create_node(nodes=[self.wavelink_node], client=SBDS.main_bot)
 
                 # await self.wavelink_node._connect(client=SBDS.main_bot)
 
@@ -488,7 +488,7 @@ class _MusicModuleCog(commands.Cog):
 
             # Якщо це посилання на ютуб відео або просто пошуковий запит, шукаємо на ютубі.
             if data_type == "SearchText" or data_type == "YoutubeVideo":
-                tracks = await wavelink.Pool().fetch_tracks(f"ytsearch:{data}")
+                tracks = await mafic.Node().fetch_tracks(f"ytsearch:{data}")
                 if not tracks:
                     await ctx.edit_original_response(embed=SBDS.utils.buildEmbed(path_to_embed="modules.music-module.embeds.NO-RESULT-FOUND", placehoders={"{{QUERY}}": data}))
                     return

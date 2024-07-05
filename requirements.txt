@@ -8,7 +8,7 @@ spotipy
 aioconsole
 ovh
 aiohttp
-wavelink
+mafic
 mcstatus
 asyncrcon
 google-generativeai

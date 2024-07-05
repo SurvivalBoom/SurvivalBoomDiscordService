@@ -38,7 +38,7 @@ except ImportError as e:
         spotipy
         aioconsole
         aiohttp
-        wavelink
+        mafic
         mcstatus
         asyncrcon
         tiktok_downloader
