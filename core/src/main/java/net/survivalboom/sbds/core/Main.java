@@ -61,7 +61,7 @@ public class Main {
 
     public static void exit() {
         CommonUtils.sleep(10000);
-        System.exit(1);
+        System.exit(0);
     }
 
 }
