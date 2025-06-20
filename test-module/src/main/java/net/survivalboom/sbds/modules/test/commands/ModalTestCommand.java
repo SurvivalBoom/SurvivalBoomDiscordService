@@ -23,8 +23,8 @@ public class ModalTestCommand extends CommandBase implements SlashCommand {
 
         ModalTemplate template = ModalTemplate.builder()
                 .setTitle("[test.modal.title]")
-                .addInput("short", "[test.modal.input.short.title]", "[test.modal.input.short.placeholder]", TextInputStyle.SHORT)
-                .addInput("long", "[test.modal.input.long.title]", "[test.modal.input.long.placeholder]", TextInputStyle.PARAGRAPH)
+                .addInput("short", "[test.modal.input.short.title]", "[test.modal.input.short.placeholder]", TextInputStyle.SHORT, 1, 100, true)
+                .addInput("long", "[test.modal.input.long.title]", "[test.modal.input.long.placeholder]", TextInputStyle.PARAGRAPH, 10, 1000, false)
                 .build();
 
         sbds.getModalInteractionManager().registerModal(module, "test", template);

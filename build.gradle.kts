@@ -41,7 +41,8 @@ tasks {
 
             projects.forEach { project ->
 
-                val moduleFile = File(project.layout.buildDirectory.orNull!!.asFile, "libs/${project.tasks.getByName("jar", Jar::class).archiveFileName}")
+                val jarTask = project.tasks.named("jar", Jar::class)
+                val moduleFile = jarTask.get().archiveFile.get().asFile
                 val newModuleFile = File(runModules, moduleFile.name)
 
                 Files.deleteIfExists(newModuleFile.toPath())
@@ -50,7 +51,6 @@ tasks {
             }
 
         }
-
     }
 
     create<Exec>("runApp") {
