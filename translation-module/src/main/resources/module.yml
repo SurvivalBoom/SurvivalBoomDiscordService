@@ -1,0 +1,14 @@
+#
+# SURVIVALBOOM DISCORD SERVICE | SURVIVALBOOM NETWORK 2025
+#           Translation Module | By TIMURishche
+#
+
+
+name: "TranslationModule"
+main: "net.survivalboom.sbds.modules.translation.TranslationModule"
+
+description: "Select your translation and translate messages"
+version: "1.0"
+
+author: "TIMURishche"
+website: "https://survivalboom.net"

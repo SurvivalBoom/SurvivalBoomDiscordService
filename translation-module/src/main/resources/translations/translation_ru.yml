@@ -1,0 +1,30 @@
+#
+# SURVIVALBOOM DISCORD SERVICE | SURVIVALBOOM NETWORK 2025
+#         Русский перевод | By TIMURishche
+#
+
+$name: "russian"
+
+translation:
+
+  command:
+
+    translation:
+
+      description: "Показывает ваш текущий язык или устанавливает его"
+
+      translation:
+        name: "язык"
+        description: "Язык который будет использовать бот в сообщения для вас"
+        choices:
+          ukrainian: "Українська"
+          russian: "Русский"
+          english: "English"
+
+      show: "Ваш язык: `{TRANSLATION}`."
+
+      set:
+        $embed:
+          title: "Язык установлен!"
+          color: 34eb83
+          description: "Вы установили ваш язык на `{TRANSLATION}`."

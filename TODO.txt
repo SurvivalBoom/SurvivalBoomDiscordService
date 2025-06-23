@@ -16,3 +16,12 @@ Dropdowns:
 ClassLoader:
  - Переписати LibrariesManager. Зробити так щоб він не завантажував бібліотеки старої версії якщо нова версія вже завантажена.
  - Зробити, щоб бібліотеки кожного модуля підключались конкретно до його ClassLoader.
+
+Translation Module:
+ - Додати команду translate до контекстного меню, яка буде перекладати повідомлення.
+
+Event Manager:
+ - Додати події від самого SBDS. Наприклад ModuleLoadEvent, або ConsoleCommandEvent, та зробити функцію скасовувати події setCancelled(true) (референс з бакіта)
+
+ContextCommand:
+ - Прибрати ContextCommandBase й запихнути його функціонал у звичайний CommandBase.

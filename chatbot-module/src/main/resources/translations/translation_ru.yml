@@ -1,0 +1,56 @@
+#
+# SURVIVALBOOM DISCORD SERVICE | SurvivalBoom Network 2025
+#           ChatBot Русский | By TIMURishche
+#
+
+$name: "russian"
+
+chatbot:
+
+  command:
+
+    ban:
+
+      description: "Запрещает пользователю использовать чат бота"
+
+      user:
+        name: "пользователь"
+        description: "Пользователь которого нужно заблокировать"
+
+      banned:
+        $embed:
+          title: "Пользователь заблокирован!"
+          color: 03fc6f
+          description: |
+            Вы заблокировали пользователя {USER} в чат боте.
+            Теперь бот не будет реагировать на его сообщения.
+
+      unbanned:
+        $embed:
+          title: "Пользователь разблокирован!"
+          color: 03fc6f
+          description: |
+            Вы разблокировали пользователя {USER} в чат боте.
+            Теперь бот будет реагировать на его сообщения.
+
+    set:
+
+      description: "Разрешает чат боту писать в указанном канале"
+
+      channel:
+        name: "канал"
+        description: "Канал для чат бота"
+
+      allowed:
+        $embed:
+          title: "Канал установлен!"
+          color: 03fc6f
+          description: |
+            Вы **разрешили** чат боту реагировать на сообщения в канале {CHANNEL}.
+
+      deny:
+        $embed:
+          title: "Канал установлен!"
+          color: 03fc6f
+          description: |
+            Ви **запретили** чат боту реагировать на сообщения в канале {CHANNEL}.

@@ -1,0 +1,30 @@
+#
+# SURVIVALBOOM DISCORD SERVICE | SURVIVALBOOM NETWORK 2025
+#         Український переклад | By TIMURishche
+#
+
+$name: "ukrainian"
+
+translation:
+
+  command:
+
+    translation:
+
+      description: "Показує вашу поточну мову або встановлює її"
+
+      translation:
+        name: "мова"
+        description: "Мова яку буде використовувати бот у повідомленнях для вас"
+        choices:
+          ukrainian: "Українська"
+          russian: "Русский"
+          english: "English"
+
+      show: "Ваша поточна мова: `{TRANSLATION}`."
+
+      set:
+        $embed:
+          title: "Мову встановлено!"
+          color: 34eb83
+          description: "Ви встановили мову `{TRANSLATION}`."

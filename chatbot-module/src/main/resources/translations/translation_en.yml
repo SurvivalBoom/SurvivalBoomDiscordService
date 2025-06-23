@@ -1,0 +1,56 @@
+#
+# SURVIVALBOOM DISCORD SERVICE | SurvivalBoom Network 2025
+#              ChatBot English | By TIMURishche
+#
+
+$name: "english"
+
+chatbot:
+
+  command:
+
+    ban:
+
+      description: "Blocks user from using chat bot."
+
+      user:
+        name: "user"
+        description: "User to block"
+
+      banned:
+        $embed:
+          title: "User blocked!"
+          color: 03fc6f
+          description: |
+            You blocked user {USER} from using chat bot.
+            Now bot will no longer reply to user's messages.
+
+      unbanned:
+        $embed:
+          title: "Користувача розблоковано!"
+          color: 03fc6f
+          description: |
+            You unblocked user {USER} from using chat bot.
+            Now bot will reply to user's messages.
+
+    set:
+
+      description: "Allows chat bot to talk in a channel."
+
+      channel:
+        name: "channel"
+        description: "Channel for the bot"
+
+      allowed:
+        $embed:
+          title: "Channel allowed!"
+          color: 03fc6f
+          description: |
+            You **allowed** chat bot to talk in the channel {CHANNEL}.
+
+      deny:
+        $embed:
+          title: "Channel denied!"
+          color: 03fc6f
+          description: |
+            You **denied** chat bot to talk in the channel {CHANNEL}.

@@ -5,6 +5,8 @@ import net.survivalboom.sbds.modules.chatbot.ai.OpenAiManager;
 import net.survivalboom.sbds.modules.chatbot.chats.ChatManager;
 import net.survivalboom.sbds.modules.chatbot.commands.BanUserCommand;
 import net.survivalboom.sbds.modules.chatbot.commands.SetChannelCommand;
+import net.survivalboom.sbds.modules.chatbot.commands.console.SetModelCommand;
+import net.survivalboom.sbds.modules.chatbot.commands.console.ViewModelCommand;
 import net.survivalboom.sbds.modules.chatbot.listener.GuildEventsListener;
 
 import java.io.File;
@@ -30,7 +32,9 @@ public class ChatBotModule extends ModuleMain {
 
         saveDefaultConfig();
         checkFiles(Map.of(
-                "translations/translation_uk.yml", "translation/translation_uk.yml"
+                "translations/translation_uk.yml", "translations/translation_uk.yml",
+                "translations/translation_ru.yml", "translations/translation_ru.yml",
+                "translations/translation_en.yml", "translations/translation_en.yml"
         ));
         addModuleTranslations();
 
@@ -46,6 +50,9 @@ public class ChatBotModule extends ModuleMain {
 
         registerSlashCommand(new SetChannelCommand(chatManager.allowedChannels()));
         registerSlashCommand(new BanUserCommand(chatManager.bannedUsers()));
+
+        registerConsoleCommand(new SetModelCommand(chatManager.guildModels()));
+        registerConsoleCommand(new ViewModelCommand(chatManager.guildModels()));
 
     }
 

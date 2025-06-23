@@ -15,6 +15,7 @@ import net.survivalboom.sbds.api.utils.Manager;
 import net.survivalboom.sbds.modules.chatbot.ai.OpenAiManager;
 import net.survivalboom.sbds.modules.chatbot.storage.AllowedChannels;
 import net.survivalboom.sbds.modules.chatbot.storage.BannedUsers;
+import net.survivalboom.sbds.modules.chatbot.storage.GuildModels;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -29,8 +30,6 @@ import java.util.concurrent.CompletableFuture;
 public class ChatManager extends Manager {
 
 
-    private static final ChatModel MODEL = ChatModel.GPT_4_1_MINI;
-
     private static final Logger log = LoggerFactory.getLogger(ChatManager.class);
 
 
@@ -44,6 +43,8 @@ public class ChatManager extends Manager {
     private final AllowedChannels allowedChannels;
 
     private final BannedUsers bannedUsers;
+
+    private final GuildModels guildModels;
 
 
     private final List<String> allowedGuilds = new ArrayList<>();
@@ -77,14 +78,13 @@ public class ChatManager extends Manager {
 
         this.allowedChannels = new AllowedChannels(module);
         this.bannedUsers = new BannedUsers(module);
+        this.guildModels = new GuildModels(module);
 
     }
 
 
     @Override
     protected void init0() {
-
-        log.info("Using model: {}", MODEL);
 
         allowedGuilds.addAll(module.getConfig().getStringList("allowed-guilds"));
 
@@ -128,6 +128,7 @@ public class ChatManager extends Manager {
 
         allowedChannels.init();
         bannedUsers.init();
+        guildModels.init();
 
     }
 
@@ -142,6 +143,7 @@ public class ChatManager extends Manager {
 
         allowedChannels.shutdown();
         bannedUsers.shutdown();
+        guildModels.shutdown();
 
         chats.clear();
 
@@ -209,8 +211,11 @@ public class ChatManager extends Manager {
 
             ChatCompletion completion;
 
+            ChatModel model = guildModels.getModel(channel.getGuild());
+            log.warn(model.toString());
+
             try {
-                completion = openAiManager.chatCompletion(history, MODEL);
+                completion = openAiManager.chatCompletion(history, model);
             }
 
             catch (Throwable t) {
@@ -256,6 +261,10 @@ public class ChatManager extends Manager {
 
     public @NotNull BannedUsers bannedUsers() {
         return bannedUsers;
+    }
+
+    public @NotNull GuildModels guildModels() {
+        return guildModels;
     }
 
     public @NotNull List<String> getCharacterNames() {
