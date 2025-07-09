@@ -124,6 +124,11 @@ public class TranslationManager extends Manager implements ITranslationManager {
         return translationMap.get(name);
     }
 
+    @Override
+    public @NotNull List<ITranslation> getTranslations() {
+        return new ArrayList<>(translationMap.values());
+    }
+
 
     public @NotNull List<Translation> getTranslations0() {
         return new ArrayList<>(translationMap.values());
@@ -155,6 +160,11 @@ public class TranslationManager extends Manager implements ITranslationManager {
         Module module = sbds.getModuleManager().checkModuleEnabled(imodule, "Disabled module attempted to add translations");
 
         File file = new File(module.getDataFolder(), "translations");
+        if (!file.exists()) {
+            imodule.getLogger().warn("Directory `translations` does not exist in module data folder.");
+            return;
+        }
+
         File[] files = file.listFiles();
         if (files == null) return;
 

@@ -1,9 +1,9 @@
 package net.survivalboom.sbds.modules.chatbot.commands;
 
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.survivalboom.sbds.api.commands.argument.Argument;
 import net.survivalboom.sbds.api.commands.argument.discord.UserArgument;
-import net.survivalboom.sbds.api.commands.argument.primitive.BooleanArgument;
 import net.survivalboom.sbds.api.commands.base.Command;
 import net.survivalboom.sbds.api.commands.base.CommandArgument;
 import net.survivalboom.sbds.api.commands.base.CommandBase;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-@Command(name = "chatbot-ban", description = "Ban user from interacting with bot", permission = "chatbot.command.ban")
+@Command(name = "chatbot-ban", description = "Ban user from interacting with bot", translationKey = "chatbot.command.ban", permission = "chatbot.command.ban")
 public class BanUserCommand extends CommandBase implements SlashCommand {
 
     private final BannedUsers bannedUsers;
@@ -29,26 +29,21 @@ public class BanUserCommand extends CommandBase implements SlashCommand {
     public void executes(@NotNull SlashExecutionInfo info) {
 
         User user = info.arguments().get("user", User.class);
-
         assert user != null;
 
-        boolean value = info.arguments().getCastOrDefault("value", Boolean.class, true);
+        Guild guild = Objects.requireNonNull(info.guild());
+        boolean value = !bannedUsers.isUserBanned(guild, user);
 
-        bannedUsers.setUserAllowed(Objects.requireNonNull(info.guild()), user, value);
+        bannedUsers.setUserAllowed(guild, user, value);
 
         String str = value ? "chatbot.command.ban.banned" : "chatbot.command.ban.unbanned";
         info.reply(str).withPlaceholders("{USER}", user.getAsMention()).queue();
 
     }
 
-    @CommandArgument(name = "user", description = "A user")
+    @CommandArgument(name = "user", description = "User to ban")
     public Argument<?> user() {
         return new UserArgument();
-    }
-
-    @CommandArgument(name = "value", description = "Allow/Deny", index = 1)
-    public Argument<?> value() {
-        return new BooleanArgument();
     }
 
 }

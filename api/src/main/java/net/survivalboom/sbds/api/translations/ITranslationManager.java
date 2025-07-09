@@ -6,11 +6,14 @@ import net.survivalboom.sbds.api.modules.ModuleMain;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Set;
 
 public interface ITranslationManager {
 
     @Nullable ITranslation getTranslation(@NotNull String name);
+
+    @NotNull List<ITranslation> getTranslations();
 
 
     @Nullable ITranslation defaultTranslation();

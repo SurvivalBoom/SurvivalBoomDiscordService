@@ -53,7 +53,7 @@ public class MessageTemplate {
         }
 
         MessageCreateBuilder builder = new MessageCreateBuilder();
-        builder.setContent(content);
+        if (content != null) builder.setContent(parser.apply(content));
 
         // embeds //
         embeds.forEach(t -> builder.addEmbeds(t.build(parser)));

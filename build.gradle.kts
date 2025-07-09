@@ -35,7 +35,7 @@ tasks {
 
         projects.forEach { project -> dependsOn("${project.name}:build") }
 
-        doLast {
+      doLast {
 
             runModules.mkdirs()
 

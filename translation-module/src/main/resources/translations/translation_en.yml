@@ -1,0 +1,30 @@
+#
+# SURVIVALBOOM DISCORD SERVICE | SURVIVALBOOM NETWORK 2025
+#         English Translation | By TIMURishche
+#
+
+$name: "english"
+
+translation:
+
+  command:
+
+    translation:
+
+      description: "Shows your current language or sets it"
+
+      translation:
+        name: "language"
+        description: "Language that will use bot in messages for you"
+        choices:
+          ukrainian: "Українська"
+          russian: "Русский"
+          english: "English"
+
+      show: "Your current language: `{TRANSLATION}`."
+
+      set:
+        $embed:
+          title: "Language set!"
+          color: 34eb83
+          description: "You set your language to `{TRANSLATION}`."

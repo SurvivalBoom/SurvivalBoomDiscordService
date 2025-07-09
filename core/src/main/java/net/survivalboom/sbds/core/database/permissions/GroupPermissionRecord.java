@@ -16,8 +16,8 @@ public class GroupPermissionRecord extends DataRecord {
     @Column(nullable = false)
     private long guildId;
 
-    @Column(nullable = false)
-    private String group;
+    @Column(name = "group_name", nullable = false)
+    private String groupName;
 
     @Column(nullable = false)
     private String permission;
@@ -25,9 +25,17 @@ public class GroupPermissionRecord extends DataRecord {
     @Column(nullable = false)
     private boolean value;
 
+    // Getter
+    public String getGroupName() {
+        return groupName;
+    }
+
+    // Setter
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
 
     public @NotNull Permission toPermission() {
         return new Permission(permission, value);
     }
-
 }
