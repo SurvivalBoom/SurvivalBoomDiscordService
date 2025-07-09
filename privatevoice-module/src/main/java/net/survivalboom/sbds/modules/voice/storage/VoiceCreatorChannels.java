@@ -55,7 +55,11 @@ public class VoiceCreatorChannels extends Manager {
         }
 
         IGuildData guildData = repository.createGuildData(guild);
-        String channelId = guildData.container().getOrCreate(key).getCastOrDefault("creator", String.class, "");
+        String channelId = guildData.container().getOrCreate(key).getCastOrNull("creator", String.class);
+
+        if (channelId == null) {
+            return null;
+        }
 
         channel = guild.getChannelById(VoiceChannel.class, channelId);
         if (channel != null) channels.put(channel, true);
