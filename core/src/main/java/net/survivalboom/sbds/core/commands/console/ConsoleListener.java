@@ -3,6 +3,7 @@ package net.survivalboom.sbds.core.commands.console;
 import net.survivalboom.sbds.api.commands.ArgumentScope;
 import net.survivalboom.sbds.api.commands.Command;
 import net.survivalboom.sbds.api.commands.argument.Argument;
+import net.survivalboom.sbds.api.commands.argument.ArgumentParseException;
 import net.survivalboom.sbds.api.commands.argument.internal.SubCommandArgument;
 import net.survivalboom.sbds.api.commands.console.ConsoleCommand;
 import net.survivalboom.sbds.api.commands.console.ConsoleExecutionInfo;
@@ -91,7 +92,12 @@ public class ConsoleListener extends AbstractCommandManager implements IConsoleL
 
         StringCommandParser parser = new StringCommandParser(input, command, ArgumentScope.CONSOLE, resources);
 
-        parser.parse();
+        try {
+            parser.parse();
+        } catch (ArgumentParseException e) {
+            rootLogger.error("An error occurred: {}", e.getMessage());
+            return;
+        }
 
         if (!parser.checkCount()) {
 
