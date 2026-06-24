@@ -58,6 +58,8 @@ public class Database extends Manager implements IDatabase {
 
     private boolean failed = false;
 
+    private volatile boolean isRebuilding = false;
+
 
     public Database(@NotNull SBDS sbds) {
         this.sbds = sbds;
@@ -175,6 +177,7 @@ public class Database extends Manager implements IDatabase {
 
         catch (Exception t) {
             failed = true;
+            this.isRebuilding = false;
             log.error("Failed to reload the database! SBDS will not function properly!");
             log.error("All calls to the database will cause an IllegalStateException. Everything that works with the database will break!", t);
             return;
@@ -230,44 +233,48 @@ public class Database extends Manager implements IDatabase {
 
         Objects.requireNonNull(properties, "properties == null");
 
-        // CommonUtils.waitUntil(sbds::isReady);
+        this.isRebuilding = true;
 
-        if (toImport == null) {
-            log.info("Rebuilding SessionFactory...");
+        try {
+            if (toImport == null) {
+                log.info("Rebuilding SessionFactory...");
+            }
+
+            else {
+                log.info("Rebuilding SessionFactory to include {} new repositories.", toImport.size());
+            }
+
+            if (sessionFactory != null) {
+                sessionFactory.close();
+                sessionFactory = null;
+            }
+
+            // Нам потрібно щоб Hibernate вантажив класи репозиторіїв від імені Root Class Loader, оскільки виявляється Hibernate не має доступу до класів модулів :(
+            // Це може викликати проблеми, оскільки тоді Hibernate повністю обходить ізоляцію, але... Коли будуть проблеми, от тоді зробимо розумніше!
+            BootstrapServiceRegistry serviceRegistry = new BootstrapServiceRegistryBuilder()
+                            .applyClassLoader(sbds.getLibrariesManager().getRootClassLoader())
+                            .build();
+
+            org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration(serviceRegistry);
+            configuration.setProperties(properties);
+
+            List<IRepository<?>> repos = new ArrayList<>(currentAttachedRepositories);
+            if (toImport != null) {
+                repos.addAll(toImport);
+            }
+
+            for (var repo : repos) {
+                Class<?> clazz = repo.getRecordClass();
+                configuration.addAnnotatedClass(clazz);
+            }
+
+            this.currentAttachedRepositories.clear();
+            this.currentAttachedRepositories.addAll(repos);
+
+            sessionFactory = configuration.buildSessionFactory();
+        } finally {
+            this.isRebuilding = false;
         }
-
-        else {
-            log.info("Rebuilding SessionFactory to include {} new repositories.", toImport.size());
-        }
-
-        if (sessionFactory != null) {
-            sessionFactory.close();
-            sessionFactory = null;
-        }
-
-        // Нам потрібно щоб Hibernate вантажив класи репозиторіїв від імені Root Class Loader, оскільки виявляється Hibernate не має доступу до класів модулів :(
-        // Це може викликати проблеми, оскільки тоді Hibernate повністю обходить ізоляцію, але... Коли будуть проблеми, от тоді зробимо розумніше!
-        BootstrapServiceRegistry serviceRegistry = new BootstrapServiceRegistryBuilder()
-                        .applyClassLoader(sbds.getLibrariesManager().getRootClassLoader())
-                        .build();
-
-        org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration(serviceRegistry);
-        configuration.setProperties(properties);
-
-        List<IRepository<?>> repos = new ArrayList<>(currentAttachedRepositories);
-        if (toImport != null) {
-            repos.addAll(toImport);
-        }
-
-        for (var repo : repos) {
-            Class<?> clazz = repo.getRecordClass();
-            configuration.addAnnotatedClass(clazz);
-        }
-
-        this.currentAttachedRepositories.clear();
-        this.currentAttachedRepositories.addAll(repos);
-
-        sessionFactory = configuration.buildSessionFactory();
 
     }
 
@@ -319,6 +326,7 @@ public class Database extends Manager implements IDatabase {
         Repository<T> repository = new Repository<>(clazz, this);
         repository.registration = (Registration<IRepository<T>>) (Registration<?>) repositoriesRegistry.register0(module, name, repository);
 
+        this.isRebuilding = true;
         rebuildQueue.append(repository);
 
         return repository;
@@ -375,6 +383,7 @@ public class Database extends Manager implements IDatabase {
     }
 
     public @NotNull Session createSession() {
+        CommonUtils.waitUntil(() -> !isRebuilding);
         Objects.requireNonNull(sessionFactory, "sessionFactory == null, something went wrong");
         return sessionFactory.openSession();
     }
@@ -554,7 +563,7 @@ public class Database extends Manager implements IDatabase {
     }
 
     private void checkDatabase() {
-
+        CommonUtils.waitUntil(() -> !isRebuilding);
         if (sessionFactory == null) {
             throw new IllegalStateException("Datasource is not present. Looks like database was reloaded incorrectly.");
         }

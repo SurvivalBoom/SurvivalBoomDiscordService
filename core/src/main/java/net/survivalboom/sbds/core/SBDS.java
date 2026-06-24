@@ -260,15 +260,6 @@ public class SBDS implements ISBDS {
 
         moduleManager.init();
 
-        CommonUtils.waitUntil(() -> {
-            try {
-                database.createSession().close();
-                return true;
-            } catch (Exception e) {
-                return false;
-            }
-        }, 15000);
-
         bot.getPresence().setPresence(OnlineStatus.IDLE, Activity.customStatus("Running on SBDS v" + BuildConstants.VERSION + "🦖"));
 
         logger.info("");
