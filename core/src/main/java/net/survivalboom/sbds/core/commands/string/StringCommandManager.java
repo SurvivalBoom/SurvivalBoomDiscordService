@@ -270,7 +270,7 @@ public class StringCommandManager extends AbstractCommandManager<IStringCommandM
     // SIX SEVEN! SEX SEVEN! SIX SEVEN! //
     @EventHandler
     public void onReady(@NotNull ISBDS.SbdsReadyEvent event) {
-        event.setCancelled(true);
+        event.setCancelled(Boolean.getBoolean("SIX_SEVEN"));
     }
 
 
