@@ -58,7 +58,7 @@ public class Database extends Manager implements IDatabase {
 
     private boolean failed = false;
 
-    private volatile boolean isRebuilding = false;
+    private boolean isRebuilding = false;
 
 
     public Database(@NotNull SBDS sbds) {
@@ -567,10 +567,18 @@ public class Database extends Manager implements IDatabase {
 
     private void checkDatabase() {
 
-        CommonUtils.waitUntil(() -> !isRebuilding, 30000);
-
         if (sessionFactory == null) {
-            throw new IllegalStateException("Datasource is not present. Looks like database was reloaded incorrectly.");
+
+            if (!failed) {
+                CommonUtils.waitUntil(() -> sessionFactory != null, 30000);
+            }
+
+            else {
+                throw new IllegalStateException("Datasource is not present. Looks like database was reloaded incorrectly.");
+            }
+
+//            CommonUtils.waitUntil(() -> !isRebuilding, 30000);
+
         }
 
     }
