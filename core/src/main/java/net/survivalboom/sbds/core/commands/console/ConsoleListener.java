@@ -15,6 +15,7 @@ import net.survivalboom.sbds.core.SBDS;
 import net.survivalboom.sbds.core.commands.AbstractCommandManager;
 import net.survivalboom.sbds.core.commands.cmds.common.StatusCommand;
 import net.survivalboom.sbds.core.commands.cmds.console.ServersCommand;
+import net.survivalboom.sbds.core.commands.cmds.console.SuicideCommand;
 import net.survivalboom.sbds.core.commands.cmds.console.database.DatabaseCommand;
 import net.survivalboom.sbds.core.commands.cmds.console.guildconfig.GuildConfigCommand;
 import net.survivalboom.sbds.core.commands.cmds.console.registration.RegistrationCommand;
@@ -44,6 +45,7 @@ public class ConsoleListener extends AbstractCommandManager<IConsoleListener.IRe
 
         super.init0();
 
+        registerCommand0(null, new SuicideCommand());
         registerCommand0(null, new ShutdownCommand());
         registerCommand0(null, new HelpCommand());
         registerCommand0(null, new ModulesCommand());
