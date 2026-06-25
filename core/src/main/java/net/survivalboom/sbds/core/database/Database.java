@@ -329,7 +329,6 @@ public class Database extends Manager implements IDatabase {
         Repository<T> repository = new Repository<>(clazz, this);
         repository.registration = (Registration<IRepository<T>>) (Registration<?>) repositoriesRegistry.register0(module, name, repository);
 
-        this.isRebuilding = true;
         rebuildQueue.append(repository);
 
         return repository;
@@ -381,14 +380,17 @@ public class Database extends Manager implements IDatabase {
         checkRepository(repository);
         checkDatabase();
 
-        return createSession();
+        return sessionFactory.openSession();
 
     }
 
     public @NotNull Session createSession() {
-        CommonUtils.waitUntil(() -> !isRebuilding, 30000);
-        Objects.requireNonNull(sessionFactory, "sessionFactory == null, something went wrong");
+
+        checkValid();
+        checkDatabase();
+
         return sessionFactory.openSession();
+
     }
 
 
@@ -406,7 +408,6 @@ public class Database extends Manager implements IDatabase {
 
         checkValid();
         checkRepository(repository);
-        checkDatabase();
 
         return queue.queueSessionRequest(function);
 
@@ -416,7 +417,6 @@ public class Database extends Manager implements IDatabase {
 
         checkValid();
         checkRepository(repository);
-        checkDatabase();
 
         return queue.queueSessionRequest(consumer);
 
@@ -566,7 +566,9 @@ public class Database extends Manager implements IDatabase {
     }
 
     private void checkDatabase() {
-        CommonUtils.waitUntil(() -> !isRebuilding);
+
+        CommonUtils.waitUntil(() -> !isRebuilding, 30000);
+
         if (sessionFactory == null) {
             throw new IllegalStateException("Datasource is not present. Looks like database was reloaded incorrectly.");
         }

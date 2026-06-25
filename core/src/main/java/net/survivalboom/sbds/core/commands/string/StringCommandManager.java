@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
 import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.survivalboom.sbds.api.ISBDS;
 import net.survivalboom.sbds.api.commands.ArgumentScope;
 import net.survivalboom.sbds.api.commands.Command;
 import net.survivalboom.sbds.api.commands.CommandExecutor;
@@ -263,6 +264,13 @@ public class StringCommandManager extends AbstractCommandManager<IStringCommandM
 
         return null;
 
+    }
+
+
+    // SIX SEVEN! SEX SEVEN! SIX SEVEN! //
+    @EventHandler
+    public void onReady(@NotNull ISBDS.SbdsReadyEvent event) {
+        event.setCancelled(true);
     }
 
 

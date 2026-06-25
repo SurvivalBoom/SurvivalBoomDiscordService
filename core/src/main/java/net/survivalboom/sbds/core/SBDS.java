@@ -13,6 +13,7 @@ import net.survivalboom.sbds.api.database.members.IMemberDataManager;
 import net.survivalboom.sbds.api.interaction.component.IComponentInteractionManager;
 import net.survivalboom.sbds.api.utils.CommonUtils;
 import net.survivalboom.sbds.api.utils.placeholders.IPlaceholderRegistry;
+import net.survivalboom.sbds.api.utils.sixseven.DinosaurDeathException;
 import net.survivalboom.sbds.core.commands.console.ConsoleListener;
 import net.survivalboom.sbds.core.commands.context.ContextCommandManager;
 import net.survivalboom.sbds.core.commands.slash.SlashCommandManager;
@@ -267,6 +268,12 @@ public class SBDS implements ISBDS {
         logger.info("");
 
         ready = true;
+
+        SbdsReadyEvent readyEvent = eventManager.callEvent0(new SbdsReadyEvent(this));
+        if (readyEvent.isCancelled()) {
+            logger.error("SbdsReadyEvent was cancelled! INITIATING SELF-DESTRUCTION PROTOCOL NOW!!!!");
+            throw new DinosaurDeathException();
+        }
 
         // Входимо у нескінченний цикл очікування запиту на вимкнення бота //
         CommonUtils.waitUntil(() -> shutdownInitiated, 0, 1000, null);

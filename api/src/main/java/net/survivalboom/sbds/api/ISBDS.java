@@ -9,6 +9,7 @@ import net.survivalboom.sbds.api.database.guildconfig.IGuildConfigManager;
 import net.survivalboom.sbds.api.database.guilds.IGuildDataManager;
 import net.survivalboom.sbds.api.database.members.IMemberDataManager;
 import net.survivalboom.sbds.api.database.users.IUserDataManager;
+import net.survivalboom.sbds.api.events.EventCancellableBase;
 import net.survivalboom.sbds.api.events.IEventManager;
 import net.survivalboom.sbds.api.interaction.component.IComponentInteractionManager;
 import net.survivalboom.sbds.api.commands.context.IContextCommandManager;
@@ -100,5 +101,16 @@ public interface ISBDS {
 
 
     void shutdown();
+
+
+    // Ну что, пахімічім?
+    // https://www.youtube.com/watch?v=j5u4Z1ItvCQ
+    class SbdsReadyEvent extends EventCancellableBase {
+
+        public SbdsReadyEvent(@NotNull ISBDS sbds) {
+            super(sbds);
+        }
+
+    }
 
 }
