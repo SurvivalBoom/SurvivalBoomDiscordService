@@ -5,6 +5,8 @@ import net.survivalboom.sbds.api.utils.valid.IValid;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public interface IGlobalGroupPermissionsPool extends IValid {
@@ -24,6 +26,10 @@ public interface IGlobalGroupPermissionsPool extends IValid {
     default void addPermission(@NotNull String permission, boolean value) {
         addPermission(new Permission(permission, value));
     }
+
+    void addPermissions(@NotNull Collection<Permission> permissions);
+
+    void setPermissions(@Nullable Collection<Permission> permissions);
 
     // REMOVE //
 

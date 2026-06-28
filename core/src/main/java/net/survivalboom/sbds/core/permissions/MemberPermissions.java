@@ -1,29 +1,27 @@
 package net.survivalboom.sbds.core.permissions;
 
 import net.dv8tion.jda.api.entities.Member;
-import net.survivalboom.sbds.api.permissions.IMemberPermissions;
-import net.survivalboom.sbds.api.permissions.IPermissionManager;
-import net.survivalboom.sbds.api.permissions.Permission;
+import net.survivalboom.sbds.api.permissions.*;
+import net.survivalboom.sbds.api.utils.CommonUtils;
 import net.survivalboom.sbds.api.utils.valid.Valid;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
-public class MemberPermissions extends Valid implements IMemberPermissions {
+public class MemberPermissions extends AbstractPermissionHolder implements IMemberPermissions {
 
     private final PermissionManager manager;
 
     private final Member member;
 
-    private final Map<String, Permission> permissionMap = new HashMap<>();
-
 
     public MemberPermissions(@NotNull Member member, @NotNull PermissionManager manager) {
+        super(manager);
         this.member = member;
         this.manager = manager;
+        permissionMap.put("group.default", new Permission("group.default", true)); // Додаємо стандартну групу для усіх.
     }
 
     @Override
@@ -36,86 +34,38 @@ public class MemberPermissions extends Valid implements IMemberPermissions {
         return member;
     }
 
-    //
-    // PERMISSIONS
-    //
-
     @Override
-    public boolean hasPermission(@NotNull String permission, boolean defaultAllow) {
-
-        checkValid();
-        Objects.requireNonNull(permission, "permission == null");
-
-        Permission perm = permissionMap.get(permission);
-        if (perm == null) {
-            return defaultAllow;
-        }
-
-        return perm.value();
-
+    public @NotNull String getName() {
+        return member.getEffectiveName();
     }
 
-
+    @SuppressWarnings("unchecked")
     @Override
-    public void setPermission(@NotNull Permission permission) {
-
-        Objects.requireNonNull(permission, "permission == null");
-        checkValid();
-
-        permissionMap.put(permission.permission(), permission);
-
-    }
-
-    @Override
-    public void removePermission(@NotNull String permission) {
-        checkValid();
-        permissionMap.remove(permission);
-    }
-
-
-    @Override
-    public void setPermissions(@Nullable Map<String, @Nullable Permission> permissions, boolean override) {
+    public @NotNull CompletableFuture<List<IPermissionsHolder>> getMemberGroups() {
 
         checkValid();
 
-        if (permissions == null) {
-            permissionMap.clear();
-            return;
-        }
+        List<CompletableFuture<IPermissionsHolder>> futures = new ArrayList<>();
+        for (String perm : getPermissions().keySet()) {
 
-        for (var entry : permissions.entrySet()) {
-
-            String key = entry.getKey();
-            Permission perm = entry.getValue();
-
-            if (perm != null && override) {
-                permissionMap.put(key, perm);
+            if (!perm.startsWith("group.")) {
+                continue;
             }
 
-            else if (perm == null && override) {
-                permissionMap.remove(key);
-            }
+            String groupName = perm.substring(6);
+
+            // Виглядає як катастрофічний триндець.
+            var future = (CompletableFuture<IPermissionsHolder>) (CompletableFuture<?>) manager.getGuildGroup(member.getGuild(), groupName);
+            var future2 = (CompletableFuture<IPermissionsHolder>) (CompletableFuture<?>) CompletableFuture.completedFuture(manager.getGlobalGroup(groupName));
+
+            futures.add(future);
+            futures.add(future2);
 
         }
 
-    }
-
-    @Override
-    public @NotNull Map<String, Permission> getPermissions() {
-        checkValid();
-        return new HashMap<>(permissionMap);
-    }
-
-
-    @Override
-    protected void setValid(boolean v) {
-
-        if (v) {
-            return;
-        }
-
-        permissionMap.clear();
+        return CommonUtils.sequenceAsync(futures);
 
     }
+
 
 }

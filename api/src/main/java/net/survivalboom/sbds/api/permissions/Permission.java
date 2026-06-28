@@ -1,5 +1,6 @@
 package net.survivalboom.sbds.api.permissions;
 
+import net.survivalboom.sbds.api.utils.CommonUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -31,7 +32,24 @@ public record Permission(String permission, boolean value) {
 
     @Override
     public String toString() {
-        return "Permission{permission=" + permission + ",value=" + value + "}";
+        return permission + ":" + value;
+    }
+
+
+    public static @NotNull Permission fromString(@NotNull String string) {
+
+        String[] parts = CommonUtils.splitString(string, "\\:");
+
+        if (parts.length == 1) {
+            return new Permission(parts[0], true);
+        }
+
+        if (parts.length == 2) {
+            return new Permission(parts[0], Boolean.parseBoolean(parts[1]));
+        }
+
+        throw new IllegalArgumentException("Invalid permission `" + string + "`");
+
     }
 
 

@@ -18,6 +18,7 @@ import net.survivalboom.sbds.core.commands.cmds.console.ServersCommand;
 import net.survivalboom.sbds.core.commands.cmds.console.SuicideCommand;
 import net.survivalboom.sbds.core.commands.cmds.console.database.DatabaseCommand;
 import net.survivalboom.sbds.core.commands.cmds.console.guildconfig.GuildConfigCommand;
+import net.survivalboom.sbds.core.commands.cmds.console.permission.PermissionCommand;
 import net.survivalboom.sbds.core.commands.cmds.console.registration.RegistrationCommand;
 import net.survivalboom.sbds.core.commands.parser.StringCommandParser;
 import net.survivalboom.sbds.core.commands.cmds.console.HelpCommand;
@@ -53,6 +54,7 @@ public class ConsoleListener extends AbstractCommandManager<IConsoleListener.IRe
 
         registerCommand0(null, new DatabaseCommand());
         registerCommand0(null, new GuildConfigCommand());
+        registerCommand0(null, new PermissionCommand());
 
         registerCommand0(null, new StatusCommand());
         registerCommand0(null, new ServersCommand());
@@ -135,11 +137,13 @@ public class ConsoleListener extends AbstractCommandManager<IConsoleListener.IRe
             for (SubCommandArgument.SubCommand execute : toExecute) {
 
                 ConsoleExecutionInfo info = new ConsoleExecutionInfo(cmdReg, execute.command(), input, execute.alias(), result.arguments(), rootLogger);
-                ConsoleCommandExecutor executor = (ConsoleCommandExecutor) execute.command().getExecutor();
 
-                if (executor != null) {
-                    executor.executes(info);
+                CommandExecutor executor = execute.command().getExecutor();
+                if (!(executor instanceof ConsoleCommandExecutor consoleCommandExecutor)) {
+                    continue;
                 }
+
+                consoleCommandExecutor.executes(info);
 
             }
 

@@ -7,7 +7,6 @@ import net.survivalboom.sbds.api.database.IRepository;
 import net.survivalboom.sbds.api.modules.IModule;
 import net.survivalboom.sbds.api.permissions.*;
 import net.survivalboom.sbds.api.utils.CommonUtils;
-import net.survivalboom.sbds.api.utils.NamespacedKey;
 import net.survivalboom.sbds.api.utils.valid.Manager;
 import net.survivalboom.sbds.core.SBDS;
 import net.survivalboom.sbds.core.database.Database;
@@ -16,13 +15,17 @@ import net.survivalboom.sbds.core.permissions.records.GuildPermissionsGroupRecor
 import net.survivalboom.sbds.core.permissions.records.GuildUserPermissionRecord;
 import net.survivalboom.sbds.core.registration.InternalRegistrationManager;
 import net.survivalboom.sbds.core.utils.InternalPushQueue;
+import org.hibernate.query.criteria.JpaCriteriaQuery;
+import org.hibernate.query.criteria.JpaRoot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spongepowered.configurate.ConfigurationNode;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class PermissionManager extends Manager implements IPermissionManager {
 
@@ -77,6 +80,8 @@ public class PermissionManager extends Manager implements IPermissionManager {
         guildGroupRepository = database.createRepository0(null, "guild_permission_groups", GuildPermissionsGroupRecord.class);
         groupPermissionRepository = database.createRepository0(null, "guild_group_permissions", GuildGroupPermissionRecord.class);
 
+        loadGlobalPermissions();
+
         guildGroupSaveQueue.init();
         memberPermSaveQueue.init();
 
@@ -95,6 +100,41 @@ public class PermissionManager extends Manager implements IPermissionManager {
         globalGroupRegistry.shutdown();
 
     }
+
+    private void loadGlobalPermissions() {
+
+        ConfigurationNode section = sbds.getConfiguration().node("global-permissions");
+
+        for (var entry : section.childrenMap().entrySet()) {
+
+            String name = (String) entry.getKey();
+            ConfigurationNode node = entry.getValue();
+
+            try {
+
+                int weight = node.node("weight").getInt();
+                List<String> permissionsRaw = node.node("permissions").getList(String.class);
+
+                List<Permission> permissions = permissionsRaw.stream()
+                        .map(Permission::fromString)
+                        .toList();
+
+                GlobalPermissionGroup group = (GlobalPermissionGroup) createGlobalGroup0(null, name);
+                group.createPool0(null, name).setPermissions(permissions);
+                group.setWeight(weight);
+
+            }
+
+            catch (Throwable t) {
+                log.error("Failed to load global permission `{}`.", name, t);
+            }
+
+
+
+        }
+
+    }
+
 
     //
     // PERMISSION CHECKING
@@ -117,7 +157,7 @@ public class PermissionManager extends Manager implements IPermissionManager {
             return true;
         }
 
-        Map<String, Permission> permissionMap = createUserPermissionMap(guildId, userId);
+        Map<String, Permission> permissionMap = getMemberPermissionMap(guildId, userId);
 
         Permission perm = permissionMap.get(permission);
         if (perm == null) {
@@ -128,7 +168,8 @@ public class PermissionManager extends Manager implements IPermissionManager {
 
     }
 
-    private @NotNull Map<String, Permission> createUserPermissionMap(long guildId, long userId) {
+    @Override
+    public @NotNull Map<String, Permission> getMemberPermissionMap(long guildId, long userId) {
 
         long userPermMapHash = CommonUtils.longHash(guildId, userId);
         if (cachedUsersPermissionMaps.containsKey(userPermMapHash)) {
@@ -143,7 +184,10 @@ public class PermissionManager extends Manager implements IPermissionManager {
                 .sorted(Comparator.comparing(IGuildPermissionsGroup::getWeight))
                 .toList();
 
-        List<IGlobalPermissionGroup> globalGroups = getGlobalGroups();
+        List<IGlobalPermissionGroup> globalGroups = getGlobalGroups().stream()
+                .filter(memberPermissions::hasGroup)
+                .sorted(Comparator.comparing(IGlobalPermissionGroup::getWeight))
+                .toList();
 
         // Створюємо permission map і впихуємо туди усі дозволи за пріоритетами //
 
@@ -250,30 +294,38 @@ public class PermissionManager extends Manager implements IPermissionManager {
 
             return ggroup;
 
-        }).thenCompose(ggroup -> groupPermissionRepository.queueSessionReturnRequest(session -> {
+        }).thenCompose(ggroup -> {
 
-            // Витягаємо з бази даних дозволи цієї групи //
+            if (ggroup == null) {
+                return CompletableFuture.completedFuture(null);
+            }
 
-            var cb = session.getCriteriaBuilder();
-            var query = cb.createQuery(GuildGroupPermissionRecord.class);
-            var root = query.from(GuildGroupPermissionRecord.class);
+            return groupPermissionRepository.queueSessionReturnRequest(session -> {
 
-            var guildIdPredicate = cb.equal(root.get("guildId"), guildId);
-            var groupNamePredicate = cb.equal(root.get("groupName"), name);
+                // Витягаємо з бази даних дозволи цієї групи //
 
-            query.select(root).where(cb.and(guildIdPredicate, groupNamePredicate));
+                var cb = session.getCriteriaBuilder();
+                var query = cb.createQuery(GuildGroupPermissionRecord.class);
+                var root = query.from(GuildGroupPermissionRecord.class);
 
-            var result = session.createQuery(query).getResultList();
+                var guildIdPredicate = cb.equal(root.get("guildId"), guildId);
+                var groupNamePredicate = cb.equal(root.get("groupName"), name);
 
-            var perms = result.stream()
-                    .map(rec -> new Permission(rec.getPermission(), rec.getValue()))
-                    .toList();
+                query.select(root).where(cb.and(guildIdPredicate, groupNamePredicate));
 
-            ggroup.setPermissions(perms, true);
+                var result = session.createQuery(query).getResultList();
 
-            return ggroup;
+                var perms = result.stream()
+                        .map(rec -> new Permission(rec.getPermission(), rec.getValue()))
+                        .toList();
 
-        }));
+                ggroup.setPermissions(perms, true);
+
+                return ggroup;
+
+            });
+
+        });
 
     }
 
@@ -284,7 +336,11 @@ public class PermissionManager extends Manager implements IPermissionManager {
 
         var map = permissionsGroupMap.computeIfAbsent(guildId, k -> new HashMap<>());
         if (!map.isEmpty()) {
-            return CompletableFuture.completedFuture(new ArrayList<>(map.values()));
+            return CompletableFuture.completedFuture(
+                    map.values().stream()
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toList())
+            );
         }
 
         return groupPermissionRepository.queueSessionReturnRequest(session -> {
@@ -293,8 +349,8 @@ public class PermissionManager extends Manager implements IPermissionManager {
 
             var cb = session.getCriteriaBuilder();
 
-            var query = cb.createQuery(String.class);
-            var root = query.from(GuildPermissionsGroupRecord.class);
+            JpaCriteriaQuery<String> query = cb.createQuery(String.class);
+            JpaRoot<GuildPermissionsGroupRecord> root = query.from(GuildPermissionsGroupRecord.class);
 
             var guildIdPredicate = cb.equal(root.get("guildId"), guildId);
 
@@ -410,7 +466,7 @@ public class PermissionManager extends Manager implements IPermissionManager {
         Objects.requireNonNull(name, "name == null");
         checkValid();
 
-        GlobalPermissionGroup group = new GlobalPermissionGroup(this);
+        GlobalPermissionGroup group = new GlobalPermissionGroup(name, this);
         group.registration = globalGroupRegistry.register0(module, name, group);
 
         return group;
@@ -425,18 +481,51 @@ public class PermissionManager extends Manager implements IPermissionManager {
         return globalGroupRegistry.unregister(group) != null;
     }
 
+    @Override
+    public @Nullable IGlobalPermissionGroup removeGlobalGroup(@NotNull String name) {
+
+        IGlobalPermissionGroup group = getGlobalGroup(name);
+        if (group == null) {
+            return null;
+        }
+
+        removeGlobalGroup(group);
+
+        return group;
+
+    }
+
     // GET //
 
     @Override
-    public @Nullable IGlobalPermissionGroup getGlobalGroup(@NotNull NamespacedKey key) {
+    public @Nullable IGlobalPermissionGroup getGlobalGroup(@NotNull String group) {
         checkValid();
-        return globalGroupRegistry.getRegistrationAsObject(key);
+        return globalGroupRegistry.getRegisteredObjects().stream()
+                .filter(g -> g.getName().equals(group))
+                .findAny()
+                .orElse(null);
     }
 
     @Override
     public @NotNull List<IGlobalPermissionGroup> getGlobalGroups() {
         checkValid();
         return globalGroupRegistry.getRegisteredObjects();
+    }
+
+    // OBTAIN //
+
+    @Override
+    public @NotNull IGlobalPermissionGroup obtainGlobalGroup(@NotNull IModule module, @NotNull String group) {
+
+        checkValid();
+
+        IGlobalPermissionGroup gg = getGlobalGroup(group);
+        if (gg != null) {
+            return gg;
+        }
+
+        return createGlobalGroup(module, group);
+
     }
 
     //

@@ -4,36 +4,18 @@ import net.survivalboom.sbds.api.modules.IModule;
 import net.survivalboom.sbds.api.modules.ModuleMain;
 import net.survivalboom.sbds.api.registrations.Registration;
 import net.survivalboom.sbds.api.utils.NamespacedKey;
-import net.survivalboom.sbds.api.utils.valid.IValid;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public interface IGlobalPermissionGroup extends IValid {
+public interface IGlobalPermissionGroup extends IPermissionsHolder {
 
     @NotNull IPermissionManager getManager();
 
     @NotNull Registration<IGlobalPermissionGroup> getRegistration();
-
-    default @NotNull String getName() {
-        return getRegistration().key().toString();
-    }
-
-    // weight //
-
-    void setWeight(int weight);
-
-    int getWeight();
-
-    //
-    // PERMISSIONS
-    //
-
-    @Nullable Permission getPermission(@NotNull String permission);
-
-    @NotNull Map<String, Permission> getPermissions();
 
     //
     // POOLS

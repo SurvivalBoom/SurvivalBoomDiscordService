@@ -7,6 +7,7 @@ import net.survivalboom.sbds.api.ISBDS;
 import net.survivalboom.sbds.api.modules.IModule;
 import net.survivalboom.sbds.api.modules.ModuleMain;
 import net.survivalboom.sbds.api.utils.NamespacedKey;
+import net.survivalboom.sbds.api.utils.valid.IManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,13 +16,15 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-public interface IPermissionManager {
+public interface IPermissionManager extends IManager {
 
     @NotNull ISBDS getSbds();
 
     //
     // PERMISSION CHECKING
     //
+
+    // HAS PERMISSION //
 
     boolean hasPermission(long guildId, long userId, @NotNull String permission, boolean allowDefault);
 
@@ -39,6 +42,18 @@ public interface IPermissionManager {
 
     default boolean hasPermission(@NotNull Guild guild, @NotNull User user, @NotNull Permission permission) {
         return hasPermission(guild.getIdLong(), user.getIdLong(), permission);
+    }
+
+    // PERMISSION MAP //
+
+    @NotNull Map<String, Permission> getMemberPermissionMap(long guildId, long memberId);
+
+    default @NotNull Map<String, Permission> getMemberPermissionMap(@NotNull Guild guild, @NotNull User user) {
+        return getMemberPermissionMap(guild.getIdLong(), user.getIdLong());
+    }
+
+    default @NotNull Map<String, Permission> getMemberPermissionMap(@NotNull Member member) {
+        return getMemberPermissionMap(member.getGuild(), member.getUser());
     }
 
     //
@@ -61,7 +76,16 @@ public interface IPermissionManager {
 
     @NotNull CompletableFuture<@Nullable IGuildPermissionsGroup> getGuildGroup(long guildId, @NotNull String name);
 
+    default @NotNull CompletableFuture<@Nullable IGuildPermissionsGroup> getGuildGroup(@NotNull Guild guild, @NotNull String name) {
+        return getGuildGroup(guild.getIdLong(), name);
+    }
+
+
     @NotNull CompletableFuture<List<IGuildPermissionsGroup>> getGuildGroups(long guildId);
+
+    default @NotNull CompletableFuture<List<IGuildPermissionsGroup>> getGuildGroups(@NotNull Guild guild) {
+        return getGuildGroups(guild.getIdLong());
+    }
 
     // OBTAIN //
 
@@ -105,7 +129,7 @@ public interface IPermissionManager {
 
     @NotNull IGlobalPermissionGroup createGlobalGroup(@NotNull IModule module, @NotNull String name);
 
-    default @NotNull IGlobalPermissionGroup createGlobalGroup(@NotNull ModuleMain main,  @NotNull String name) {
+    default @NotNull IGlobalPermissionGroup createGlobalGroup(@NotNull ModuleMain main, @NotNull String name) {
         return createGlobalGroup(main.getModule(), name);
     }
 
@@ -113,31 +137,20 @@ public interface IPermissionManager {
 
     boolean removeGlobalGroup(@NotNull IGlobalPermissionGroup group);
 
-    default @Nullable IGlobalPermissionGroup removeGlobalGroup(@NotNull NamespacedKey key) {
-
-        IGlobalPermissionGroup group = getGlobalGroup(key);
-        if (group == null) {
-            return null;
-        }
-
-        removeGlobalGroup(group);
-
-        return group;
-
-    }
-
-    default @Nullable IGlobalPermissionGroup removeGlobalGroup(@NotNull String key) {
-        return removeGlobalGroup(NamespacedKey.fromString(key));
-    }
+    @Nullable IGlobalPermissionGroup removeGlobalGroup(@NotNull String name);
 
     // GET //
 
-    @Nullable IGlobalPermissionGroup getGlobalGroup(@NotNull NamespacedKey key);
-
-    default @Nullable IGlobalPermissionGroup getGlobalGroup(@NotNull String key) {
-        return getGlobalGroup(NamespacedKey.fromString(key));
-    }
+    @Nullable IGlobalPermissionGroup getGlobalGroup(@NotNull String name);
 
     @NotNull List<IGlobalPermissionGroup> getGlobalGroups();
+
+    // OBTAIN //
+
+    @NotNull IGlobalPermissionGroup obtainGlobalGroup(@NotNull IModule module, @NotNull String group);
+
+    default @NotNull IGlobalPermissionGroup obtainGlobalGroup(@NotNull ModuleMain module, @NotNull String group) {
+        return obtainGlobalGroup(module.getModule(), group);
+    }
 
 }

@@ -8,6 +8,7 @@ import net.survivalboom.sbds.api.utils.valid.Valid;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -51,7 +52,37 @@ public class GlobalGroupPermissionPool extends Valid implements IGlobalGroupPerm
         String key = permission.permission();
 
         permissionMap.put(key, permission);
-        group.cache.put(key, permission);
+        group.permissionMap.put(key, permission);
+
+    }
+
+    @Override
+    public void addPermissions(@NotNull Collection<Permission> permissions) {
+
+        Objects.requireNonNull(permissions, "permissions == null");
+        checkValid();
+
+        permissions.forEach(permission -> {
+            permissionMap.put(permission.permission(), permission);
+            group.permissionMap.put(permission.permission(), permission);
+        });
+
+    }
+
+    @Override
+    public void setPermissions(@Nullable Collection<Permission> permissions) {
+
+        checkValid();
+
+        this.permissionMap.forEach((key, value) -> group.permissionMap.remove(key));
+        this.permissionMap.clear();
+
+        if (permissions != null) {
+            permissions.forEach(permission -> {
+                this.permissionMap.put(permission.permission(), permission);
+                this.group.permissionMap.put(permission.permission(), permission);
+            });
+        }
 
     }
 
@@ -65,7 +96,7 @@ public class GlobalGroupPermissionPool extends Valid implements IGlobalGroupPerm
 
         Permission perm = permissionMap.remove(permission);
         if (perm != null) {
-            group.cache.remove(permission);
+            group.permissionMap.remove(permission);
         }
 
     }

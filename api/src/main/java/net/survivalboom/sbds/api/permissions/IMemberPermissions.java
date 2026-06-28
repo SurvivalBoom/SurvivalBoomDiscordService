@@ -1,30 +1,20 @@
 package net.survivalboom.sbds.api.permissions;
 
 import net.dv8tion.jda.api.entities.Member;
-import net.survivalboom.sbds.api.utils.valid.IValid;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-public interface IMemberPermissions extends IValid {
-
-    @NotNull IPermissionManager getManager();
+public interface IMemberPermissions extends IPermissionsHolder {
 
     @NotNull Member getMember();
 
-    //
-    // PERMISSIONS
-    //
-
-    boolean hasPermission(@NotNull String permission, boolean defaultAllow);
-
-    default boolean hasPermission(@NotNull Permission permission) {
-        return hasPermission(permission.permission(), !permission.value());
-    }
-
+    // HAS GROUP //
 
     default boolean hasGroup(@NotNull String group) {
         return hasPermission("group." + group, false);
@@ -34,38 +24,12 @@ public interface IMemberPermissions extends IValid {
         return hasGroup(group.getName());
     }
 
-
-    void setPermission(@NotNull Permission permission);
-
-    default void setPermission(@NotNull String permission, boolean value) {
-        setPermission(new Permission(permission, value));
+    default boolean hasGroup(@NotNull IGlobalPermissionGroup group) {
+        return hasGroup(group.getName());
     }
 
+    // GET GROUPS //
 
-    void setPermissions(@Nullable Map<String, @Nullable Permission> permissions, boolean override);
-
-    default void setPermissions(@Nullable Collection<Permission> permissions, boolean override) {
-
-        if (permissions == null) {
-            setPermissions((Map<String, Permission>) null, override);
-            return;
-        }
-
-        Map<String, Permission> map = permissions.stream().collect(Collectors.toMap(Permission::permission, p -> p));
-        setPermissions(map, override);
-
-    }
-
-
-    void removePermission(@NotNull String permission);
-
-    default void removePermission(@NotNull Permission permission) {
-        removePermission(permission.permission());
-    }
-
-
-    @NotNull Map<String, Permission> getPermissions();
-
-
+    @NotNull CompletableFuture<List<IPermissionsHolder>> getMemberGroups();
 
 }

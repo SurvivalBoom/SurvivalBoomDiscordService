@@ -8,7 +8,6 @@ import net.survivalboom.sbds.api.permissions.Permission;
 import net.survivalboom.sbds.api.registrations.Registration;
 import net.survivalboom.sbds.api.registrations.RegistrationManager;
 import net.survivalboom.sbds.api.utils.NamespacedKey;
-import net.survivalboom.sbds.api.utils.valid.Valid;
 import net.survivalboom.sbds.core.registration.InternalRegistrationManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,25 +15,23 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class GlobalPermissionGroup extends Valid implements IGlobalPermissionGroup, RegistrationManager.Callback<IGlobalGroupPermissionsPool> {
+public class GlobalPermissionGroup extends AbstractPermissionHolder implements IGlobalPermissionGroup, RegistrationManager.Callback<IGlobalGroupPermissionsPool> {
 
     private final PermissionManager manager;
+
+    private final InternalRegistrationManager<IGlobalGroupPermissionsPool> registry;
 
     protected Registration<IGlobalPermissionGroup> registration;
 
 
-    private int weight = 0;
+    public GlobalPermissionGroup(@NotNull String name, @NotNull PermissionManager manager) {
+        super(manager);
 
-
-    private final InternalRegistrationManager<IGlobalGroupPermissionsPool> registry;
-
-    protected final Map<String, Permission> cache = new HashMap<>();
-
-
-    public GlobalPermissionGroup(@NotNull PermissionManager manager) {
         this.manager = manager;
-        this.registry = new InternalRegistrationManager<>(this, getName(), this, manager.getSbds().getRegistrationRegistry());
+        this.registry = new InternalRegistrationManager<>(this, name, this, manager.getSbds().getRegistrationRegistry());
+
         registry.init();
+
     }
 
     @Override
@@ -47,30 +44,9 @@ public class GlobalPermissionGroup extends Valid implements IGlobalPermissionGro
         return registration;
     }
 
-    // weight //
-
     @Override
-    public int getWeight() {
-        return weight;
-    }
-
-    @Override
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
-    //
-    // PERMISSIONS
-    //
-
-    @Override
-    public @Nullable Permission getPermission(@NotNull String permission) {
-        return cache.get(permission);
-    }
-
-    @Override
-    public @NotNull Map<String, Permission> getPermissions() {
-        return new HashMap<>(cache);
+    public @NotNull String getName() {
+        return registration.key().key();
     }
 
     //
@@ -139,8 +115,8 @@ public class GlobalPermissionGroup extends Valid implements IGlobalPermissionGro
                 .flatMap(pool -> pool.getPermissions().entrySet().stream())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-        this.cache.clear();
-        this.cache.putAll(out);
+        this.permissionMap.clear();
+        this.permissionMap.putAll(out);
 
     }
 
