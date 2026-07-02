@@ -238,10 +238,12 @@ public class MusicManager extends Manager {
             return false;
         }
 
-        return memberData.container()
-                .obtainNode(key)
-                .node("banned")
-                .getBoolean(false);
+        ConfigurationNode node = memberData.container().getNode(key).orElse(null);
+        if (node == null) {
+            return false;
+        }
+
+        return node.node("banned").getBoolean(false);
 
     }
 
