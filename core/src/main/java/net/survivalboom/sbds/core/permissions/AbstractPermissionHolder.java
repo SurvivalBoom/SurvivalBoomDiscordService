@@ -36,6 +36,7 @@ public abstract class AbstractPermissionHolder extends Valid implements IPermiss
     @Override
     public void setWeight(int weight) {
         this.weight = weight;
+        save();
     }
 
     //
@@ -73,6 +74,7 @@ public abstract class AbstractPermissionHolder extends Valid implements IPermiss
         checkValid();
 
         permissionMap.put(permission.permission(), permission);
+        save();
 
     }
 
@@ -90,6 +92,7 @@ public abstract class AbstractPermissionHolder extends Valid implements IPermiss
 
         if (permissions == null) {
             permissionMap.clear();
+            save();
             return;
         }
 
@@ -107,6 +110,8 @@ public abstract class AbstractPermissionHolder extends Valid implements IPermiss
             }
 
         }
+
+        save();
 
     }
 
@@ -132,6 +137,7 @@ public abstract class AbstractPermissionHolder extends Valid implements IPermiss
         checkValid();
 
         permissionMap.remove(permission.permission());
+        save();
 
     }
 
@@ -163,6 +169,10 @@ public abstract class AbstractPermissionHolder extends Valid implements IPermiss
     public int getPermissionsCount() {
         return permissionMap.size();
     }
+
+    // LIVECYCLE //
+
+    protected abstract void save();
 
     @Override
     protected void setValid(boolean v) {

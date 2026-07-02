@@ -59,7 +59,7 @@ public class DatabaseUserReadCommand extends CommandBase implements ConsoleComma
 
         if (path == null) {
 
-            ConfigurationNode node = container.getNode(key);
+            ConfigurationNode node = container.getNode(key).orElse(null);
             if (node == null) {
                 info.logger().info("There is no data by key `{}` in user `{}`.", key, user.getEffectiveName());
                 return;
@@ -72,7 +72,7 @@ public class DatabaseUserReadCommand extends CommandBase implements ConsoleComma
 
         }
 
-        ConfigurationNode node = container.getNode(key);
+        ConfigurationNode node = container.getNode(key).orElse(null);
         if (node == null) {
             info.logger().info("There is no data by key `{}` in user `{}`.", key, user.getEffectiveName());
             return;

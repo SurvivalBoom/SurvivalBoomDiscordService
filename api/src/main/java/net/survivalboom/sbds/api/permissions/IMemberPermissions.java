@@ -1,18 +1,15 @@
 package net.survivalboom.sbds.api.permissions;
 
-import net.dv8tion.jda.api.entities.Member;
+import net.survivalboom.sbds.api.database.members.IMemberData;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 public interface IMemberPermissions extends IPermissionsHolder {
 
-    @NotNull Member getMember();
+    @NotNull IMemberData getMember();
 
     // HAS GROUP //
 
@@ -31,5 +28,7 @@ public interface IMemberPermissions extends IPermissionsHolder {
     // GET GROUPS //
 
     @NotNull CompletableFuture<List<IPermissionsHolder>> getMemberGroups();
+
+    @NotNull Map<String, Permission> getPermissionMap();
 
 }

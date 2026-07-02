@@ -27,7 +27,7 @@ public class PermissionGuildGroupDeleteCommand extends CommandBase implements Co
             return;
         }
 
-        info.sbds().getPermissionManager().deleteGuildGroup(group).join();
+        info.sbds().getPermissionManager().deleteGuildGroup(group);
 
         info.logger().info("Deleted group `{}` in guild `{}` successfully.", name, guild.getName());
 

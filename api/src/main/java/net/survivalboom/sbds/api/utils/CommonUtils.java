@@ -26,6 +26,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -752,7 +753,7 @@ public class CommonUtils {
                 .thenApply(v -> futures.stream()
                         .map(CompletableFuture::join)
                         .filter(Objects::nonNull) // Твой фильтр на null
-                        .toList()
+                        .collect(Collectors.toList())
                 );
     }
 

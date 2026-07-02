@@ -71,49 +71,71 @@ public class DatabaseQueue extends Manager {
 
             Transaction transaction = session.beginTransaction();
 
-            while (!sessionRequestsQueue.isEmpty()) {
+            try {
 
-                var request = sessionRequestsQueue.poll();
+                while (!sessionRequestsQueue.isEmpty()) {
 
-                var function = (Function<Session, Object>) request.function;
-                var future = (CompletableFuture<Object>) request.future;
+                    var request = sessionRequestsQueue.poll();
+                    var function = (Function<Session, Object>) request.function;
+                    var future = (CompletableFuture<Object>) request.future;
 
-                try {
+                    try {
+                        var result = function.apply(session);
+                        session.flush();
+                        future.complete(result);
+                    }
 
-                    var result = function.apply(session);
-                    future.complete(result);
+                    catch (Throwable t) {
+                        log.error("An error occurred while trying to execute database query. This may cause data loss.", t);
+                        future.completeExceptionally(t);
+                    }
 
                 }
 
-                catch (Throwable t) {
-                    log.error("An error occurred while trying to execute database query. Looks like something just break. This may cause data loss.", t);
-                    future.completeExceptionally(t);
+                var iterator = recordsSavingQueue.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    var entry = iterator.next();
+                    var record = entry.getKey();
+                    var future = entry.getValue();
+
+                    try {
+                        session.merge(record);
+                        session.flush();
+                        future.complete(null);
+                    }
+
+                    catch (Throwable t) {
+                        log.error("An error occurred while attempting to save a record `{}`. This may cause data loss.", record, t);
+                        future.completeExceptionally(t);
+                    }
+
+                    finally {
+                        iterator.remove();
+                    }
+
                 }
+
+                transaction.commit();
 
             }
 
-            for (var entry : recordsSavingQueue.entrySet()) {
+            catch (Throwable t) {
 
-                var record = entry.getKey();
-                var future = entry.getValue();
+                log.error("Catastrophic database failure! Something went completely wrong!", t);
 
-                try {
-                    session.merge(record);
-                    future.complete(null);
-                }
+                if (transaction.getStatus().canRollback()) {
 
-                catch (Throwable t) {
-                    future.completeExceptionally(t);
-                    log.error("An error occurred while attempting to save a record `{}`. This may cause data loss.", record, t);
-                }
+                    try {
+                        transaction.rollback();
+                    }
 
-                finally {
-                    recordsSavingQueue.remove(record);
+                    catch (Throwable ex) {
+                        log.error("Failed to rollback transaction!", ex);
+                    }
+
                 }
 
             }
-
-            transaction.commit();
 
         }
 

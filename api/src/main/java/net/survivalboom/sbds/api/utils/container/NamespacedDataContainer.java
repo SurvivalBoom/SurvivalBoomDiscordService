@@ -7,16 +7,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.jackson.JacksonConfigurationLoader;
+import org.spongepowered.configurate.serialize.SerializationException;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class NamespacedDataContainer extends Valid implements INamespacedDataContainer {
 
-    private final JacksonConfigurationLoader loader = IDatabase.createConfigurateLoader().build();
-
-    private final Map<NamespacedKey, ConfigurationNode> map = new HashMap<>();
+    private final ConfigurationNode map = IDatabase.createConfigurateLoader().build().createNode();
 
     // CREATE //
 
@@ -25,15 +22,11 @@ public class NamespacedDataContainer extends Valid implements INamespacedDataCon
 
         checkValid();
 
-        if (map.containsKey(key)) {
+        if (map.hasChild(key)) {
             throw new IllegalStateException("Data with key `" + key + "` already exists");
         }
 
-        ConfigurationNode node = loader.createNode();
-
-        map.put(key, node);
-
-        return node;
+        return map.node(key);
 
     }
 
@@ -44,12 +37,16 @@ public class NamespacedDataContainer extends Valid implements INamespacedDataCon
 
         checkValid();
 
-        ConfigurationNode node = getNode(key);
+        ConfigurationNode node = getNode(key).orElse(null);
         if (node == null) {
             return null;
         }
 
-        map.remove(key);
+        try {
+            node.set(null);
+        } catch (SerializationException e) {
+            throw new RuntimeException(e);
+        }
 
         return node;
 
@@ -58,9 +55,17 @@ public class NamespacedDataContainer extends Valid implements INamespacedDataCon
     // GET //
 
     @Override
-    public @Nullable ConfigurationNode getNode(@NotNull NamespacedKey key) {
+    public @NotNull Optional<ConfigurationNode> getNode(@NotNull NamespacedKey key) {
+
         checkValid();
-        return map.get(key);
+
+        ConfigurationNode node = map.node(key);
+        if (node.virtual()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(node);
+
     }
 
     // OBTAIN //
@@ -68,14 +73,32 @@ public class NamespacedDataContainer extends Valid implements INamespacedDataCon
     @Override
     public @NotNull ConfigurationNode obtainNode(@NotNull NamespacedKey key) {
         checkValid();
-        return Objects.requireNonNullElseGet(getNode(key), () -> createNode(key));
+        return Objects.requireNonNullElseGet(getNode(key).orElse(null), () -> createNode(key));
+    }
+
+    @Override
+    public boolean hasNode(@NotNull NamespacedKey key) {
+        checkValid();
+        return map.hasChild(key);
     }
 
     // MISC //
 
     @Override
     public @NotNull Map<NamespacedKey, ConfigurationNode> getAsMap() {
-        return new HashMap<>(map);
+
+        Map<NamespacedKey, ConfigurationNode> map = new HashMap<>();
+        for (var entry : this.map.childrenMap().entrySet()) {
+
+            NamespacedKey key = (NamespacedKey) entry.getKey();
+            ConfigurationNode node = entry.getValue();
+
+            map.put(key, node);
+
+        }
+
+        return map;
+
     }
 
 }

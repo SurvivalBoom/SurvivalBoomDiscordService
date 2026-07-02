@@ -59,7 +59,7 @@ public class DatabaseGuildReadCommand extends CommandBase implements ConsoleComm
 
         if (path == null) {
 
-            ConfigurationNode node = container.getNode(key);
+            ConfigurationNode node = container.getNode(key).orElse(null);
             if (node == null) {
                 info.logger().info("There is no data by key `{}` in guild `{}`.", key, guild.getName());
                 return;
@@ -72,7 +72,7 @@ public class DatabaseGuildReadCommand extends CommandBase implements ConsoleComm
 
         }
 
-        ConfigurationNode node = container.getNode(key);
+        ConfigurationNode node = container.getNode(key).orElse(null);
         if (node == null) {
             info.logger().info("There is no data by key `{}` in guild `{}`.", key, guild.getName());
             return;

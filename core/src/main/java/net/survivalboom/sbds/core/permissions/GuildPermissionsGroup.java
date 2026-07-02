@@ -1,32 +1,42 @@
 package net.survivalboom.sbds.core.permissions;
 
-import net.dv8tion.jda.api.entities.Guild;
+import net.survivalboom.sbds.api.database.guilds.IGuildData;
 import net.survivalboom.sbds.api.permissions.*;
-import net.survivalboom.sbds.api.utils.valid.Valid;
-import net.survivalboom.sbds.core.permissions.records.GuildPermissionsGroupRecord;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.Collection;
+import java.util.List;
 
 public class GuildPermissionsGroup extends AbstractPermissionHolder implements IGuildPermissionsGroup {
 
     private final PermissionManager manager;
 
-    private final Guild guild;
+    private final String name;
 
-    private final GuildPermissionsGroupRecord record;
+    private final IGuildData guild;
 
 
-    public GuildPermissionsGroup(@NotNull GuildPermissionsGroupRecord record, @NotNull PermissionManager manager) {
+    public GuildPermissionsGroup(
+            @NotNull String name,
+            @Nullable Collection<Permission> permissions,
+            int weight,
+            @NotNull IGuildData guild,
+            @NotNull PermissionManager manager
+    ) {
         super(manager);
 
-        this.record = record;
+        this.name = name;
+        this.guild = guild;
         this.manager = manager;
 
-        this.guild = manager.getSbds().getBot().getGuildById(record.getGuildId());
+        this.weight = weight;
+
+        if (permissions != null) {
+            permissions.forEach(p -> permissionMap.put(p.permission(), p));
+        }
 
     }
 
@@ -36,22 +46,30 @@ public class GuildPermissionsGroup extends AbstractPermissionHolder implements I
     }
 
     @Override
-    public long getId() {
-        return record.getId();
+    protected void save() {
+
+        ConfigurationNode node = guild.container().obtainNode(IPermissionManager.PERMISSION_CONTAINER_KEY).node(name);
+
+        List<Permission> permissions = getPermissionList();
+        try {
+            node.node("permissions").setList(Permission.class, permissions);
+            node.node("weight").set(weight);
+        } catch (SerializationException e) {
+            throw new RuntimeException(e);
+        }
+
+        guild.save();
+
     }
 
     @Override
-    public @NotNull Guild getGuild() {
+    public @NotNull IGuildData getGuild() {
         return guild;
     }
 
     @Override
     public @NotNull String getName() {
-        return record.getGroupName();
-    }
-
-    public @NotNull GuildPermissionsGroupRecord getRecord() {
-        return record;
+        return name;
     }
 
 }

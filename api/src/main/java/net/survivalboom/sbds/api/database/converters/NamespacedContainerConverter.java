@@ -59,10 +59,8 @@ public class NamespacedContainerConverter implements AttributeConverter<INamespa
             NamespacedDataContainer container = new NamespacedDataContainer();
             for (var entry : rootNode.childrenMap().entrySet()) {
 
-                String key = (String) entry.getKey();
+                NamespacedKey namespacedKey = NamespacedKey.fromString((String) entry.getKey());
                 ConfigurationNode node = entry.getValue();
-
-                NamespacedKey namespacedKey = NamespacedKey.fromString(key);
 
                 container.obtainNode(namespacedKey).mergeFrom(node);
 
@@ -72,7 +70,7 @@ public class NamespacedContainerConverter implements AttributeConverter<INamespa
 
         }
         
-        catch (Exception e) {
+        catch (ConfigurateException e) {
             throw new RuntimeException("Something went wrong! Failed to load data. Looks like you fucked up with the JSON format. Raw data `" + dbData + "`");
         }
 

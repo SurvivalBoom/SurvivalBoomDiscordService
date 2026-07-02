@@ -50,6 +50,40 @@ public class GlobalPermissionGroup extends AbstractPermissionHolder implements I
     }
 
     //
+    // PERMISSIONS
+    //
+
+    @Override
+    public void setPermission(@NotNull Permission permission) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public @NotNull Permission setPermission(@NotNull String permission, boolean value) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void setPermissions(@Nullable Map<String, @Nullable Permission> permissions, boolean override) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void setPermissions(@Nullable Collection<Permission> permissions, boolean override) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void removePermission(@NotNull Permission permission) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void removePermission(@NotNull String permission) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    //
     // POOLS
     //
 
@@ -108,6 +142,11 @@ public class GlobalPermissionGroup extends AbstractPermissionHolder implements I
     //
     // MISC
     //
+
+    @Override
+    protected void save() {
+        // Empty
+    }
 
     private void recalculateFullCache() {
 

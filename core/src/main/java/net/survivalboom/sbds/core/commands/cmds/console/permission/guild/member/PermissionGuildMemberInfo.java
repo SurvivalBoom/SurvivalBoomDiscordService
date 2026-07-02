@@ -33,7 +33,7 @@ public class PermissionGuildMemberInfo extends CommandBase implements ConsoleCom
                 .map(IPermissionsHolder::getName)
                 .toList();
 
-        Map<String, Permission> permissionMap = manager.getMemberPermissionMap(member);
+        Map<String, Permission> permissionMap = memberPermissions.getPermissionMap();
 
         info.logger().info("--- --- < Member Permissions > --- ---");
         info.logger().info("Guild: {}", guild.getName());

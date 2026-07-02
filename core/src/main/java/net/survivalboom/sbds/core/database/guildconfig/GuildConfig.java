@@ -101,7 +101,7 @@ public class GuildConfig extends Valid implements IGuildConfig {
                 return defaultValue ? Optional.ofNullable((T) field.defaultValue()) : Optional.empty();
             }
 
-            ConfigurationNode rootNode = guildData.container().getNode(this.key);
+            ConfigurationNode rootNode = guildData.container().getNode(this.key).orElse(null);
             if (rootNode == null) {
                 return defaultValue ? Optional.ofNullable((T) field.defaultValue()) : Optional.empty();
             }

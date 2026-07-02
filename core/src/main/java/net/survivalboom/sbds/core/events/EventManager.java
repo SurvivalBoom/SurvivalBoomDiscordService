@@ -68,7 +68,7 @@ public class EventManager extends Manager implements net.dv8tion.jda.api.hooks.E
                 .sorted(Comparator.comparing(IRegisteredEventHandler::getPriority).reversed())
                 .toList();
 
-        boolean cancelled = false; // TODO Реалізувати.
+        boolean cancelled = false;
         for (var handler : eventHandlers) {
 
             if (handler.isIgnoringCancelled() && cancelled) {
@@ -80,7 +80,7 @@ public class EventManager extends Manager implements net.dv8tion.jda.api.hooks.E
             }
 
             catch (Throwable t) {
-                logger.error("An exception was thrown in Event Handler `{}`.", handler.getRegistration().key(), t);
+                logger.error("Could not pass &e{} &rto &e{}&r. An exception was thrown.", event.getClass().getSimpleName(), Objects.requireNonNull(handler.getRegistration().module(), "SBDS"), t);
             }
 
             if (event instanceof ICancellable cancellable) {

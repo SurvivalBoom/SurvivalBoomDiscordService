@@ -18,6 +18,8 @@ import java.util.concurrent.CompletableFuture;
 
 public interface IPermissionManager extends IManager {
 
+    NamespacedKey PERMISSION_CONTAINER_KEY = NamespacedKey.sbds("permissions");
+
     @NotNull ISBDS getSbds();
 
     //
@@ -44,18 +46,6 @@ public interface IPermissionManager extends IManager {
         return hasPermission(guild.getIdLong(), user.getIdLong(), permission);
     }
 
-    // PERMISSION MAP //
-
-    @NotNull Map<String, Permission> getMemberPermissionMap(long guildId, long memberId);
-
-    default @NotNull Map<String, Permission> getMemberPermissionMap(@NotNull Guild guild, @NotNull User user) {
-        return getMemberPermissionMap(guild.getIdLong(), user.getIdLong());
-    }
-
-    default @NotNull Map<String, Permission> getMemberPermissionMap(@NotNull Member member) {
-        return getMemberPermissionMap(member.getGuild(), member.getUser());
-    }
-
     //
     // GUILD PERMISSION GROUPS
     //
@@ -70,7 +60,13 @@ public interface IPermissionManager extends IManager {
 
     // DELETE //
 
-    @NotNull CompletableFuture<Void> deleteGuildGroup(@NotNull IGuildPermissionsGroup group);
+    void deleteGuildGroup(@NotNull IGuildPermissionsGroup group);
+
+    @NotNull CompletableFuture<@Nullable IGuildPermissionsGroup> deleteGuildGroup(long guildId, @NotNull String name);
+
+    default @NotNull CompletableFuture<@Nullable IGuildPermissionsGroup> deleteGuildGroup(@NotNull Guild guild, @NotNull String name) {
+        return deleteGuildGroup(guild.getIdLong(), name);
+    }
 
     // GET //
 
