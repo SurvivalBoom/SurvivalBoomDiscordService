@@ -1,0 +1,13 @@
+#
+#  Change Status | SBDS
+# SurvivalBoom Network | By TIMURishche
+#
+
+main: "net.survivalboom.sbds.modules.changestatus.ChangeStatusModule"
+
+name: "ChangeStatusModule"
+description: "Змінює статус бота на щось цікавеньке!"
+version: "${version}"
+
+authors: TIMURishche
+website: "https://survivalboom.net"

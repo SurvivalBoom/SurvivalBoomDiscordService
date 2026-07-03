@@ -1,0 +1,157 @@
+#
+#  Change Status | SBDS
+# Configuration | By TIMURishche
+#
+
+# Інтервал через який бот буде змінювати статус.
+# Вказується у хвилинах. Має бути більше за 5 хв.
+change-interval: 30 # 30 хвилин
+
+# Список із різних текстів, що будуть випадково встановлюватись боту.
+# status - Статус бота, може бути: ONLINE, INVISIBLE, DO_NOT_DISTURB, IDLE
+# activity - Поточна активність бота, може бути: PLAYING, STREAMING, LISTENING, WATCHING, COMPETING, CUSTOM_STATUS
+statuses:
+
+  - status: IDLE
+    activity: LISTENING
+    text: "ричання динозаврика"
+
+  - status: IDLE
+    activity: LISTENING
+    text: "базу даних"
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "Гризе сервер..."
+
+  - status: IDLE
+    activity: PLAYING
+    text: "mc.survivalboom.net"
+
+  - status: IDLE
+    activity: LISTENING
+    text: "смарагдове небо"
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "Деградує..."
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "*чути ричання дракона*"
+
+  - status: IDLE
+    activity: LISTENING
+    text: "гр-р-р-р!"
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "Злий динозаврик прийде по тебе!"
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "А ви знали, що дракони існують?..."
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "Im a furry, rawrr~"
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "Фир фир фир..."
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "Продам адмінку, писати в особисті."
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "SurvivalBoom The Best!"
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "java.lang.DinosaurDeathException"
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "java.lang.OutOfMemoryError"
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "sudo arch-install"
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "sudo nixos-rebuild switch"
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "sudo rm -rf /mnt/windows"
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "java -jar SBDS-4.0.0.jar"
+
+  - status: IDLE
+    activity: WATCHING
+    text: "configuration.nix"
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "Огида!"
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "Віжіванія взріф - школо сірвір"
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "Напиши !status"
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "Я слідкую за тобою!"
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "Динозаврик слідкує за тобою..."
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "Віжіванія взріф - найкріщій сірвір."
+
+  - status: IDLE
+    activity: CUSTOM_STATUS
+    text: "свінтус 🐷"
+
+  - status: IDLE
+    activity: PLAYING
+    text: "survivalboom.host"
+
+  - status: IDLE
+    activity: PLAYING
+    text: "BedWars"
+
+  - status: IDLE
+    activity: PLAYING
+    text: "AntWars"
+
+  - status: IDLE
+    activity: PLAYING
+    text: "OneBlock"
+
+  - status: IDLE
+    activity: PLAYING
+    text: "Factorio"
+
+  - status: IDLE
+    activity: PLAYING
+    text: "REPO"
+
+  - status: IDLE
+    activity: PLAYING
+    text: "Path Of Titans"
+
+  - status: IDLE
+    activity: PLAYING
+    text: "SurvivalBoom"
