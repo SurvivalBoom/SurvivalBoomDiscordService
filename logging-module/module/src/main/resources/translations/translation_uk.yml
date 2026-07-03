@@ -1,0 +1,203 @@
+$name: sbds:ukrainian
+
+logging:
+  config:
+    enabled: "Увімкнути логування"
+    database_logging: "Зберігати логи в базі даних"
+    channel: "Канал для логів"
+
+    events:
+      message: "Повідомлення"
+      message.edit: "Редагування повідомлень"
+      message.delete: "Видалення повідомлень"
+
+      member: "Учасники"
+      member.join: "Вхід на сервер"
+      member.leave: "Вихід із сервера"
+      member.nickname: "Зміна нікнейма"
+      member.role_add: "Отримання ролей"
+      member.role_remove: "Втрата ролей"
+
+      voice: "Голосові канали"
+      voice.join: "Підключення до каналу"
+      voice.leave: "Відключення від каналу"
+      voice.move: "Переміщення між каналами"
+
+      stage: "Трибуни (Сцени)"
+      stage.start: "Відкриття трибуни"
+      stage.end: "Закриття трибуни"
+      stage.topic: "Зміна теми трибуни"
+
+  message:
+    edit:
+      $embed:
+        color: 33adff
+        description: |
+          ### Повідомлення відредаговано
+          
+          **Автор:** {author}
+          **Канал:** {channel}
+
+          [Перейти до повідомлення]({link})
+        fields:
+          - name: "Зміни:"
+            value: |
+              ```diff
+              {diff}
+              ```
+        footer: "ID повідомлення: {message_id}"
+
+    delete:
+      $embed:
+        color: ff3366
+        description: |
+          ### Повідомлення видалено
+          
+          **Автор:** {author}
+          **Канал:** {channel}
+          **Час відправки:** <t:{time}:F>
+        fields:
+          - name: "Вміст:"
+            value: |
+              ```
+              {content}
+              ```
+        footer: "ID повідомлення: {message_id}"
+
+    delete_bulk:
+      $embed:
+        color: ff3366
+        description: |
+          ### Видалено декілька повідомлень одразу
+          
+          **Кількість:** {count}
+          **Канал:** {channel}
+
+    member:
+      join:
+        $embed:
+          color: 82eb90
+          description: |
+            **Учасник {user} ({name}) зайшов на сервер**
+
+          footer: "ID учасника: {user_id}"
+
+      leave:
+        $embed:
+          color: ff4d4d
+          description: |
+            **Учасник {user} ({name}) покинув цей сервер**
+
+          footer: "ID учасника: {user_id}"
+
+      nickname:
+        $embed:
+          color: 2b2d31
+          description: |
+            ### Нікнейм учасника {user} було змінено
+            
+            **Старий нікнейм:** {old_name}
+            **Новий нікнейм:** {new_name}
+
+          footer: "ID учасника: {user_id}"
+
+      role_add:
+        $embed:
+          color: 82eb90
+          description: |
+            ### Змінено ролі користувача {user}
+            **Додані ролі:** {roles}
+          footer: "ID учасника: {user_id}"
+
+      role_remove:
+        $embed:
+          color: ff4d4d
+          description: |
+            ### Змінено ролі користувача {user}
+            **Видалені ролі:** {roles}
+          footer: "ID учасника: {user_id}"
+
+    voice:
+      join:
+        $embed:
+          color: 82eb90
+          description: "** Учасник {user} ({username}) приєднався до каналу {channel} ({channel_name}) **"
+          footer: "ID учасника: {user_id}"
+
+      leave:
+        $embed:
+          color: ff4d4d
+          description: "** Учасник {user} ({username}) покинув канал {channel} ({channel_name}) **"
+          footer: "ID учасника: {user_id}"
+
+      move:
+        $embed:
+          color: 33adff
+          description: "** Учасника {user} ({username}) було переміщено: {old_channel} -> {new_channel} **"
+          footer: "ID учасника: {user_id}"
+
+    stage:
+      start:
+        $embed:
+          title: "Трибуну {stage_channel} відкрито"
+          color: 82eb90
+          description: |
+            **Тема трибуни:** {topic}
+
+      end:
+        $embed:
+          title: "Трибуну {stage_channel} закрито"
+          color: ff4d4d
+          description: |
+            **Тема трибуни:** {topic}
+
+      topic:
+        $embed:
+          title: "Змінено тему трибуни {stage_channel}"
+          color: 33adff
+          fields:
+            - name: "Стара тема:"
+              value: "{old_topic}"
+            - name: "Нова тема:"
+              value: "{new_topic}"
+
+
+  command:
+    description: "Керування модулем логування"
+
+    enable:
+      description: "Увімкнути модуль логування на цьому сервері"
+
+      channel:
+        name: "канал"
+        description: "Виберіть текстовий канал, куди будуть надсилатися логи"
+
+      success:
+        $embed:
+          color: 82eb90
+          description: "Модуль логування успішно увімкнено"
+
+      no-channel:
+        $embed:
+          color: ff4d4d
+          description: "Спочатку вкажіть канал для логів: `/logging channel <канал>`"
+
+
+    disable:
+      description: "Вимкнути модуль логування на цьому сервері"
+      success:
+        $embed:
+          color: ff4d4d
+          description: "Модуль логування успішно вимкнено"
+
+
+    channel:
+      description: "Встановити або змінити канал для надсилання логів"
+      channel:
+        name: "канал"
+        description: "Виберіть текстовий канал, куди будуть надсилатися логи"
+
+      success:
+        $embed:
+          color: 82eb90
+          description: "Канал для логування успішно встановлено"

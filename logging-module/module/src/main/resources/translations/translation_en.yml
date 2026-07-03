@@ -1,0 +1,203 @@
+$name: sbds:english
+
+logging:
+  config:
+    enabled: "Enable logging"
+    database_logging: "Save logs in database"
+    channel: "Log channel"
+
+    events:
+      message: "Messages"
+      message.edit: "Message edits"
+      message.delete: "Message deletions"
+
+      member: "Members"
+      member.join: "Server joins"
+      member.leave: "Server leaves"
+      member.nickname: "Nickname changes"
+      member.role_add: "Role additions"
+      member.role_remove: "Role removals"
+
+      voice: "Voice channels"
+      voice.join: "Channel joins"
+      voice.leave: "Channel leaves"
+      voice.move: "Channel moves"
+
+      stage: "Stages"
+      stage.start: "Stage opens"
+      stage.end: "Stage closes"
+      stage.topic: "Stage topic changes"
+
+  message:
+    edit:
+      $embed:
+        color: 33adff
+        description: |
+          ### Message edited
+          
+          **Author:** {author}
+          **Channel:** {channel}
+
+          [Jump to message]({link})
+        fields:
+          - name: "Changes:"
+            value: |
+              ```diff
+              {diff}
+              ```
+        footer: "Message ID: {message_id}"
+
+    delete:
+      $embed:
+        color: ff3366
+        description: |
+          ### Message deleted
+          
+          **Author:** {author}
+          **Channel:** {channel}
+          **Sending time:** <t:{time}:F>
+        fields:
+          - name: "Content:"
+            value: |
+              ```
+              {content}
+              ```
+        footer: "Message ID: {message_id}"
+
+    delete_bulk:
+      $embed:
+        color: ff3366
+        description: |
+          ### Multiple messages deleted
+          
+          **Count:** {count}
+          **Channel:** {channel}
+
+    member:
+      join:
+        $embed:
+          color: 82eb90
+          description: |
+            **Member {user} ({name}) joined the server**
+            
+          footer: "Member ID: {user_id}"
+
+      leave:
+        $embed:
+          color: ff4d4d
+          description: |
+            **Member {user} ({name}) left this server**
+            
+          footer: "Member ID: {user_id}"
+
+      nickname:
+        $embed:
+          color: 2b2d31
+          description: |
+            ### Member {user}'s nickname was changed
+            
+            **Old nickname:** {old_name}
+            **New nickname:** {new_name}
+            
+          footer: "Member ID: {user_id}"
+
+      role_add:
+        $embed:
+          color: 82eb90
+          description: |
+            ### Roles changed for user {user}
+            **Added roles:** {roles}
+          footer: "Member ID: {user_id}"
+
+      role_remove:
+        $embed:
+          color: ff4d4d
+          description: |
+            ### Roles changed for user {user}
+            **Removed roles:** {roles}
+          footer: "Member ID: {user_id}"
+
+    voice:
+      join:
+        $embed:
+          color: 82eb90
+          description: "** Member {user} ({username}) joined channel {channel} ({channel_name}) **"
+          footer: "Member ID: {user_id}"
+
+      leave:
+        $embed:
+          color: ff4d4d
+          description: "** Member {user} ({username}) left channel {channel} ({channel_name}) **"
+          footer: "Member ID: {user_id}"
+
+      move:
+        $embed:
+          color: 33adff
+          description: "** Member {user} ({username}) was moved: {old_channel} -> {new_channel} **"
+          footer: "Member ID: {user_id}"
+
+    stage:
+      start:
+        $embed:
+          title: "Stage {stage_channel} opened"
+          color: 82eb90
+          description: |
+            **Stage topic:** {topic}
+
+      end:
+        $embed:
+          title: "Stage {stage_channel} closed"
+          color: ff4d4d
+          description: |
+            **Stage topic:** {topic}
+
+      topic:
+        $embed:
+          title: "Topic changed for stage {stage_channel}"
+          color: 33adff
+          fields:
+            - name: "Old topic:"
+              value: "{old_topic}"
+            - name: "New topic:"
+              value: "{new_topic}"
+
+
+  command:
+    description: "Manage the logging module"
+
+    enable:
+      description: "Enable the logging module on this server"
+
+      channel:
+        name: "channel"
+        description: "Select the text channel where logs will be sent"
+
+      success:
+        $embed:
+          color: 82eb90
+          description: "Logging module successfully enabled"
+
+      no-channel:
+        $embed:
+          color: ff4d4d
+          description: "First, specify a log channel: `/logging channel <channel>`"
+
+
+    disable:
+      description: "Disable the logging module on this server"
+      success:
+        $embed:
+          color: ff4d4d
+          description: "Logging module successfully disabled"
+
+
+    channel:
+      description: "Set or change the channel for sending logs"
+      channel:
+        name: "channel"
+        description: "Select the text channel where logs will be sent"
+
+      success:
+        $embed:
+          color: 82eb90
+          description: "Log channel successfully set"

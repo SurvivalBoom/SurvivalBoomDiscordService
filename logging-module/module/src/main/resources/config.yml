@@ -1,0 +1,11 @@
+#
+# SurvivalBoom Discord Service | SurvivalBoom Network 2026
+#            Logging Module | By Mycetik
+#
+
+cache:
+  # Час зберігання повідомлень в оперативній пам'яті. 0 - Це вічне зберігання
+  ram_ttl_hours: 24
+
+  # Час зберігання повідомлень в базі даних. 0 - Це вічне зберігання
+  disk_ttl_hours: 0

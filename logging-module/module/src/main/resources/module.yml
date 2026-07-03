@@ -1,0 +1,11 @@
+
+main: "net.survivalboom.sbds.modules.logging.LoggingModule"
+
+name: "LoggingModule"
+description: "Модуль логування для SBDS."
+version: "1.0"
+
+author: Mycetik
+website: "https://survivalboom.net"
+
+
