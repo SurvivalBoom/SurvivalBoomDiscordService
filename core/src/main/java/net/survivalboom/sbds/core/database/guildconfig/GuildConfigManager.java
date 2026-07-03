@@ -46,6 +46,8 @@ public class GuildConfigManager extends Manager implements IGuildConfigManager, 
             builder
                 .setTranslation("sbds.config")
                 .addField("prefix", String.class, "!")
+                    .addField("language", String.class, "sbds:english")
+                    .addField("timezone", TimeZone.class, TimeZone.getDefault())
         );
 
     }

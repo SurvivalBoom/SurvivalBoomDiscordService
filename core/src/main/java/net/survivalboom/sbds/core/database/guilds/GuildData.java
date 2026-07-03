@@ -48,15 +48,32 @@ public class GuildData extends Valid implements IGuildData {
     // TRANSLATION //
 
     @Override
-    public @Nullable ITranslation getTranslation() {
-        return record.getTranslation();
-    }
-
-    @Override
-    public void setTranslation(@Nullable ITranslation translation) {
+    public @NotNull ITranslation getTranslation() {
         checkValid();
-        record.setTranslation(translation);
-        save();
+
+        var configTemplate = manager.getSbds().getGuildConfigManager().getTemplate("sbds:config");
+        if (configTemplate != null) {
+            var config = manager.getSbds().getGuildConfigManager().getGuildConfig(configTemplate, guild.getIdLong());
+
+            String langKey = config.get("language", String.class, true).join().orElse("sbds:english");
+
+            ITranslation translation = manager.getSbds().getTranslationManager().getTranslation(langKey);
+            if (translation != null) {
+                return translation;
+            }
+        }
+
+        ITranslation defaultTranslation = manager.getSbds().getTranslationManager().getDefaultTranslation();
+        if (defaultTranslation != null) {
+            return defaultTranslation;
+        }
+
+        ITranslation fallbackTranslation = manager.getSbds().getTranslationManager().getFallbackTranslation();
+        if (fallbackTranslation != null) {
+            return fallbackTranslation;
+        }
+
+        throw new IllegalStateException("Critical error: No translations available in TranslationManager!");
     }
 
     // DATABASE //

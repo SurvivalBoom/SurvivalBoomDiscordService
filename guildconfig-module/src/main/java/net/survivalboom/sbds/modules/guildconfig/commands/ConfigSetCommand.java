@@ -19,6 +19,9 @@ import net.survivalboom.sbds.api.database.guildconfig.IGuildConfigTemplate;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.TimeZone;
 
 @CommandClass(name = "set", description = "Set an option value for this guild", translationKey = "guildconfig.command.config.set", permission = "guilconfig.command.config.set")
 public class ConfigSetCommand extends CommandBase implements SlashCommandExecutor {
@@ -54,9 +57,27 @@ public class ConfigSetCommand extends CommandBase implements SlashCommandExecuto
             value = null;
         }
 
+        if (field.type() == TimeZone.class && value instanceof String tzStr) {
+            if (!Arrays.asList(TimeZone.getAvailableIDs()).contains(tzStr)) {
+                String fieldTranslated = template.getTranslationKey() != null ? field.createTranslationKey(template) : template.getKey() + ":" + field.key();
+                info.reply("guildconfig.command.config.set.invalid-value")
+                        .withPlaceholders(
+                                "option", field,
+                                "option.translated", fieldTranslated,
+                                "value", tzStr
+                        )
+                        .queue();
+                return;
+            }
+            value = TimeZone.getTimeZone(tzStr);
+        }
+
         String fieldTranslated = template.getTranslationKey() != null ? field.createTranslationKey(template) : template.getKey() + ":" + field.key();
         Object valueTranslated = value != null ? value : field.defaultValue();
-        if (valueTranslated == null) {
+
+        if (valueTranslated instanceof TimeZone tz) {
+            valueTranslated = tz.getID();
+        } else if (valueTranslated == null) {
             valueTranslated = "$[guildconfig.values.empty]";
         }
 
@@ -127,6 +148,29 @@ public class ConfigSetCommand extends CommandBase implements SlashCommandExecuto
     @ArgumentMethod(index = 2, required = false)
     public StringArgument string() {
         return new StringArgument();
+    }
+
+    @ArgumentMethod(index = 2, required = false)
+    public StringArgument timezone() {
+        return new StringArgument(context -> List.of(
+                new Command.Choice("UTC", "UTC"),
+                new Command.Choice("Europe/Kyiv", "Europe/Kyiv"),
+                new Command.Choice("Europe/Warsaw", "Europe/Warsaw"),
+                new Command.Choice("Europe/London", "Europe/London"),
+                new Command.Choice("Europe/Berlin", "Europe/Berlin"),
+                new Command.Choice("Europe/Paris", "Europe/Paris"),
+                new Command.Choice("America/New_York", "America/New_York"),
+                new Command.Choice("America/Chicago", "America/Chicago"),
+                new Command.Choice("America/Los_Angeles", "America/Los_Angeles"),
+                new Command.Choice("America/Sao_Paulo", "America/Sao_Paulo"),
+                new Command.Choice("Asia/Istanbul", "Asia/Istanbul"),
+                new Command.Choice("Asia/Dubai", "Asia/Dubai"),
+                new Command.Choice("Asia/Kolkata", "Asia/Kolkata"),
+                new Command.Choice("Asia/Shanghai", "Asia/Shanghai"),
+                new Command.Choice("Asia/Tokyo", "Asia/Tokyo"),
+                new Command.Choice("Australia/Sydney", "Australia/Sydney"),
+                new Command.Choice("Pacific/Auckland", "Pacific/Auckland")
+        ));
     }
 
     @ArgumentMethod(index = 2, required = false)

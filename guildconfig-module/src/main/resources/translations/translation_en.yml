@@ -78,6 +78,9 @@ guildconfig:
           name: user
           description: Specify a user
 
+        timezone:
+          name: time-zone
+          description: Set time zone
 
 
         success:

@@ -21,8 +21,6 @@ public interface IGuildData extends IValid {
 
     @Nullable ITranslation getTranslation();
 
-    void setTranslation(@Nullable ITranslation translation);
-
     // DATA //
 
     @NotNull INamespacedDataContainer container();

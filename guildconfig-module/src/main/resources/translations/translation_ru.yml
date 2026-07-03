@@ -79,6 +79,9 @@ guildconfig:
           name: пользователь
           description: Указать пользователя
 
+        timezone:
+          name: часовий-пояс
+          description: Установить часовий пояс
 
         success:
           $embed:

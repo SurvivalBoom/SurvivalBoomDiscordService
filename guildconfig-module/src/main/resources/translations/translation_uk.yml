@@ -79,6 +79,9 @@ guildconfig:
           name: користувач
           description: Вказати користувача
 
+        timezone:
+          name: часовий-пояс
+          description: Встановити часовий пояс
 
 
         success:

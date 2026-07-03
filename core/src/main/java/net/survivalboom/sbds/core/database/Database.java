@@ -7,6 +7,7 @@ import net.survivalboom.sbds.api.database.DataRecord;
 import net.survivalboom.sbds.api.database.IDatabase;
 import net.survivalboom.sbds.api.database.IRepository;
 import net.survivalboom.sbds.api.database.converters.ChannelConverter;
+import net.survivalboom.sbds.api.database.converters.TimeZoneConverter;
 import net.survivalboom.sbds.api.modules.IModule;
 import net.survivalboom.sbds.api.registrations.Registration;
 import net.survivalboom.sbds.api.utils.CommonUtils;
@@ -87,6 +88,7 @@ public class Database extends Manager implements IDatabase {
         rebuildQueue.init();
 
         registerSerializer0(null, Channel.class, new ChannelConverter());
+        registerSerializer0(null, TimeZone.class, new TimeZoneConverter());
 
         queue.init();
 

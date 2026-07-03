@@ -12,6 +12,7 @@ import net.survivalboom.sbds.api.messages.template.EmbedMessageTemplate;
 import net.survivalboom.sbds.api.messages.template.IMessageTemplate;
 import net.survivalboom.sbds.api.messages.template.TextMessageTemplate;
 import org.jetbrains.annotations.NotNull;
+import java.util.TimeZone;
 
 @CommandClass(name = "list", description = "Shows all of the available options to configure for this guild", translationKey = "guildconfig.command.config.list", permission = "guildconfig.command.config.list", defaultPermission = true)
 public class ConfigListCommand extends CommandBase implements SlashCommandExecutor {
@@ -64,7 +65,11 @@ public class ConfigListCommand extends CommandBase implements SlashCommandExecut
 
                 String fieldTranslated = template.getTranslationKey() != null ? field.createTranslationKey(template) : field.key();
                 Object valueTranslated = value != null ? value : field.defaultValue();
-                if (valueTranslated == null) {
+
+                if (valueTranslated instanceof TimeZone tz) {
+                    valueTranslated = tz.getID();
+                }
+                else if (valueTranslated == null) {
                     valueTranslated = "$[guildconfig.values.empty]";
                 }
 
