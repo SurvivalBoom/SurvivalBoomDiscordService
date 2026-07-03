@@ -119,26 +119,16 @@ logging:
       pattern: net.dv8tion.jda
       level: WARN
 
-# Налаштування Discord gateway intents.
-discord:
+# Налаштування Discord бота.
+bot:
 
   # Які gateway intents запитувати у Discord при запуску SBDS.
   # Значення має відповідати переліку з https://jda.wiki/using-jda/gateway-intents/
   # Привілейовані інтенти (GUILD_MEMBERS, GUILD_PRESENCES, MESSAGE_CONTENT) потребують увімкнення у Discord Developer Portal.
-  gateway-intents:
-    - MESSAGE_CONTENT
-    - GUILD_MESSAGES
-    - GUILD_MESSAGE_REACTIONS
-    - DIRECT_MESSAGES
-    - DIRECT_MESSAGE_REACTIONS
-    - GUILD_VOICE_STATES
-    - GUILD_INVITES
-    - GUILD_WEBHOOKS
-    - GUILD_EMOJIS_AND_STICKERS
-    - GUILD_MESSAGE_TYPING
-    - GUILD_MODERATION
-    - AUTO_MODERATION_CONFIGURATION
-    - AUTO_MODERATION_EXECUTION
+  # Лишіть список пустим, щоб SBDS використовував усі можливі Gateway Intents.
+  # Або ж вкажіть конкретні Gateway Intents, якщо у вас якийсь специфічний випадок використання.
+  gateway-intents: []
+
 #
 # SBDS підтримує систему перекладів.
 # За замовчуванням, користувач може обрати переклад що буде використовуватись у повідомленнях від бота користувачу.

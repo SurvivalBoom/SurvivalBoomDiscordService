@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.exceptions.InvalidTokenException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.survivalboom.sbds.api.ISBDS;
 import net.survivalboom.sbds.api.SbdsProvider;
 import net.survivalboom.sbds.api.database.guildconfig.IGuildConfigManager;
@@ -39,6 +40,7 @@ import net.survivalboom.sbds.core.service.ServiceProvider;
 import net.survivalboom.sbds.core.translations.TranslationManager;
 import net.survivalboom.sbds.core.utils.placeholders.PlaceholderRegistry;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -46,9 +48,9 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Locale;
 
 public class SBDS implements ISBDS {
 
@@ -123,25 +125,7 @@ public class SBDS implements ISBDS {
 
     private final JDABuilder jdaBuilder;
 
-    private static final EnumSet<GatewayIntent> DEFAULT_GATEWAY_INTENTS = EnumSet.of(
-            GatewayIntent.GUILD_MESSAGES,
-            GatewayIntent.GUILD_MESSAGE_REACTIONS,
-            GatewayIntent.DIRECT_MESSAGES,
-            GatewayIntent.DIRECT_MESSAGE_REACTIONS,
-            GatewayIntent.GUILD_VOICE_STATES,
-            GatewayIntent.GUILD_INVITES,
-            GatewayIntent.GUILD_WEBHOOKS,
-            GatewayIntent.GUILD_MESSAGE_TYPING,
-            GatewayIntent.GUILD_MODERATION,
-            GatewayIntent.AUTO_MODERATION_CONFIGURATION,
-            GatewayIntent.AUTO_MODERATION_EXECUTION
-    );
-
-    private static final EnumSet<GatewayIntent> PRIVILEGED_GATEWAY_INTENTS = EnumSet.of(
-            GatewayIntent.GUILD_MEMBERS,
-            GatewayIntent.GUILD_PRESENCES,
-            GatewayIntent.MESSAGE_CONTENT
-    );
+    private static final EnumSet<GatewayIntent> ALL_GATEWAY_INTENTS = EnumSet.allOf(GatewayIntent.class);
 
     private JDA bot = null;
 
@@ -158,9 +142,7 @@ public class SBDS implements ISBDS {
 
         this.logger = logger;
         this.configuration = configuration;
-        this.jdaBuilder = JDABuilder.createDefault(token, resolveGatewayIntents(configuration))
-                .setMemberCachePolicy(MemberCachePolicy.ALL)
-                .setChunkingFilter(ChunkingFilter.ALL); // Без цього виникають баги за певних обставин, бо JDA кешував не всіх учасників
+        this.jdaBuilder = createJdaBuilder(token, configuration);
         this.workingDir = workingDir;
 
         this.librariesManager = librariesManager;
@@ -505,52 +487,59 @@ public class SBDS implements ISBDS {
         return commandInteractionManager;
     }
 
-    private @NotNull EnumSet<GatewayIntent> resolveGatewayIntents(@NotNull ConfigurationNode configuration) {
+    // JDA BUILDER //
 
-        EnumSet<GatewayIntent> intents = EnumSet.copyOf(DEFAULT_GATEWAY_INTENTS);
+    private @NotNull JDABuilder createJdaBuilder(@NotNull String token, @NotNull ConfigurationNode configuration) {
 
-        List<String> configured;
+        Collection<GatewayIntent> intents = resolveGatewayIntents(configuration);
+
+        JDABuilder builder = JDABuilder.createDefault(token, intents);
+
+        // Без цього виникають баги за певних обставин, бо JDA кешував не всіх учасників
+        if (intents.contains(GatewayIntent.GUILD_MEMBERS)) {
+            builder.setMemberCachePolicy(MemberCachePolicy.ALL);
+            builder.setChunkingFilter(ChunkingFilter.ALL);
+        }
+
+        return builder;
+
+    }
+
+    // GATEWAY INTENTS //
+
+    private @NotNull Collection<GatewayIntent> resolveGatewayIntents(@NotNull ConfigurationNode configuration) {
+
+        List<GatewayIntent> intents = resolveGatewayIntents0(configuration);
+        if (intents == null || intents.isEmpty()) {
+            return ALL_GATEWAY_INTENTS;
+        }
+
+        logger.info("Using configured gateway intents: {}", String.join(", ", intents.stream().map(GatewayIntent::toString).toList()));
+
+        return intents;
+
+    }
+
+    private @Nullable List<GatewayIntent> resolveGatewayIntents0(@NotNull ConfigurationNode configuration) {
+
+        ConfigurationNode node = configuration.node("bot").node("gateway-intents");
+        if (node.virtual() || !node.isList()) {
+            return null;
+        }
+
+        List<GatewayIntent> intents;
         try {
-            configured = configuration.node("discord", "gateway-intents").getList(String.class);
+            intents = node.getList(GatewayIntent.class);
         }
 
         catch (SerializationException e) {
-            logger.error("Invalid discord.gateway-intents. Using safe defaults: {}", intents);
-            return intents;
+            logger.error("Failed to load Gateway intents. You broke the configuration file. Live with it. \n - {}", e.getMessage());
+            Main.exit();
+            return null;
         }
 
-        if (configured == null || configured.isEmpty()) {
-            logger.warn("discord.gateway-intents not configured. Using safe defaults: {}", intents);
-            return intents;
-        }
+        return intents;
 
-        EnumSet<GatewayIntent> parsed = EnumSet.noneOf(GatewayIntent.class);
-        for (String name : configured) {
-            if (name == null || name.isBlank()) continue;
-
-            String trimmed = name.trim();
-            try {
-                GatewayIntent intent = GatewayIntent.valueOf(trimmed.toUpperCase(Locale.ROOT));
-                parsed.add(intent);
-            }
-            catch (IllegalArgumentException ex) {
-                logger.warn("Unknown gateway intent '{}' in settings.yml. Skipping...", trimmed);
-            }
-        }
-
-        if (parsed.isEmpty()) {
-            logger.warn("No valid gateway intents configured; falling back to safe defaults: {}", intents);
-            return intents;
-        }
-
-        EnumSet<GatewayIntent> privileged = EnumSet.copyOf(PRIVILEGED_GATEWAY_INTENTS);
-        privileged.retainAll(parsed);
-//        if (!privileged.isEmpty()) {
-//            logger.warn("Privileged gateway intents requested: {}. Ensure they are enabled in the Discord developer portal.", privileged);
-//        }
-
-//        logger.info("Using configured gateway intents: {}", parsed);
-        return parsed;
     }
 
     //
