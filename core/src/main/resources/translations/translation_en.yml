@@ -23,6 +23,8 @@ sbds:
   config:
     label: "Core settings"
     prefix: "Command prefix"
+    translation: "Server translation"
+    timezone: "Time zone"
 
   command:
 

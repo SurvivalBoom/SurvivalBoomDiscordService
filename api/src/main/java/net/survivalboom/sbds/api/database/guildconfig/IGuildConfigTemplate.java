@@ -26,6 +26,10 @@ public interface IGuildConfigTemplate extends IValid {
     @NotNull Map<String, GuildConfigField> getFields();
 
 
-    @NotNull IGuildConfig obtainConfig(@NotNull Guild guild);
+    @NotNull IGuildConfig obtainConfig(long guildId);
+
+    default @NotNull IGuildConfig obtainConfig(@NotNull Guild guild) {
+        return obtainConfig(guild.getIdLong());
+    }
 
 }

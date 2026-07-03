@@ -36,6 +36,8 @@ public interface IGuildConfigManager extends IManager {
     // GUILD CONFIG
     //
 
+    // GET //
+
     @NotNull IGuildConfig getGuildConfig(@NotNull IGuildConfigTemplate template, long guildId);
 
     default @Nullable IGuildConfig getGuildConfig(@NotNull IGuildConfigTemplate template, @NotNull Guild guild) {
@@ -48,6 +50,13 @@ public interface IGuildConfigManager extends IManager {
         return getGuildConfigs(guild.getIdLong());
     }
 
+    // DEFAULT //
+
+    @NotNull IGuildConfigTemplate getSbdsConfig();
+
+    //
+    // DE-BILDER
+    //
 
     interface IGuildConfigBuilder {
 

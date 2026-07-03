@@ -23,6 +23,8 @@ sbds:
   config:
     label: "Параметры ядра"
     prefix: "Префикс команд"
+    translation: "Перевод сервера"
+    timezone: "Часовой пояс"
 
   command:
 

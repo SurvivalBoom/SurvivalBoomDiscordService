@@ -8,6 +8,7 @@ import net.survivalboom.sbds.api.database.guilds.IGuildDataManager;
 import net.survivalboom.sbds.api.modules.IModule;
 import net.survivalboom.sbds.api.registrations.Registration;
 import net.survivalboom.sbds.api.registrations.RegistrationManager;
+import net.survivalboom.sbds.api.translations.ITranslation;
 import net.survivalboom.sbds.api.utils.NamespacedKey;
 import net.survivalboom.sbds.api.utils.valid.Manager;
 import net.survivalboom.sbds.core.SBDS;
@@ -46,8 +47,8 @@ public class GuildConfigManager extends Manager implements IGuildConfigManager, 
             builder
                 .setTranslation("sbds.config")
                 .addField("prefix", String.class, "!")
-                    .addField("language", String.class, "sbds:english")
-                    .addField("timezone", TimeZone.class, TimeZone.getDefault())
+                .addField("translation", ITranslation.class, null)
+                .addField("timezone", TimeZone.class, TimeZone.getDefault())
         );
 
     }
@@ -139,6 +140,8 @@ public class GuildConfigManager extends Manager implements IGuildConfigManager, 
     // GUILD CONFIG
     //
 
+    // GET //
+
     @Override
     public @NotNull IGuildConfig getGuildConfig(@NotNull IGuildConfigTemplate template, long guildId) {
 
@@ -160,6 +163,17 @@ public class GuildConfigManager extends Manager implements IGuildConfigManager, 
                 .map(template -> getGuildConfig(template, guildId))
                 .collect(Collectors.toList());
     }
+
+    // DEFAULT //
+
+    @Override
+    public @NotNull IGuildConfigTemplate getSbdsConfig() {
+        return Objects.requireNonNull(getTemplate("sbds:config"), "sbds template == null; Congratulations! You totally fucked up!");
+    }
+
+    //
+    // DE-BUILDER
+    //
 
     public static class Builder implements IGuildConfigBuilder {
 

@@ -69,9 +69,9 @@ public class GuildConfigTemplate extends Valid implements IGuildConfigTemplate {
     }
 
     @Override
-    public @NotNull IGuildConfig obtainConfig(@NotNull Guild guild) {
+    public @NotNull IGuildConfig obtainConfig(long guildId) {
         checkValid();
-        return manager.getGuildConfig(this, guild.getIdLong());
+        return manager.getGuildConfig(this, guildId);
     }
 
 }

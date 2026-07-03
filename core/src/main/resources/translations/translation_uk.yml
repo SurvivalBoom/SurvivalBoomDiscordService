@@ -23,6 +23,8 @@ sbds:
   config:
     label: "Налаштування ядра"
     prefix: "Префікс команд"
+    translation: "Переклад серверу"
+    timezone: "Часовий пояс"
 
   command:
 
