@@ -7,20 +7,61 @@ public abstract class Manager extends Valid implements IManager {
     }
 
     public void init() {
-        if (isValid()) throw new IllegalStateException("Manager already initialized");
+
+        if (isValid()) {
+            throw new IllegalStateException("Manager already initialized");
+        }
+
         setValid(true);
-        init0();
+
+        try {
+            init0();
+        }
+
+        catch (RuntimeException e) {
+            setValid(false);
+            throw e;
+        }
+
     }
 
     public void shutdown() {
+
         checkValid();
-        shutdown0();
-        setValid(false);
+
+        try {
+            shutdown0();
+        }
+
+        finally {
+            setValid(false);
+        }
+
     }
 
-    public void shutdownIfNeeded() {
-        if (!isValid()) return;
+
+    public boolean initIfNeeded() {
+
+        if (isValid()) {
+            return false;
+        }
+
+        init();
+
+        return true;
+
+    }
+
+    public boolean shutdownIfNeeded() {
+
+        if (!isValid()) {
+            return false;
+        }
+
         shutdown();
+
+        return true;
+
     }
 
 
