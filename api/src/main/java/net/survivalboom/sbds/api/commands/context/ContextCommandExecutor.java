@@ -1,10 +1,10 @@
 package net.survivalboom.sbds.api.commands.context;
 
-import net.dv8tion.jda.api.events.interaction.command.GenericContextInteractionEvent;
+import net.survivalboom.sbds.api.commands.CommandExecutor;
 import org.jetbrains.annotations.NotNull;
 
-public interface ContextCommandExecutor<E extends ContextInteractionInfo<?>> {
+public interface ContextCommandExecutor<E extends ContextInteractionInfo<?>> extends CommandExecutor {
 
-    void execute(@NotNull E info) throws Throwable;
+    void executes(@NotNull E info) throws Throwable;
 
 }

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class TestUserContext extends CommandBase implements UserContextCommandExecutor {
 
     @Override
-    public void execute(@NotNull UserContextInteractionInfo info) {
+    public void executes(@NotNull UserContextInteractionInfo info) {
         User user = info.user();
         info.reply("testmodule.context.user").withPlaceholders("user", user).queue();
     }

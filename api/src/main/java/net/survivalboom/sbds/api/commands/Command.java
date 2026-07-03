@@ -2,7 +2,16 @@ package net.survivalboom.sbds.api.commands;
 
 import net.survivalboom.sbds.api.commands.argument.Argument;
 import net.survivalboom.sbds.api.commands.argument.misc.SubCommandArgument;
+import net.survivalboom.sbds.api.commands.console.ConsoleCommandExecutor;
+import net.survivalboom.sbds.api.commands.console.ConsoleExecutionInfo;
+import net.survivalboom.sbds.api.commands.context.ContextCommandExecutor;
+import net.survivalboom.sbds.api.commands.context.ContextInteractionInfo;
+import net.survivalboom.sbds.api.commands.slash.SlashCommandExecutor;
+import net.survivalboom.sbds.api.commands.slash.SlashExecutionInfo;
+import net.survivalboom.sbds.api.commands.string.StringCommandExecutor;
+import net.survivalboom.sbds.api.commands.string.StringExecutionInfo;
 import net.survivalboom.sbds.api.permissions.Permission;
+import net.survivalboom.sbds.api.utils.ThrowingConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -248,6 +257,41 @@ public class Command {
 
         public @NotNull Builder setExecutor(@Nullable CommandExecutor executor) {
             this.executor = executor;
+            return this;
+        }
+
+        public @NotNull Builder setConsoleExecutor(@NotNull ThrowingConsumer<ConsoleExecutionInfo> executor) {
+            this.executor = new ConsoleCommandExecutor() {
+                @Override
+                public void executes(@NotNull ConsoleExecutionInfo info) throws Throwable {
+                    executor.acceptThrowing(info);
+                }
+            };
+            return this;
+        }
+
+        public @NotNull Builder setStringExecutor(@NotNull ThrowingConsumer<StringExecutionInfo> executor) {
+            this.executor = new StringCommandExecutor() {
+                @Override
+                public void executes(@NotNull StringExecutionInfo info) throws Throwable {
+                    executor.acceptThrowing(info);
+                }
+            };
+            return this;
+        }
+
+        public @NotNull Builder setSlashExecutor(@NotNull ThrowingConsumer<SlashExecutionInfo> executor) {
+            this.executor = new SlashCommandExecutor() {
+                @Override
+                public void executes(@NotNull SlashExecutionInfo info) throws Throwable {
+                    executor.acceptThrowing(info);
+                }
+            };
+            return this;
+        }
+
+        public @NotNull Builder setContextExecutor(@NotNull ThrowingConsumer<ContextInteractionInfo<?>> executor) {
+            this.executor = (ContextCommandExecutor<ContextInteractionInfo<?>>) executor::acceptThrowing;
             return this;
         }
 

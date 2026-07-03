@@ -4,11 +4,9 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.GenericContextInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.survivalboom.sbds.api.commands.Command;
 import net.survivalboom.sbds.api.commands.CommandExecutor;
 import net.survivalboom.sbds.api.commands.context.*;
-import net.survivalboom.sbds.api.commands.slash.SlashExecutionInfo;
 import net.survivalboom.sbds.api.events.EventHandler;
 import net.survivalboom.sbds.api.events.EventListener;
 import net.survivalboom.sbds.api.permissions.Permission;
@@ -131,7 +129,7 @@ public class ContextCommandManager extends AbstractCommandManager<IContextComman
                     }
 
                     if (executor0 != null) {
-                        executor0.execute(info);
+                        executor0.executes(info);
                     }
 
                 }
@@ -147,7 +145,7 @@ public class ContextCommandManager extends AbstractCommandManager<IContextComman
                     }
 
                     if (executor0 != null) {
-                        executor0.execute(info);
+                        executor0.executes(info);
                     }
 
                 }

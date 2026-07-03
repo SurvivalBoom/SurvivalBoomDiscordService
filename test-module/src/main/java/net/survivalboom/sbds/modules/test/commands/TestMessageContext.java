@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class TestMessageContext extends CommandBase implements MessageContextCommandExecutor {
 
     @Override
-    public void execute(@NotNull MessageContextInteractionInfo info) {
+    public void executes(@NotNull MessageContextInteractionInfo info) {
 
         Message message = info.event().getTarget();
 
