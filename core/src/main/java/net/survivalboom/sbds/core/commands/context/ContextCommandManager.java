@@ -1,13 +1,17 @@
 package net.survivalboom.sbds.core.commands.context;
 
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.GenericContextInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.survivalboom.sbds.api.commands.Command;
 import net.survivalboom.sbds.api.commands.CommandExecutor;
 import net.survivalboom.sbds.api.commands.context.*;
+import net.survivalboom.sbds.api.commands.slash.SlashExecutionInfo;
 import net.survivalboom.sbds.api.events.EventHandler;
 import net.survivalboom.sbds.api.events.EventListener;
+import net.survivalboom.sbds.api.permissions.Permission;
 import net.survivalboom.sbds.api.registrations.Registration;
 import net.survivalboom.sbds.core.SBDS;
 import net.survivalboom.sbds.core.commands.AbstractCommandManager;
@@ -122,6 +126,10 @@ public class ContextCommandManager extends AbstractCommandManager<IContextComman
                     UserContextCommandExecutor executor0 = (UserContextCommandExecutor) executor;
                     UserContextInteractionInfo info = new UserContextInteractionInfo(event0, registeredContextCommand, command, name, sbds);
 
+                    if (!permissionCheck(info)) {
+                        return;
+                    }
+
                     if (executor0 != null) {
                         executor0.execute(info);
                     }
@@ -133,6 +141,10 @@ public class ContextCommandManager extends AbstractCommandManager<IContextComman
                     MessageContextInteractionEvent event0 = (MessageContextInteractionEvent) event;
                     MessageContextCommandExecutor executor0 = (MessageContextCommandExecutor) executor;
                     MessageContextInteractionInfo info = new MessageContextInteractionInfo(event0, registeredContextCommand, command, name, sbds);
+
+                    if (!permissionCheck(info)) {
+                        return;
+                    }
 
                     if (executor0 != null) {
                         executor0.execute(info);
@@ -150,6 +162,28 @@ public class ContextCommandManager extends AbstractCommandManager<IContextComman
                     .withPlaceholders("exception", t)
                     .queue();
         }
+
+    }
+
+    private boolean permissionCheck(@NotNull ContextInteractionInfo<?> info) {
+
+        Permission permission = info.currentCommand().getPermission();
+        GenericContextInteractionEvent<?> event = info.event();
+
+        Member member = event.getMember();
+        if (member != null && permission != null) {
+
+            boolean hasPermission = permissionManager.hasPermission(member,  permission);
+            if (!hasPermission) {
+                messages.reply(event,"sbds.no-permission", event.getUser())
+                        .withPlaceholders("permission", permission.permission())
+                        .queue();
+                return false;
+            }
+
+        }
+
+        return true;
 
     }
 
