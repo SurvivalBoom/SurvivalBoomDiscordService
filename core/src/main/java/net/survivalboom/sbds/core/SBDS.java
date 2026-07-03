@@ -122,6 +122,8 @@ public class SBDS implements ISBDS {
 
     private boolean shutdownInitiated = false;
 
+    private boolean shutDownCompleted = false;
+
 
     private final JDABuilder jdaBuilder;
 
@@ -249,6 +251,11 @@ public class SBDS implements ISBDS {
 
         bot.getPresence().setPresence(OnlineStatus.IDLE, Activity.customStatus("Running on SBDS v" + BuildConstants.VERSION + "🦖"));
 
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            shutdown();
+            CommonUtils.waitUntil(() -> shutDownCompleted, 300000);
+        }));
+
         logger.info("");
         logger.info("SurvivalBoom Discord Service successfully started!");
         logger.info("");
@@ -328,6 +335,8 @@ public class SBDS implements ISBDS {
         registrationRegistry.shutdown();
 
         logger.info("Bye bye!");
+
+        this.shutDownCompleted = true;
 
     }
 
