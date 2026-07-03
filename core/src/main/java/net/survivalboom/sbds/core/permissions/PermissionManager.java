@@ -222,10 +222,8 @@ public class PermissionManager extends Manager implements IPermissionManager {
         checkValid();
 
         var map = permissionsGroupMap.computeIfAbsent(guildId, k -> new WeakHashMap<>());
-
-        IGuildPermissionsGroup group = map.get(name);
-        if (group != null) {
-            return CompletableFuture.completedFuture(group);
+        if (map.containsKey(name)) {
+            return CompletableFuture.completedFuture(map.get(name));
         }
 
         return guildDataManager.get(guildId).thenApply(guildData -> {
@@ -244,7 +242,7 @@ public class PermissionManager extends Manager implements IPermissionManager {
                 return null;
             }
 
-            int weight = section.node("wight").getInt(1);
+            int weight = section.node("weight").getInt(1);
 
             List<Permission> permissions;
             try {
@@ -255,7 +253,10 @@ public class PermissionManager extends Manager implements IPermissionManager {
 
             return new GuildPermissionsGroup(name, permissions, weight, guildData, this);
 
-        }).thenApply(group0 -> map.put(name, group0));
+        }).thenApply(group0 -> {
+            map.put(name, group0);
+            return group0;
+        });
 
     }
 
@@ -264,7 +265,7 @@ public class PermissionManager extends Manager implements IPermissionManager {
 
         checkValid();
 
-        return guildDataManager.get(guildId).thenApply(guildData -> {
+        return guildDataManager.get(guildId).thenCompose(guildData -> {
 
             if (guildData == null) {
                 return null;
@@ -275,39 +276,7 @@ public class PermissionManager extends Manager implements IPermissionManager {
                 return null;
             }
 
-            List<IGuildPermissionsGroup> groups = new ArrayList<>();
-            for (var entry : node.childrenMap().entrySet()) {
-
-                String name = (String) entry.getKey();
-                ConfigurationNode section = entry.getValue();
-
-                int weight = section.getInt(1);
-
-                List<Permission> permissions;
-                try {
-                    permissions = section.node("permissions").getList(Permission.class);
-                } catch (SerializationException e) {
-                    throw new RuntimeException(e);
-                }
-
-                GuildPermissionsGroup group = new GuildPermissionsGroup(name, permissions, weight, guildData, this);
-                groups.add(group);
-
-            }
-
-            return groups;
-
-        }).thenApply(groups -> {
-
-            if (groups == null) {
-                permissionsGroupMap.put(guildId, null);
-            }
-
-            else {
-                permissionsGroupMap.computeIfAbsent(guildId, k -> new WeakHashMap<>());
-            }
-
-            return groups;
+            return CommonUtils.sequenceAsync(node.childrenMap().keySet(), key -> getGuildGroup(guildId, key.toString()));
 
         });
 

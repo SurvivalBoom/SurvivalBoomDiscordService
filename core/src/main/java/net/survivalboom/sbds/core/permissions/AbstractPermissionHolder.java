@@ -145,6 +145,7 @@ public abstract class AbstractPermissionHolder extends Valid implements IPermiss
     public void removePermission(@NotNull String permission) {
         checkValid();
         permissionMap.remove(permission);
+        save();
     }
 
     // GET //
