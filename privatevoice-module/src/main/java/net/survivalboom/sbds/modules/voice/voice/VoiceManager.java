@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class VoiceManager extends Manager implements EventListener {
 
-    private static final Logger log = LoggerFactory.getLogger(VoiceManager.class);
+    private static final Logger log = LoggerFactory.getLogger(VoiceManager.class.getSimpleName());
 
     private final ModuleMain module;
 
@@ -175,6 +175,8 @@ public class VoiceManager extends Manager implements EventListener {
 
                     privateVoice.updateControlPanel(true);
 
+                    log.info("Created voice channel &b{} &rin &b{}&r.", channel.getGuild().getName(), channel.getName());
+
                     return member.getGuild().moveVoiceMember(member, channel).submit()
                             .thenApply(v -> {
                                 voiceMap.put(channel, privateVoice);
@@ -208,6 +210,7 @@ public class VoiceManager extends Manager implements EventListener {
         return getFallbackVoice(voice.getGuild()).thenCompose(fallback -> {
 
             voiceMap.remove(voice.getChannel());
+            log.info("Deleted voice channel &b{} &rin &b{}&r.", voice.getChannel().getGuild().getName(), voice.getChannel().getName());
 
             if (fallback != null) {
 
