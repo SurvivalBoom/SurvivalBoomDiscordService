@@ -78,7 +78,7 @@ public class ChangeStatusModule extends ModuleMain {
 
         getSbds().getBot().getPresence().setPresence(status.status, Activity.of(status.activity, status.text));
 
-        getLogger().info("Changed bot status to {} {} `{}`", status.status, status.activity, status.text);.
+        getLogger().info("Changed bot status to {} {} `{}`", status.status, status.activity, status.text);
 
     }
 
