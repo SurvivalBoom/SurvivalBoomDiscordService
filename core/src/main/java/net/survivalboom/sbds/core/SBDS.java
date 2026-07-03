@@ -42,6 +42,8 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
 
 import java.io.File;
 import java.util.EnumSet;
@@ -156,7 +158,9 @@ public class SBDS implements ISBDS {
 
         this.logger = logger;
         this.configuration = configuration;
-        this.jdaBuilder = JDABuilder.createDefault(token, resolveGatewayIntents(configuration));
+        this.jdaBuilder = JDABuilder.createDefault(token, resolveGatewayIntents(configuration))
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
+                .setChunkingFilter(ChunkingFilter.ALL); // Без цього виникають баги за певних обставин, бо JDA кешував не всіх учасників
         this.workingDir = workingDir;
 
         this.librariesManager = librariesManager;
