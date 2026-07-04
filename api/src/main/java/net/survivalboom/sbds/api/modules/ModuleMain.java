@@ -16,8 +16,9 @@ import net.survivalboom.sbds.api.commands.slash.ISlashCommandManager;
 import net.survivalboom.sbds.api.commands.slash.SlashCommandExecutor;
 import net.survivalboom.sbds.api.commands.string.IStringCommandManager;
 import net.survivalboom.sbds.api.commands.string.StringCommandExecutor;
+import net.survivalboom.sbds.api.database.DataRecord;
 import net.survivalboom.sbds.api.database.IDatabase;
-import net.survivalboom.sbds.api.database.guildconfig.IGuildConfig;
+import net.survivalboom.sbds.api.database.IRepository;
 import net.survivalboom.sbds.api.database.guildconfig.IGuildConfigManager;
 import net.survivalboom.sbds.api.database.guildconfig.IGuildConfigTemplate;
 import net.survivalboom.sbds.api.database.guilds.IGuildDataManager;
@@ -233,6 +234,30 @@ public abstract class ModuleMain {
     //
     // REGISTRATIONS
     //
+
+    // DATABASE //
+
+    public <T extends DataRecord> IRepository<T> createRepository(@NotNull String name, @NotNull Class<T> clazz) {
+        return getDatabase().createRepository(this, name, clazz);
+    }
+
+    public <T extends DataRecord> IRepository<T> getRepository(@NotNull String name, @NotNull Class<T> clazz) {
+        return getDatabase().getRepository(name, clazz);
+    }
+
+    // SERVICE PROVIDER //
+
+    public <T> IServiceProvider.IRegisteredService<T> registerService(@NotNull Class<T> clazz, T object) {
+        return getServiceProvider().registerService(this, clazz, object);
+    }
+
+    public <T> T getService(@NotNull Class<T> clazz) {
+        return getServiceProvider().getService(clazz);
+    }
+
+    public <T> IServiceProvider.IRegisteredService<T> getRegisteredService(@NotNull Class<T> clazz) {
+        return getServiceProvider().getRegisteredService(clazz);
+    }
 
     // EVENTS //
 
@@ -461,6 +486,10 @@ public abstract class ModuleMain {
 
     public @NotNull ISchedulerTask schedule(@NotNull Runnable task, int delay, int period) {
         return getScheduler().schedule(this, task, delay, period);
+    }
+
+    public @NotNull ISchedulerTask schedule(@NotNull Runnable runnable) {
+        return getScheduler().schedule(this, runnable);
     }
 
     // EVENT HANDLER //
