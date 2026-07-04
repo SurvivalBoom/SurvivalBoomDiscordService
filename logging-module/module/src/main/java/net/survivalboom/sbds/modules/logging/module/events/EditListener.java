@@ -38,8 +38,8 @@ public class EditListener implements EventListener {
         long messageId = event.getMessageIdLong();
         long guildId = event.getGuild().getIdLong();
 
-        String newContent = event.getMessage().getContentRaw();
-        if (newContent.isBlank()) return;
+        String newContent1 = event.getMessage().getContentRaw();
+        if (newContent1.isBlank()) return;
 
         module.schedule(() -> {
 
@@ -63,8 +63,8 @@ public class EditListener implements EventListener {
                 return;
             }
 
-            String oldContent = pusak.getContent();
-            if (newContent.equals(oldContent)) {
+            String oldContent1 = pusak.getContent();
+            if (newContent1.equals(oldContent1)) {
                 return;
             }
 
@@ -72,8 +72,10 @@ public class EditListener implements EventListener {
             String channelMention = "<#" + event.getChannel().getId() + ">";
             String messageLink = event.getMessage().getJumpUrl();
 
+            String oldContent = oldContent1.replace("```", "");
+            String newContent = newContent1.replace("```", "");
+
             String fullDiff = generateDiff(oldContent, newContent);
-            String safeDiff = fullDiff.replace("```", "");
             boolean isLarge = fullDiff.length() > 480;
             String displayDiff = isLarge ? "[changes.diff]" : fullDiff;
 
