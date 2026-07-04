@@ -82,6 +82,10 @@ guildconfig:
           name: time-zone
           description: Set time zone
 
+        translation:
+          name: перевод
+          description: Установить перевод
+
 
         success:
           $embed:

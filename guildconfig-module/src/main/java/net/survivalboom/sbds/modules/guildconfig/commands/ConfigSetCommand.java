@@ -8,6 +8,7 @@ import net.survivalboom.sbds.api.commands.argument.primitive.BooleanArgument;
 import net.survivalboom.sbds.api.commands.argument.primitive.IntegerArgument;
 import net.survivalboom.sbds.api.commands.argument.primitive.StringArgument;
 import net.survivalboom.sbds.api.commands.argument.sbds.GuildConfigArgument;
+import net.survivalboom.sbds.api.commands.argument.sbds.TranslationArgument;
 import net.survivalboom.sbds.api.commands.base.ArgumentMethod;
 import net.survivalboom.sbds.api.commands.base.CommandBase;
 import net.survivalboom.sbds.api.commands.base.CommandClass;
@@ -171,6 +172,11 @@ public class ConfigSetCommand extends CommandBase implements SlashCommandExecuto
                 new Command.Choice("Australia/Sydney", "Australia/Sydney"),
                 new Command.Choice("Pacific/Auckland", "Pacific/Auckland")
         ));
+    }
+
+    @ArgumentMethod(index = 2, required = false)
+    public TranslationArgument translation() {
+        return new TranslationArgument();
     }
 
     @ArgumentMethod(index = 2, required = false)

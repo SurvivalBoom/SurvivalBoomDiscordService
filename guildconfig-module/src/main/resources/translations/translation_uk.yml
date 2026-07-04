@@ -83,6 +83,9 @@ guildconfig:
           name: часовий-пояс
           description: Встановити часовий пояс
 
+        translation:
+          name: переклад
+          description: Встановити переклад
 
         success:
           $embed:

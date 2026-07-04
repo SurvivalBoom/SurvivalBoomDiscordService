@@ -63,6 +63,10 @@ public class ConfigListCommand extends CommandBase implements SlashCommandExecut
                 var field = entry.getKey();
                 var value = entry.getValue();
 
+                if (field.internal()) {
+                    continue;
+                }
+
                 String fieldTranslated = template.getTranslationKey() != null ? field.createTranslationKey(template) : field.key();
                 Object valueTranslated = value != null ? value : field.defaultValue();
 
