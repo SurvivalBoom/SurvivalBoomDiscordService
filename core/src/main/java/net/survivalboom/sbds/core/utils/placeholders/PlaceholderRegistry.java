@@ -20,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.TimeZone;
 import java.util.function.Function;
 
 public class PlaceholderRegistry extends Manager implements IPlaceholderRegistry {
@@ -44,6 +45,7 @@ public class PlaceholderRegistry extends Manager implements IPlaceholderRegistry
         registerProvider0(null, Channel.class, ChannelPlaceholder::new);
         registerProvider0(null, ITranslation.class, TranslationPlaceholder::new);
         registerProvider0(null, GuildConfigField.class, GuildConfigFieldPlaceholder::new);
+        registerProvider0(null , TimeZone.class, TimeZonePlaceholder::new);
 
     }
 
