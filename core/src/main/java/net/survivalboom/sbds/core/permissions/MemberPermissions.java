@@ -78,7 +78,7 @@ public class MemberPermissions extends AbstractPermissionHolder implements IMemb
         }
 
         return CommonUtils.sequenceAsync(futures).thenApply(list -> {
-            list.sort(Comparator.comparing(IPermissionsHolder::getWeight).reversed());
+            list.sort(Comparator.comparing(IPermissionsHolder::getWeight));
             return list;
         });
 
