@@ -8,8 +8,10 @@ import net.survivalboom.sbds.api.database.IDatabase;
 import net.survivalboom.sbds.api.database.IRepository;
 import net.survivalboom.sbds.api.database.converters.ChannelConverter;
 import net.survivalboom.sbds.api.database.converters.TimeZoneConverter;
+import net.survivalboom.sbds.api.database.converters.TranslationConverter;
 import net.survivalboom.sbds.api.modules.IModule;
 import net.survivalboom.sbds.api.registrations.Registration;
+import net.survivalboom.sbds.api.translations.ITranslation;
 import net.survivalboom.sbds.api.utils.CommonUtils;
 import net.survivalboom.sbds.api.utils.valid.Manager;
 import net.survivalboom.sbds.api.utils.NamespacedKey;
@@ -20,9 +22,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.BootstrapServiceRegistry;
 import org.hibernate.boot.registry.BootstrapServiceRegistryBuilder;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.AvailableSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -89,6 +88,7 @@ public class Database extends Manager implements IDatabase {
 
         registerSerializer0(null, Channel.class, new ChannelConverter());
         registerSerializer0(null, TimeZone.class, new TimeZoneConverter());
+        registerSerializer0(null, ITranslation.class, new TranslationConverter());
 
         queue.init();
 
