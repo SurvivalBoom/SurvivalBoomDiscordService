@@ -21,10 +21,13 @@ subprojects {
 
             val copyModuleToRun by tasks.registering(Copy::class) {
 
-                val jarTask = tasks.named<Jar>("jar")
-                dependsOn(jarTask)
+                val archiveProvider = provider {
+                    tasks.findByName("shadowJar") ?: tasks.getByName("jar")
+                }
 
-                from(jarTask.flatMap { it.archiveFile })
+                dependsOn(archiveProvider)
+
+                from(archiveProvider.flatMap { (it as AbstractArchiveTask).archiveFile })
 
                 into(runModules)
 
