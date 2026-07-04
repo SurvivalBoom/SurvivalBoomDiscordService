@@ -80,6 +80,14 @@ public interface IScheduler extends IManager {
         return schedule(main.getModule(), runnable, delay, period);
     }
 
+    default @NotNull ISchedulerTask schedule(@NotNull IModule module, @NotNull Runnable runnable) {
+        return schedule(module, runnable, 0, 0);
+    }
+
+    default @NotNull ISchedulerTask schedule(@NotNull ModuleMain main, @NotNull Runnable runnable) {
+        return schedule(main.getModule(), runnable, 0, 0);
+    }
+
     @NotNull List<ISchedulerTask> getTasks();
 
 }
