@@ -14,9 +14,9 @@ public interface IServiceProvider extends IManager {
 
     // REG //
 
-    <T> @NotNull IRegisteredService<?> registerService(@NotNull IModule module, @NotNull Class<T> clazz, @NotNull T service);
+    <T> @NotNull IRegisteredService<T> registerService(@NotNull IModule module, @NotNull Class<T> clazz, @NotNull T service);
 
-    default <T> @NotNull IRegisteredService<?> registerService(@NotNull ModuleMain main, @NotNull Class<T> clazz, @NotNull T service) {
+    default <T> @NotNull IRegisteredService<T> registerService(@NotNull ModuleMain main, @NotNull Class<T> clazz, @NotNull T service) {
         return registerService(main.getModule(), clazz, service);
     }
 
