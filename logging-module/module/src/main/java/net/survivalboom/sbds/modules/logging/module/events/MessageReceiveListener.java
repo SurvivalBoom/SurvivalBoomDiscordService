@@ -1,10 +1,10 @@
-package net.survivalboom.sbds.modules.logging.events;
+package net.survivalboom.sbds.modules.logging.module.events;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.survivalboom.sbds.api.events.EventHandler;
 import net.survivalboom.sbds.api.events.EventListener;
-import net.survivalboom.sbds.modules.logging.LoggingModule;
-import net.survivalboom.sbds.modules.logging.database.MessageRecord;
+import net.survivalboom.sbds.modules.logging.module.LoggingModule;
+import net.survivalboom.sbds.modules.logging.module.database.MessageRecord;
 
 public class MessageReceiveListener implements EventListener {
 
@@ -16,6 +16,7 @@ public class MessageReceiveListener implements EventListener {
 
     @EventHandler
     public void onMessageReceived(MessageReceivedEvent event) {
+
         if (event.getAuthor().isBot() || event.getAuthor().isSystem() || event.isWebhookMessage()) {
             return;
         }
@@ -27,8 +28,13 @@ public class MessageReceiveListener implements EventListener {
         String content = event.getMessage().getContentRaw();
         var attachments = event.getMessage().getAttachments();
 
-        // Теоретично тут можна було б зробити читання префіксу сервера із бази даних, але на практиці я боюся, що від великої кількості серверів воно просто ляже
-        if (content.startsWith("!")) {
+        String cmdPrefix = module.getGuildConfigManager().getSbdsConfig()
+                .obtainConfig(event.getGuild())
+                .get("prefix", String.class)
+                .join()
+                .orElseThrow();
+
+        if (content.startsWith(cmdPrefix)) {
             return;
         }
 
@@ -59,5 +65,7 @@ public class MessageReceiveListener implements EventListener {
         );
 
         module.getMessageManager().saveMessage(record);
+
     }
+
 }

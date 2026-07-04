@@ -1,4 +1,4 @@
-package net.survivalboom.sbds.modules.logging.utils;
+package net.survivalboom.sbds.modules.logging.module.utils;
 
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.survivalboom.sbds.api.commands.argument.ArgumentParseException;

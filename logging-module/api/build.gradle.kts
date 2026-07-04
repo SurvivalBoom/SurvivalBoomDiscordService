@@ -1,5 +1,5 @@
 plugins {
-    java
+    `java-library`
 }
 
 repositories {
@@ -7,5 +7,5 @@ repositories {
 }
 
 dependencies {
-    compileOnly(project(":api"))
+    compileOnlyApi(project(":api"))
 }

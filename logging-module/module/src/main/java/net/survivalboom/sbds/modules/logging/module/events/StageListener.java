@@ -1,12 +1,12 @@
-package net.survivalboom.sbds.modules.logging.events;
+package net.survivalboom.sbds.modules.logging.module.events;
 
 import net.dv8tion.jda.api.events.stage.StageInstanceCreateEvent;
 import net.dv8tion.jda.api.events.stage.StageInstanceDeleteEvent;
 import net.dv8tion.jda.api.events.stage.update.StageInstanceUpdateTopicEvent;
 import net.survivalboom.sbds.api.events.EventHandler;
 import net.survivalboom.sbds.api.events.EventListener;
-import net.survivalboom.sbds.modules.logging.LoggingModule;
-import net.survivalboom.sbds.modules.logging.logging.LogManager;
+import net.survivalboom.sbds.modules.logging.module.LoggingModule;
+import net.survivalboom.sbds.modules.logging.module.logging.LogManager;
 import org.jetbrains.annotations.NotNull;
 
 public class StageListener implements EventListener {

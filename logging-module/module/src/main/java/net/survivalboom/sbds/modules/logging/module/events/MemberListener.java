@@ -1,4 +1,4 @@
-package net.survivalboom.sbds.modules.logging.events;
+package net.survivalboom.sbds.modules.logging.module.events;
 
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
@@ -8,8 +8,8 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.entities.Role;
 import net.survivalboom.sbds.api.events.EventHandler;
 import net.survivalboom.sbds.api.events.EventListener;
-import net.survivalboom.sbds.modules.logging.LoggingModule;
-import net.survivalboom.sbds.modules.logging.logging.LogManager;
+import net.survivalboom.sbds.modules.logging.module.LoggingModule;
+import net.survivalboom.sbds.modules.logging.module.logging.LogManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.stream.Collectors;

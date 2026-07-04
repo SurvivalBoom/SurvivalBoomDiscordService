@@ -1,5 +1,5 @@
 
-main: "net.survivalboom.sbds.modules.logging.LoggingModule"
+main: "net.survivalboom.sbds.modules.logging.module.LoggingModule"
 
 name: "LoggingModule"
 description: "Модуль логування для SBDS."

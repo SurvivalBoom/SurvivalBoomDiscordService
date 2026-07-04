@@ -1,10 +1,10 @@
-package net.survivalboom.sbds.modules.logging.events;
+package net.survivalboom.sbds.modules.logging.module.events;
 
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.survivalboom.sbds.api.events.EventHandler;
 import net.survivalboom.sbds.api.events.EventListener;
-import net.survivalboom.sbds.modules.logging.LoggingModule;
-import net.survivalboom.sbds.modules.logging.logging.LogManager;
+import net.survivalboom.sbds.modules.logging.module.LoggingModule;
+import net.survivalboom.sbds.modules.logging.module.logging.LogManager;
 import org.jetbrains.annotations.NotNull;
 
 public class VoiceListener implements EventListener {

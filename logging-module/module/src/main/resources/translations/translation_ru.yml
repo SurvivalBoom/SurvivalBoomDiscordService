@@ -2,6 +2,7 @@ $name: sbds:russian
 
 logging:
   config:
+    label: "Логирование"
     enabled: "Включить логирование"
     database_logging: "Сохранять логи в базе данных"
     channel: "Канал для логов"

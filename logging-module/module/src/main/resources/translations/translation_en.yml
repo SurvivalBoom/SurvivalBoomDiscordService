@@ -2,6 +2,7 @@ $name: sbds:english
 
 logging:
   config:
+    label: "Logging"
     enabled: "Enable logging"
     database_logging: "Save logs in database"
     channel: "Log channel"

@@ -11,17 +11,17 @@ repositories {
 }
 
 dependencies {
-    compileOnly(project(":api"))
-
     implementation(project(":logging-module:api"))
 }
 
 tasks {
-    named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
-        archiveFileName.set("${project.parent?.name}-${project.version}.jar")
+
+    shadowJar {
+        archiveFileName = "${parent?.name}-${version}.jar"
     }
 
-    named("build") {
-        dependsOn("shadowJar")
+    build {
+        dependsOn(shadowJar)
     }
+
 }

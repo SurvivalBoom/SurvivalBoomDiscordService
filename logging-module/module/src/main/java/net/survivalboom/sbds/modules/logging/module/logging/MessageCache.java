@@ -1,4 +1,4 @@
-package net.survivalboom.sbds.modules.logging.logging;
+package net.survivalboom.sbds.modules.logging.module.logging;
 
 import net.survivalboom.sbds.modules.logging.api.ILoggedMessage;
 

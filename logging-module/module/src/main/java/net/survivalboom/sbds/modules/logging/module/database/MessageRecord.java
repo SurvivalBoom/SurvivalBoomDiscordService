@@ -1,4 +1,4 @@
-package net.survivalboom.sbds.modules.logging.database;
+package net.survivalboom.sbds.modules.logging.module.database;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
