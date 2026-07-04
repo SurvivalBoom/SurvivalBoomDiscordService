@@ -168,7 +168,7 @@ public class GuildConfigManager extends Manager implements IGuildConfigManager, 
 
     @Override
     public @NotNull IGuildConfigTemplate getSbdsConfig() {
-        return Objects.requireNonNull(getTemplate("sbds:config"), "sbds template == null; Congratulations! You totally fucked up!");
+        return Objects.requireNonNull(getTemplate("sbds"), "sbds template == null; Congratulations! You totally fucked up!");
     }
 
     //
