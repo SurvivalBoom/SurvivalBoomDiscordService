@@ -64,7 +64,7 @@ public class ModuleManager extends Manager implements IModuleManager {
             return;
         }
 
-        List<ModuleMetaLoadResult> modulesMetas = new ArrayList<>();
+        Map<String, ModuleMetaLoadResult> modulesMetas = new HashMap<>();
         for (File file : modulesFiles) {
 
             ModuleMetaLoadResult result;
@@ -77,11 +77,16 @@ public class ModuleManager extends Manager implements IModuleManager {
                 continue;
             }
 
-            modulesMetas.add(result);
+            if (modulesMetas.containsKey(result.meta().getId())) {
+                log.warn("Refusing to load module file `{}`. Module with id `{}` already exist.", file.getName(), result.meta().getId());
+                continue;
+            }
+
+            modulesMetas.put(result.meta().getId(), result);
 
         }
 
-        SortingResult sortingResult = sortModulesByDependencies(modulesMetas);
+        SortingResult sortingResult = sortModulesByDependencies(modulesMetas.values());
         if (!sortingResult.skipped().isEmpty()) {
             log.error("The following modules were skipped due to circular dependencies or loop propagation: {}",
                     String.join(", ", sortingResult.skipped().stream()
@@ -292,7 +297,17 @@ public class ModuleManager extends Manager implements IModuleManager {
 
         // Шукаємо головний клас модуля.
         String mainClassName = meta.getMain();
-        Class<? extends ModuleMain> clazz = (Class<? extends ModuleMain>) module.getClassLoader().getClass(mainClassName, false, false);
+
+        Class<? extends ModuleMain> clazz;
+        try {
+            clazz = (Class<? extends ModuleMain>) module.getClassLoader().getClass(mainClassName, false, false);
+        }
+
+        catch (Throwable t) {
+            modules.remove(meta.getId());
+            throw new ModuleLoadingException("Failed to load module main class `" + mainClassName + "`. A fatal error occurred.", t);
+        }
+
         if (clazz == null) {
             modules.remove(meta.getId());
             throw new ModuleLoadingException("Module main class `" + mainClassName + "` not found in module ClassLoader");
@@ -573,7 +588,7 @@ public class ModuleManager extends Manager implements IModuleManager {
 
     // УВАГА! Нижче починається AI SLOP! //
 
-    private SortingResult sortModulesByDependencies(List<ModuleMetaLoadResult> input) {
+    private SortingResult sortModulesByDependencies(Collection<ModuleMetaLoadResult> input) {
         Map<String, ModuleMetaLoadResult> registry = new HashMap<>();
         for (ModuleMetaLoadResult res : input) {
             registry.put(res.meta().getId(), res);
