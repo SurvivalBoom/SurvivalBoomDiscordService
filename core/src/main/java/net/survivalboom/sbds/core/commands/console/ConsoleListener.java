@@ -18,6 +18,7 @@ import net.survivalboom.sbds.core.commands.cmds.console.ServersCommand;
 import net.survivalboom.sbds.core.commands.cmds.console.SuicideCommand;
 import net.survivalboom.sbds.core.commands.cmds.console.database.DatabaseCommand;
 import net.survivalboom.sbds.core.commands.cmds.console.guildconfig.GuildConfigCommand;
+import net.survivalboom.sbds.core.commands.cmds.console.libraries.LibrariesCommand;
 import net.survivalboom.sbds.core.commands.cmds.console.permission.PermissionCommand;
 import net.survivalboom.sbds.core.commands.cmds.console.registration.RegistrationCommand;
 import net.survivalboom.sbds.core.commands.parser.StringCommandParser;
@@ -58,6 +59,7 @@ public class ConsoleListener extends AbstractCommandManager<IConsoleListener.IRe
 
         registerCommand0(null, new StatusCommand());
         registerCommand0(null, new ServersCommand());
+        registerCommand0(null, new LibrariesCommand());
 
         task = sbds.getScheduler().schedule0(null, "ConsoleListener", task -> this.consoleListener(), 0, 50);
 
