@@ -1,0 +1,222 @@
+$name: sbds:ukrainian
+
+permission:
+
+  values:
+    empty: "Немає дозволів"
+
+  command:
+    description: Керування дозволами SurvivalBoom Discord Service
+
+    global:
+      description: Керування глобальними дозволами
+
+      list:
+        description: Показати список глобальних груп дозволів
+
+        empty:
+          $embed:
+            description: "Глобальних груп дозволів не знайдено"
+            color: ff0000
+
+        success:
+          $embed:
+            title: Глобальні групи дозволів
+            description: "{groups}"
+            color: 2B00FF
+
+      info:
+        description: Показати інформацію про глобальну групу
+
+        group:
+          name: група
+          description: Назва глобальної групи
+
+        not-found:
+          $embed:
+            description: "Групу з назвою **{group}** не знайдено."
+            color: ff0000
+
+        success:
+          $embed:
+            title: "Інформація про групу {group.name}"
+            color: 2B00FF
+            description: |
+              **Ключ:** `{group.key}`
+              
+              **Дозволи:**
+              {group.permissions}
+
+    member:
+      description: Керування дозволами учасників на сервері
+
+      user:
+        name: учасник
+        description: Учасник сервера
+
+      info:
+        description: Показати інформацію про дозволи учасника
+
+        user:
+          name: учасник
+          description: Учасник сервера для перевірки
+
+        not-found:
+          $embed:
+            description: "Користувача не знайдено на цьому сервері."
+            color: ff0000
+
+        success:
+          $embed:
+            title: "Дозволи учасника {user.name}"
+            color: 2B00FF
+            description: |
+              Користувач: {user.ping}
+              
+              **Групи:**
+              {member.groups}
+              
+              **Дозволи:**
+              {member.permissions}
+
+      set:
+        description: Встановити або видалити дозвіл для учасника
+
+        user:
+          name: учасник
+          description: Учасник сервера
+        permission:
+          name: дозвіл
+          description: Назва дозволу (наприклад, command.use)
+        value:
+          name: значення
+          description: Значення дозволу (true / false / null)
+
+        not-found:
+          $embed:
+            description: "Користувача не знайдено на цьому сервері."
+            color: ff0000
+
+        invalid-value:
+          $embed:
+            description: "Невірне значення **{value}** для дозволу `{permission}`"
+            color: ff0000
+
+        removed:
+          $embed:
+            description: "Дозвіл `{permission}` успішно **видалено** у учасника **{user.name}**."
+            color: 33d17a
+
+        success:
+          $embed:
+            description: "Встановлено дозвіл `{permission}` на **{value}** для учасника **{user.name}**."
+            color: 33d17a
+
+    group:
+      description: Керування групами дозволів на сервері
+
+      list:
+        description: Показати список усіх груп дозволів
+
+        success:
+          $embed:
+            title: "Групи дозволів сервера {guild.name}"
+            color: 2B00FF
+            description: |
+              **Локальні групи сервера:**
+              {groups.local}
+              
+              **Глобальні групи:**
+              {groups.global}
+
+      info:
+        description: Показати всі дозволи вказаної групи
+
+        name:
+          name: назва
+          description: Назва групи дозволів
+
+        not-found:
+          $embed:
+            description: "Групу з назвою **{name}** не знайдено."
+            color: ff0000
+
+        success:
+          $embed:
+            title: "Інформація про групу {group.name}"
+            color: 2B00FF
+            description: |
+              **Сервер:** {guild.name}
+              
+              **Локальні дозволи:**
+              {permissions.local}
+              
+              **Глобальні дозволи:**
+              {permissions.global}
+
+      create:
+        description: Створити нову групу дозволів
+
+        name:
+          name: назва
+          description: Назва нової групи дозволів
+
+        exists:
+          $embed:
+            description: "Група з назвою **{name}** вже існує на цьому сервері."
+            color: ff0000
+
+        success:
+          $embed:
+            description: "Групу **{name}** успішно створено!"
+            color: 33d17a
+
+      delete:
+        description: Видалити існуючу групу дозволів
+
+        name:
+          name: назва
+          description: Назва групи для видалення
+
+        not-found:
+          $embed:
+            description: "Групу з назвою **{name}** не знайдено."
+            color: ff0000
+
+        success:
+          $embed:
+            description: "Групу **{name}** успішно видалено!"
+            color: 33d17a
+
+      set:
+        description: Встановити або видалити дозвіл для групи
+
+        group:
+          name: група
+          description: Назва групи
+        permission:
+          name: дозвіл
+          description: Назва дозволу
+        value:
+          name: значення
+          description: Значення дозволу
+
+        invalid-value:
+          $embed:
+            description: "Невірне значення **{value}** для дозволу `{permission}`."
+            color: ff0000
+
+        not-found:
+          $embed:
+            description: "Групу з назвою **{group}** не знайдено."
+            color: ff0000
+
+        removed:
+          $embed:
+            description: "Дозвіл `{permission}` успішно **видалено** у групи **{group.name}**"
+            color: 33d17a
+
+        success:
+          $embed:
+            description: "Встановлено дозвіл `{permission}` на **{value}** для групи **{group.name}**"
+            color: 33d17a

@@ -1,0 +1,8 @@
+name: "PermissionModule"
+main: "net.survivalboom.sbds.modules.permission.PermissionModule"
+
+description: "Модуль для керування правами для SBDS."
+version: "${version}"
+
+authors: Mycetik
+website: "https://survivalboom.net"
