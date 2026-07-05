@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 public class CommandLocalizator {
@@ -24,6 +26,10 @@ public class CommandLocalizator {
     private static final Logger log = LoggerFactory.getLogger(CommandLocalizator.class.getSimpleName());
 
     private static final Pattern OPTION_PATTERN = Pattern.compile("^[a-zа-яіїєґ-]+$");
+
+    private static final Set<String> WARNED_KEYS = ConcurrentHashMap.newKeySet();
+
+    private static final Set<String> WARNED_MISSING_PER_FILE = ConcurrentHashMap.newKeySet();
 
     private final TranslationManager translationManager;
 
@@ -33,7 +39,6 @@ public class CommandLocalizator {
     }
 
 
-    // Chat GPT рулить!
     private @Nullable TranslationResult getLocalizationKey(@NotNull Command rootCommand, @NotNull String request) {
 
         String[] parts = request.split("\\.");
@@ -44,12 +49,10 @@ public class CommandLocalizator {
         Command current = rootCommand;
         int index = 0;
 
-        // Пройдём по цепочке команд и сабкоманд
         while (index < parts.length) {
 
             String part = parts[index];
 
-            // Дошли до options — значит, дальше аргументы
             if (part.equals("options")) {
                 break;
             }
@@ -74,15 +77,13 @@ public class CommandLocalizator {
 
         }
 
-        // Если нет options после команд — это description команды
         if (index == parts.length - 1 && parts[index].equals("description")) {
             return current.getTranslationKey() != null ? of(current.getTranslationKey() + ".description", request) : null;
         }
 
-        // Обработка options
         if (index < parts.length && parts[index].equals("options")) {
 
-            index++; // переходим к аргументу
+            index++;
             if (index >= parts.length) return null;
 
             String argName = parts[index++];
@@ -92,7 +93,6 @@ public class CommandLocalizator {
 
             if (argument == null || argument.translationKey() == null) return null;
 
-            // Проверка на choices
             if (index < parts.length && parts[index].equals("choices")) {
                 index++;
                 if (index >= parts.length) return null;
@@ -101,7 +101,6 @@ public class CommandLocalizator {
                 return of(argument.translationKey() + ".choices." + choiceName, request);
             }
 
-            // Обычный name/description аргумента
             if (index < parts.length) {
                 String type = parts[index];
                 return of(argument.translationKey() + "." + type, request);
@@ -130,16 +129,27 @@ public class CommandLocalizator {
 
                     String translationName = translation.getRegistration().key().toString();
                     DiscordLocale locale = translation.getDiscordLocale();
+
+                    if (locale == null) continue;
+
                     IMessageTemplate template = translation.getMessage(translationKey);
 
+                    if (template == null) {
+                        String warnId = translationName + ":" + translationKey;
+                        if (WARNED_MISSING_PER_FILE.add(warnId)) {
+                            log.warn("Missing translation for `{}` in `{}`.", translationKey, translationName);
+                        }
+                        continue;
+                    }
+
                     if (!(template instanceof TextMessageTemplate txt)) {
-                        log.warn("No translation found for `{}` in `{}` ({}).", translationKey, translationName, key);
+                        log.warn("Translation for `{}` in `{}` must be a plain text.", translationKey, translationName);
                         continue;
                     }
 
                     String str = txt.getContent();
                     if (result.scope == CommandTranslationScope.OPTION_NAME && !checkOptionRegex(str)) {
-                        log.error("Invalid option name `{}` ({}) from `{}`. Must match the regex `^[a-zа-я]+$` and be between 1 and 32.", str, translationKey, translationName);
+                        log.error("Invalid option name `{}` ({}) from `{}`. Must match the regex `^[a-zа-яіїєґ-]+$` and be between 1 and 32.", str, translationKey, translationName);
                         continue;
                     }
 
@@ -150,6 +160,12 @@ public class CommandLocalizator {
 
                     map.put(locale, str);
 
+                }
+
+                if (map.isEmpty()) {
+                    if (WARNED_KEYS.add(translationKey)) {
+                        log.warn("No translations found for `{}` in ANY file ({}).", translationKey, key);
+                    }
                 }
 
             }
