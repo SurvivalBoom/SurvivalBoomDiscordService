@@ -1,0 +1,222 @@
+$name: sbds:english
+
+permission:
+
+  values:
+    empty: "No permissions"
+
+  command:
+    description: Manage SurvivalBoom Discord Service permissions
+
+    global:
+      description: Manage global permissions
+
+      list:
+        description: Show list of global permission groups
+
+        empty:
+          $embed:
+            description: "No global permission groups found"
+            color: ff0000
+
+        success:
+          $embed:
+            title: Global permission groups
+            description: "{groups}"
+            color: 2B00FF
+
+      info:
+        description: Show information about a global group
+
+        group:
+          name: group
+          description: Name of the global group
+
+        not-found:
+          $embed:
+            description: "Group named **{group}** not found."
+            color: ff0000
+
+        success:
+          $embed:
+            title: "Group information {group.name}"
+            color: 2B00FF
+            description: |
+              **Key:** `{group.key}`
+              
+              **Permissions:**
+              {group.permissions}
+
+    member:
+      description: Manage member permissions on the server
+
+      user:
+        name: member
+        description: Server member
+
+      info:
+        description: Show information about member permissions
+
+        user:
+          name: member
+          description: Server member to check
+
+        not-found:
+          $embed:
+            description: "User not found on this server."
+            color: ff0000
+
+        success:
+          $embed:
+            title: "Member permissions {user.name}"
+            color: 2B00FF
+            description: |
+              User: {user.ping}
+              
+              **Groups:**
+              {member.groups}
+              
+              **Permissions:**
+              {member.permissions}
+
+      set:
+        description: Set or remove permission for a member
+
+        user:
+          name: member
+          description: Server member
+        permission:
+          name: permission
+          description: Permission name (e.g., command.use)
+        value:
+          name: value
+          description: Permission value (true / false / null)
+
+        not-found:
+          $embed:
+            description: "User not found on this server."
+            color: ff0000
+
+        invalid-value:
+          $embed:
+            description: "Invalid value **{value}** for permission `{permission}`"
+            color: ff0000
+
+        removed:
+          $embed:
+            description: "Permission `{permission}` successfully **removed** from member **{user.name}**."
+            color: 33d17a
+
+        success:
+          $embed:
+            description: "Permission `{permission}` set to **{value}** for member **{user.name}**."
+            color: 33d17a
+
+    group:
+      description: Manage permission groups on the server
+
+      list:
+        description: Show list of all permission groups
+
+        success:
+          $embed:
+            title: "Permission groups {guild.name}"
+            color: 2B00FF
+            description: |
+              **Local server groups:**
+              {groups.local}
+              
+              **Global groups:**
+              {groups.global}
+
+      info:
+        description: Show all permissions of the specified group
+
+        name:
+          name: name
+          description: Permission group name
+
+        not-found:
+          $embed:
+            description: "Group named **{name}** not found."
+            color: ff0000
+
+        success:
+          $embed:
+            title: "Group information server {group.name}"
+            color: 2B00FF
+            description: |
+              **Server:** {guild.name}
+              
+              **Local permissions:**
+              {permissions.local}
+              
+              **Global permissions:**
+              {permissions.global}
+
+      create:
+        description: Create a new permission group
+
+        name:
+          name: name
+          description: New permission group name
+
+        exists:
+          $embed:
+            description: "Group named **{name}** already exists on this server."
+            color: ff0000
+
+        success:
+          $embed:
+            description: "Group **{name}** successfully created!"
+            color: 33d17a
+
+      delete:
+        description: Delete an existing permission group
+
+        name:
+          name: name
+          description: Group name to delete
+
+        not-found:
+          $embed:
+            description: "Group named **{name}** not found."
+            color: ff0000
+
+        success:
+          $embed:
+            description: "Group **{name}** successfully deleted!"
+            color: 33d17a
+
+      set:
+        description: Set or remove permission for a group
+
+        group:
+          name: group
+          description: Group name
+        permission:
+          name: permission
+          description: Permission name
+        value:
+          name: value
+          description: Permission value
+
+        invalid-value:
+          $embed:
+            description: "Invalid value **{value}** for permission `{permission}`."
+            color: ff0000
+
+        not-found:
+          $embed:
+            description: "Group named **{group}** not found."
+            color: ff0000
+
+        removed:
+          $embed:
+            description: "Permission `{permission}` successfully **removed** from group **{group.name}**"
+            color: 33d17a
+
+        success:
+          $embed:
+            description: "Permission `{permission}` set to **{value}** for group **{group.name}**"
+            color: 33d17a

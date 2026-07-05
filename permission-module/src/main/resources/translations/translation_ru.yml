@@ -1,0 +1,222 @@
+$name: sbds:russian
+
+permission:
+
+  values:
+    empty: "Нет прав"
+
+  command:
+    description: Управление правами SurvivalBoom Discord Service
+
+    global:
+      description: Управление глобальными правами
+
+      list:
+        description: Показать список глобальных групп прав
+
+        empty:
+          $embed:
+            description: "Глобальные группы прав не найдены"
+            color: ff0000
+
+        success:
+          $embed:
+            title: Глобальные группы прав
+            description: "{groups}"
+            color: 2B00FF
+
+      info:
+        description: Показать информацию о глобальной группе
+
+        group:
+          name: группа
+          description: Название глобальной группы
+
+        not-found:
+          $embed:
+            description: "Группа с названием **{group}** не найдена."
+            color: ff0000
+
+        success:
+          $embed:
+            title: "Информация о группе {group.name}"
+            color: 2B00FF
+            description: |
+              **Ключ:** `{group.key}`
+              
+              **Права:**
+              {group.permissions}
+
+    member:
+      description: Управление правами участников на сервере
+
+      user:
+        name: участник
+        description: Участник сервера
+
+      info:
+        description: Показать информацию о правах участника
+
+        user:
+          name: участник
+          description: Участник сервера для проверки
+
+        not-found:
+          $embed:
+            description: "Пользователь не найден на этом сервере."
+            color: ff0000
+
+        success:
+          $embed:
+            title: "Права участника {user.name}"
+            color: 2B00FF
+            description: |
+              Пользователь: {user.ping}
+              
+              **Группы:**
+              {member.groups}
+              
+              **Права:**
+              {member.permissions}
+
+      set:
+        description: Установить или удалить право для участника
+
+        user:
+          name: участник
+          description: Участник сервера
+        permission:
+          name: право
+          description: Название права (например, command.use)
+        value:
+          name: значение
+          description: Значение права (true / false / null)
+
+        not-found:
+          $embed:
+            description: "Пользователь не найден на этом сервере."
+            color: ff0000
+
+        invalid-value:
+          $embed:
+            description: "Неверное значение **{value}** для права `{permission}`"
+            color: ff0000
+
+        removed:
+          $embed:
+            description: "Право `{permission}` успешно **удалено** у участника **{user.name}**."
+            color: 33d17a
+
+        success:
+          $embed:
+            description: "Установлено право `{permission}` на **{value}** для участника **{user.name}**."
+            color: 33d17a
+
+    group:
+      description: Управление группами прав на сервере
+
+      list:
+        description: Показать список всех групп прав
+
+        success:
+          $embed:
+            title: "Группы прав сервера {guild.name}"
+            color: 2B00FF
+            description: |
+              **Локальные группы сервера:**
+              {groups.local}
+              
+              **Глобальные группы:**
+              {groups.global}
+
+      info:
+        description: Показать все права указанной группы
+
+        name:
+          name: название
+          description: Название группы прав
+
+        not-found:
+          $embed:
+            description: "Группа с названием **{name}** не найдена."
+            color: ff0000
+
+        success:
+          $embed:
+            title: "Информация о группе {group.name}"
+            color: 2B00FF
+            description: |
+              **Сервер:** {guild.name}
+              
+              **Локальные права:**
+              {permissions.local}
+              
+              **Глобальные права:**
+              {permissions.global}
+
+      create:
+        description: Создать новую группу прав
+
+        name:
+          name: название
+          description: Название новой группы прав
+
+        exists:
+          $embed:
+            description: "Группа с названием **{name}** уже существует на этом сервере."
+            color: ff0000
+
+        success:
+          $embed:
+            description: "Группа **{name}** успешно создана!"
+            color: 33d17a
+
+      delete:
+        description: Удалить существующую группу прав
+
+        name:
+          name: название
+          description: Название группы для удаления
+
+        not-found:
+          $embed:
+            description: "Группа с названием **{name}** не найдена."
+            color: ff0000
+
+        success:
+          $embed:
+            description: "Группа **{name}** успешно удалена!"
+            color: 33d17a
+
+      set:
+        description: Установить или удалить право для группы
+
+        group:
+          name: группа
+          description: Название группы
+        permission:
+          name: право
+          description: Название права
+        value:
+          name: значение
+          description: Значение права
+
+        invalid-value:
+          $embed:
+            description: "Неверное значение **{value}** для права `{permission}`."
+            color: ff0000
+
+        not-found:
+          $embed:
+            description: "Группа с названием **{group}** не найдена."
+            color: ff0000
+
+        removed:
+          $embed:
+            description: "Право `{permission}` успешно **удалено** у группы **{group.name}**"
+            color: 33d17a
+
+        success:
+          $embed:
+            description: "Установлено право `{permission}` на **{value}** для группы **{group.name}**"
+            color: 33d17a
