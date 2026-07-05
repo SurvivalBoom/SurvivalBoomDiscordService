@@ -90,8 +90,13 @@ public class DeleteListener implements EventListener {
         IGuildConfig coreConfig = manager.getSbdsConfig().obtainConfig(guild);
         IGuildConfig config = module.getGuildConfig().obtainConfig(guild);
 
-        TextChannel logChannel = config.get("channel", TextChannel.class).join().orElseThrow();
+        TextChannel logChannel = config.get("channel", TextChannel.class).join().orElse(null);
         TimeZone serverTimezone = coreConfig.get("timezone", TimeZone.class).join().orElseThrow();
+
+        if (logChannel == null) {
+            module.schedule(queue::shutdown);
+            return;
+        }
 
         String channelMention = channel.getAsMention();
 
