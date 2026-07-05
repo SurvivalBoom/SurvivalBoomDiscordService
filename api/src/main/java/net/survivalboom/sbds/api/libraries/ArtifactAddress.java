@@ -55,22 +55,6 @@ public record ArtifactAddress(
         return toGradleString();
     }
 
-    @Override
-    public boolean equals(Object o) {
-
-        if (!(o instanceof ArtifactAddress(String group1, String artifact1, SemanticVersion version1) )) {
-            return false;
-        }
-
-        return group.equals(group1) && artifact.equals(artifact1) && version.equals(version1);
-
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(group, artifact, version);
-    }
-
     //
     // STATIC
     //
