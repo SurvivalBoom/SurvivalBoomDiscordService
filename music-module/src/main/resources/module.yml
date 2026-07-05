@@ -13,4 +13,10 @@ authors: TIMURishche
 website: "https://survivalboom.net"
 
 libraries:
-  - "dev.arbjerg:lavalink-client:3.4.0"
+
+  # lavalink-client підтягує стару версію okhttp, що конфліктує з версією, що використовується в JDA.
+  relocations:
+    - "com.squareup.okhttp3:okhttp:4.10.0 -> com.squareup.okhttp3:okhttp-jvm:5.3.2"
+
+  dependencies:
+    - "dev.arbjerg:lavalink-client:3.4.0"
