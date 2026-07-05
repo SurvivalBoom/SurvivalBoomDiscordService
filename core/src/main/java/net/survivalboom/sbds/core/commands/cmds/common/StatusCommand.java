@@ -25,8 +25,6 @@ import net.survivalboom.sbds.core.BuildConstants;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,21 +120,18 @@ public class StatusCommand extends CommandBase implements SlashCommandExecutor, 
 
         IModuleManager moduleManager = sbds.getModuleManager();
 
-        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-        int threadCount = threadMXBean.getThreadCount();
-
         return Placeholders.of(
                 "version", BuildConstants.VERSION,
                 "bot", jda.getSelfUser().getName() + "#" + jda.getSelfUser().getDiscriminator(),
                 "servers", jda.getGuilds().size(),
                 "runtime", osInfo.fullName(),
-                "threadCount", threadCount,
+                "threadCount", Runtime.getRuntime().availableProcessors(),
                 "usedMemory", formatBytes(memoryInfo.getUsedPhysicalMemory()),
                 "freeMemory", formatBytes(memoryInfo.getAvailablePhysicalMemory()),
                 "maxMemory", formatBytes(memoryInfo.getTotalPhysicalMemory()),
                 "cpuModel", cpuInfo.model(),
-                "cpuLoadProcess", Math.floor(cpuMonitor.processLoad()),
-                "cpuLoadSystem", Math.floor(cpuMonitor.systemLoad()),
+                "cpuLoadProcess", Math.max(0, Math.round(cpuMonitor.processLoad() * 100.0)),
+                "cpuLoadSystem", Math.max(0, Math.round(cpuMonitor.systemLoad() * 100.0)),
                 "ping", jda.getGatewayPing(),
                 "tasks", scheduler.getTasks().size(),
                 "modules", modulesString(moduleManager)
