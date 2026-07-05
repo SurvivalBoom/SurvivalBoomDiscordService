@@ -189,15 +189,24 @@ public class SlashCommandManager extends AbstractCommandManager<SlashCommandMana
             }
 
             catch (Throwable tt) {
-                event.reply(
-                    """ 
-                    **SurvivalBoom Discord Service** *v{v}*
-                    A low-level fatal error occurred in SurvivalBoom Discord Service while attempting to process your request!
-                    This is an internal error. Looks like something went completely wrong!
-                    `{e}`
-                    """.replace("{v}", BuildConstants.VERSION).replace("{e}", tt.toString())
-                ).queue();
+
+                String msg = """ 
+                **SurvivalBoom Discord Service** *v{v}*
+                A low-level fatal error occurred in SurvivalBoom Discord Service while attempting to process your request!
+                This is an internal error. Looks like something went completely wrong!
+                `{e}`
+                """.replace("{v}", BuildConstants.VERSION).replace("{e}", tt.toString());
+
+                if (event.isAcknowledged()) {
+                    event.getHook().editOriginal(msg).queue();
+                }
+
+                else {
+                    event.reply(msg).queue();
+                }
+
                 throw tt;
+
             }
 
         }
