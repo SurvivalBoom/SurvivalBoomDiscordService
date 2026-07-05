@@ -200,17 +200,33 @@ public final class ModuleMeta {
         }
 
         ConfigurationNode librariesSection = section.node("libraries");
-        var librariesResult = LibrarySatisfyConfiguration.fromSection(librariesSection);
-        for (var entry : librariesResult.declarationsFailed().entrySet()) {
-            throw new InvalidMetaException("Invalid library declaration `" + entry.getKey() + "`", entry.getValue());
+
+        LibrarySatisfyConfiguration libraries;
+        if (!librariesSection.virtual() && !librariesSection.empty()) {
+
+            var librariesResult = LibrarySatisfyConfiguration.fromSection(librariesSection);
+            for (var entry : librariesResult.declarationsFailed().entrySet()) {
+                throw new InvalidMetaException("Invalid library declaration `" + entry.getKey() + "`", entry.getValue());
+            }
+
+            for (var entry : librariesResult.pinnedFailed().entrySet()) {
+                throw new InvalidMetaException("Invalid pinned library declaration `" + entry.getKey() + "`", entry.getValue());
+            }
+
+            for (var entry : librariesResult.relocationsFailed().entrySet()) {
+                throw new InvalidMetaException("Invalid library relocation `" + entry.getKey() + "`", entry.getValue());
+            }
+
+            libraries = librariesResult.result();
+
         }
 
-        for (var entry : librariesResult.pinnedFailed().entrySet()) {
-            throw new InvalidMetaException("Invalid pinned library declaration `" + entry.getKey() + "`", entry.getValue());
+        else {
+            libraries = null;
         }
 
         try {
-            return new ModuleMeta(name, main, apiVersion, description, version, website, authors, dependencyList, librariesResult.result());
+            return new ModuleMeta(name, main, apiVersion, description, version, website, authors, dependencyList, libraries);
         }
 
         catch (IllegalArgumentException e) {
