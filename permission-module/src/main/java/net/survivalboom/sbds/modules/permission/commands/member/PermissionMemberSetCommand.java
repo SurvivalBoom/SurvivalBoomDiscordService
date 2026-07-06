@@ -38,6 +38,11 @@ public class PermissionMemberSetCommand extends CommandBase implements SlashComm
             return;
         }
 
+        if (member.getUser().isBot()) {
+            info.reply("permission.command.member.set.bot").queue();
+            return;
+        }
+
         String permissionRaw = info.arguments().getCast("permission", String.class).orElseThrow();
         String valueRaw = info.arguments().getCast("value", String.class).orElseThrow();
 

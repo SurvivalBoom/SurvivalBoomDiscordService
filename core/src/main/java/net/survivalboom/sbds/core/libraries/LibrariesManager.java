@@ -48,6 +48,8 @@ public class LibrariesManager extends Manager implements ILibrariesManager {
     private final List<LibraryDeclaration> globalPinned = new ArrayList<>();
 
 
+    private final List<ILibrary> sbdsLibraries = new ArrayList<>();
+
     public ISBDS sbds = null; // Я знаю що це безглуздно, але пішло нахуй! Має бути setter, замість public. ХРЮ ХРЮ ХРЮ! СВІНТУС!
 
 
@@ -69,7 +71,7 @@ public class LibrariesManager extends Manager implements ILibrariesManager {
 
     @Override
     protected void init0() {
-
+        loadLibrariesFromDisk();
     }
 
     @Override
@@ -77,7 +79,28 @@ public class LibrariesManager extends Manager implements ILibrariesManager {
 
     }
 
-    public void loadLibrariesFromDisk() {
+    //
+    // SETUP
+    //
+
+    public void setupSbdsLibraries(
+            @NotNull MassLibraryDownloadResult libraries
+    ) {
+
+        // Налаштовуємо root class loader //
+
+        rootClassLoader.resetSuppliers();
+        rootClassLoader.addClassSupplier("ROOT", this::rootClassRequest);
+        rootClassLoader.addResourceSupplier("SPI", n -> n.startsWith("META-INF/services/"), this::findGlobalSPIMetaInf);
+
+        // Встановлюємо закріплені бібліотеки //
+
+        this.globalPinned.addAll(libraries.request().getPinnedLibraries());
+        this.sbdsLibraries.addAll(libraries.list());
+
+    }
+
+    private void loadLibrariesFromDisk() {
 
         List<File> pomFiles = Arrays.stream(librariesDir.listFiles())
                 .filter(file -> file.isFile() && file.getName().endsWith(".pom"))
@@ -110,10 +133,7 @@ public class LibrariesManager extends Manager implements ILibrariesManager {
 
     }
 
-
-    //
     // IMPORT LIBRARIES FROM SimpleLibrariesManager //
-    //
 
     public void importFromSimpleLibrariesDownloader(@NotNull SimpleLibrariesDownloader downloader) {
 
@@ -160,6 +180,7 @@ public class LibrariesManager extends Manager implements ILibrariesManager {
 
         library = new Library(pom, file, classLoader, dependencies);
         libraryMap.put(address, library);
+        sbdsLibraries.add(library);
 
         configureLibraryClassLoader(library, classLoader);
 
@@ -179,9 +200,10 @@ public class LibrariesManager extends Manager implements ILibrariesManager {
         Objects.requireNonNull(request, "request == null");
         checkValid();
 
-        MassLibraryDownloadResult result = new MassLibraryDownloadResult(new ArrayList<>(), new ArrayList<>(), new HashMap<>());
+        MassLibraryDownloadResult result = new MassLibraryDownloadResult(request, new ArrayList<>(), new ArrayList<>(), new HashMap<>());
 
         var pinned = request.getPinnedLibraries();
+        var reloacations = request.getRelocations();
 
         for (var declaration : request.getLibraries()) {
 
@@ -205,7 +227,7 @@ public class LibrariesManager extends Manager implements ILibrariesManager {
             if (library == null) {
 
                 try {
-                    library = downloadLibrary(pom, pinned, true);
+                    library = downloadLibrary(pom, pinned, reloacations, true);
                 }
 
                 catch (LibraryDownloadException e) {
@@ -227,6 +249,7 @@ public class LibrariesManager extends Manager implements ILibrariesManager {
     public @NotNull ILibrary downloadLibrary(
             @NotNull IPomData pom,
             @Nullable Collection<LibraryDeclaration> pinned,
+            @Nullable Map<ArtifactAddress, LibraryDeclaration> relocations,
             boolean findOptimal
     ) throws LibraryDownloadException {
 
@@ -253,29 +276,52 @@ public class LibrariesManager extends Manager implements ILibrariesManager {
             pinned0.addAll(pinned);
         }
 
+        //
+        // DEPENDENCIES
+        //
+
         List<ILibrary> dependencies = new ArrayList<>();
         for (IPomData dependencyPom : pom.getDependencies()) {
 
             boolean modified = false;
 
             ArtifactAddress pomAddress = dependencyPom.getAddress();
-            LibraryDeclaration pinnedAddr = pinned0.stream()
-                    .filter(l -> l.address().group().equals(pomAddress.group()) && l.address().artifact().equals(pomAddress.artifact()))
-                    .findAny()
-                    .orElse(null);
+            LibraryDeclaration toModify = null;
 
-            if (pinnedAddr != null) {
+            // RELOCATIONS //
+
+            if (relocations != null) {
+                toModify = relocations.get(pomAddress);
+            }
+
+            // PINNED //
+
+            if (toModify == null) {
+                toModify = pinned0.stream()
+                        .filter(l -> l.address().group().equals(pomAddress.group()) && l.address().artifact().equals(pomAddress.artifact()))
+                        .findAny()
+                        .orElse(null);
+            }
+
+            if (toModify != null) {
                 modified = true;
+            }
+
+            // LOAD MODIFIED LIB //
+
+            if (toModify != null) {
 
                 try {
-                    dependencyPom = retrievePom(pinnedAddr);
+                    dependencyPom = retrievePom(toModify);
                 }
 
                 catch (PomResolutionException e) {
-                    throw new LibraryDownloadException("Failed to resolve pinned artifact `" + pinnedAddr + "`");
+                    throw new LibraryDownloadException("Failed to resolve modified artifact `" + toModify + "`");
                 }
 
             }
+
+            // LOAD LIB //
 
             ILibrary dependency = null;
             if (!modified && findOptimal) {
@@ -289,7 +335,7 @@ public class LibrariesManager extends Manager implements ILibrariesManager {
             if (dependency == null) {
 
                 try {
-                    dependency = downloadLibrary(dependencyPom, pinned0, findOptimal);
+                    dependency = downloadLibrary(dependencyPom, pinned0, relocations, findOptimal);
                 }
 
                 catch (LibraryDownloadException e) {
@@ -301,6 +347,8 @@ public class LibrariesManager extends Manager implements ILibrariesManager {
             dependencies.add(dependency);
 
         }
+
+        // DOWNLOADED //
 
         if (!file.exists()) {
 
@@ -899,30 +947,20 @@ public class LibrariesManager extends Manager implements ILibrariesManager {
     // CLASSLOADER
     //
 
-    public void setupRootClassLoader() {
-        rootClassLoader.resetSuppliers();
-        rootClassLoader.addClassSupplier("ROOT", this::rootClassRequest);
-        rootClassLoader.addResourceSupplier("SPI", n -> n.startsWith("META-INF/services/"), this::findGlobalSPIMetaInf);
-    }
-
-    public void addGlobalPinned(@NotNull Collection<LibraryDeclaration> declarations) {
-        this.globalPinned.addAll(declarations);
-    }
-
     // Переналаштовуємо ClassLoader бібліотеки.
     // 1. Повністю очищаємо усі налаштування, які встановив SimpleLibrariesDownloader.
     // 2. Налаштовуємо вже повноцінну систему доступів до класів.
     private void configureLibraryClassLoader(@NotNull ILibrary library, @NotNull DynamicClassLoader classLoader) {
         classLoader.resetSuppliers();
-        classLoader.addClassSupplier("MAIN", name -> requestClass(library, name));
+        classLoader.addClassSupplier("dependencies", name -> requestClass(library, name, false));
         classLoader.addResourceSupplier("SPI", n -> n.startsWith("META-INF/services/"), this::findGlobalSPIMetaInf);
     }
 
-    public @Nullable Class<?> requestClass(@NotNull ILibrary library, @NotNull String name) {
-        return requestClass0(library, name, new HashSet<>());
+    public @Nullable Class<?> requestClass(@NotNull ILibrary library, @NotNull String name, boolean inside) {
+        return requestClass0(library, name, inside, new HashSet<>());
     }
 
-    private @Nullable Class<?> requestClass0(@NotNull ILibrary library, @NotNull String name, @NotNull Set<ILibrary> visited) {
+    private @Nullable Class<?> requestClass0(@NotNull ILibrary library, @NotNull String name, boolean inside, @NotNull Set<ILibrary> visited) {
 
         // Защита от бесконечного цикла (StackOverflowError) между А и Б
         if (!visited.add(library)) {
@@ -932,9 +970,11 @@ public class LibrariesManager extends Manager implements ILibrariesManager {
         DynamicClassLoader libraryClassLoader = (DynamicClassLoader) library.getClassLoader();
 
         // 1. Ищем локально в самом JAR-нике библиотеки
-        Class<?> result = libraryClassLoader.getClass(name, false, false);
-        if (result != null) {
-            return result;
+        if (inside) {
+            Class<?> result = libraryClassLoader.getClass(name, false, false);
+            if (result != null) {
+                return result;
+            }
         }
 
         // 2. Ищем в зависимостях
@@ -947,26 +987,21 @@ public class LibrariesManager extends Manager implements ILibrariesManager {
         maxDependencies.addAll(connectedLibs);
 
         for (ILibrary dependency : maxDependencies) {
-            result = requestClass0(dependency, name, visited);
+            Class<?> result = requestClass0(dependency, name, true, visited);
             if (result != null) {
                 return result;
             }
         }
 
-        // 3. Фоллбек: Если мы обошли весь изолированный граф этой группы библиотек
-        // и так ничего и не нашли — отдаем запрос в rootClassLoader.
-        // Условие visited.size() == 1 убираем, так как root должен быть доступен всем,
-        // но благодаря Set<ILibrary> visited мы защищены от зацикливания.
-        return rootClassLoader.getClass(name, false, true);
+        return null;
 
     }
 
     private @Nullable Class<?> rootClassRequest(@NotNull String name) {
 
-        for (ILibrary library : libraryMap.values()) {
+        for (ILibrary library : sbdsLibraries) {
 
-            DynamicClassLoader dynamicClassLoader = (DynamicClassLoader) library.getClassLoader();
-            Class<?> clazz = dynamicClassLoader.getClass(name, false, false);
+            Class<?> clazz = requestClass(library, name, true);
             if (clazz != null) {
                 return clazz;
             }

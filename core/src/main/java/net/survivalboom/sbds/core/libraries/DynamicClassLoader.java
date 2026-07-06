@@ -1,6 +1,5 @@
 package net.survivalboom.sbds.core.libraries;
 
-import net.survivalboom.sbds.api.utils.CommonUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -132,7 +131,7 @@ public class DynamicClassLoader extends URLClassLoader {
         checkValid();
 
         String name = supplier.name;
-        if (classSuppliers.containsKey(name)) {
+        if (!classSuppliers.containsKey(name)) {
             throw new IllegalStateException("Supplier with name `" + name + "` does not exist");
         }
 

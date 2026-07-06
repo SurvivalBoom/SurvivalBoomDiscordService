@@ -147,8 +147,6 @@ public class SbdsBootstrap {
 
         librariesManager.init();
         librariesManager.importFromSimpleLibrariesDownloader(simpleLibrariesDownloader);
-        librariesManager.loadLibrariesFromDisk();
-        librariesManager.setupRootClassLoader();
 
         ConfigurationNode section = configuration.node("libraries");
         if (section.virtual()) {
@@ -160,6 +158,7 @@ public class SbdsBootstrap {
         boolean failure = false;
 
         Map<String, Exception> failed = new HashMap<>();
+        failed.putAll(request.relocationsFailed());
         failed.putAll(request.declarationsFailed());
         failed.putAll(request.pinnedFailed());
 
@@ -189,8 +188,7 @@ public class SbdsBootstrap {
             throw new RuntimeException();
         }
 
-        librariesManager.addGlobalPinned(request.result().getPinnedLibraries());
-
+        librariesManager.setupSbdsLibraries(result);
 
     }
 

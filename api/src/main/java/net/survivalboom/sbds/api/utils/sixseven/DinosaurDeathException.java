@@ -6,4 +6,12 @@ public class DinosaurDeathException extends RuntimeException {
         super("*TIMURishche died from cringe*");
     }
 
+    public DinosaurDeathException(String message) {
+        super(message);
+    }
+
+    public DinosaurDeathException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }

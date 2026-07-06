@@ -8,45 +8,6 @@ permission:
   command:
     description: Управление правами SurvivalBoom Discord Service
 
-    global:
-      description: Управление глобальными правами
-
-      list:
-        description: Показать список глобальных групп прав
-
-        empty:
-          $embed:
-            description: "Глобальные группы прав не найдены"
-            color: ff0000
-
-        success:
-          $embed:
-            title: Глобальные группы прав
-            description: "{groups}"
-            color: 2B00FF
-
-      info:
-        description: Показать информацию о глобальной группе
-
-        group:
-          name: группа
-          description: Название глобальной группы
-
-        not-found:
-          $embed:
-            description: "Группа с названием **{group}** не найдена."
-            color: ff0000
-
-        success:
-          $embed:
-            title: "Информация о группе {group.name}"
-            color: 2B00FF
-            description: |
-              **Ключ:** `{group.key}`
-              
-              **Права:**
-              {group.permissions}
-
     member:
       description: Управление правами участников на сервере
 
@@ -95,6 +56,11 @@ permission:
         not-found:
           $embed:
             description: "Пользователь не найден на этом сервере."
+            color: ff0000
+
+        bot:
+          $embed:
+            description: "Вы не можете управлять правами бота."
             color: ff0000
 
         invalid-value:

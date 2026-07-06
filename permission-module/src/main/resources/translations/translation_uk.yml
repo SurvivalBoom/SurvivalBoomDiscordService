@@ -6,46 +6,8 @@ permission:
     empty: "Немає дозволів"
 
   command:
+
     description: Керування дозволами SurvivalBoom Discord Service
-
-    global:
-      description: Керування глобальними дозволами
-
-      list:
-        description: Показати список глобальних груп дозволів
-
-        empty:
-          $embed:
-            description: "Глобальних груп дозволів не знайдено"
-            color: ff0000
-
-        success:
-          $embed:
-            title: Глобальні групи дозволів
-            description: "{groups}"
-            color: 2B00FF
-
-      info:
-        description: Показати інформацію про глобальну групу
-
-        group:
-          name: група
-          description: Назва глобальної групи
-
-        not-found:
-          $embed:
-            description: "Групу з назвою **{group}** не знайдено."
-            color: ff0000
-
-        success:
-          $embed:
-            title: "Інформація про групу {group.name}"
-            color: 2B00FF
-            description: |
-              **Ключ:** `{group.key}`
-              
-              **Дозволи:**
-              {group.permissions}
 
     member:
       description: Керування дозволами учасників на сервері
@@ -95,6 +57,11 @@ permission:
         not-found:
           $embed:
             description: "Користувача не знайдено на цьому сервері."
+            color: ff0000
+
+        bot:
+          $embed:
+            description: "Ви не можете керувати дозволами ботів."
             color: ff0000
 
         invalid-value:

@@ -80,7 +80,7 @@ public class EventManager extends Manager implements net.dv8tion.jda.api.hooks.E
             }
 
             catch (Throwable t) {
-                logger.error("Could not pass &e{} &rto &e{}&r. An exception was thrown.", event.getClass().getSimpleName(), Objects.requireNonNull(handler.getRegistration().module(), "SBDS"), t);
+                logger.error("Could not pass &e{} &rto &e{}&r. An exception was thrown.", event.getClass().getSimpleName(), Objects.requireNonNullElse(handler.getRegistration().module(), "SBDS"), t);
             }
 
             if (event instanceof ICancellable cancellable) {

@@ -4,10 +4,7 @@ import net.survivalboom.sbds.api.utils.valid.IManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Менеджер бібілотек SurvivalBoom Discord Service.
@@ -54,6 +51,7 @@ public interface ILibrariesManager extends IManager {
     @NotNull ILibrary downloadLibrary(
             @NotNull IPomData pom,
             @Nullable Collection<LibraryDeclaration> pinnedArtifacts,
+            @Nullable Map<ArtifactAddress, LibraryDeclaration> relocations,
             boolean findOptimal
     ) throws LibraryDownloadException;
 
@@ -138,9 +136,21 @@ public interface ILibrariesManager extends IManager {
 
 
     record MassLibraryDownloadResult(
+            @NotNull LibrarySatisfyConfiguration request,
             @NotNull List<ILibrary> downloaded,
             @NotNull List<ILibrary> skipped,
             @NotNull Map<LibraryDeclaration, Exception> failed
-    ) {}
+    ) {
+
+        public @NotNull List<ILibrary> list() {
+
+            List<ILibrary> list = new ArrayList<>(downloaded);
+            list.addAll(skipped);
+
+            return list;
+
+        }
+
+    }
 
 }

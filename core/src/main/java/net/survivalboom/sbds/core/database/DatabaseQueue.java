@@ -1,6 +1,7 @@
 package net.survivalboom.sbds.core.database;
 
 import net.survivalboom.sbds.api.database.DataRecord;
+import net.survivalboom.sbds.api.utils.sixseven.DinosaurDeathException;
 import net.survivalboom.sbds.api.utils.valid.Manager;
 import net.survivalboom.sbds.core.scheduler.Scheduler;
 import net.survivalboom.sbds.core.scheduler.SchedulerTask;
@@ -21,7 +22,7 @@ import java.util.function.Function;
 
 public class DatabaseQueue extends Manager {
 
-    private static final Logger log = LoggerFactory.getLogger(DatabaseQueue.class);
+    private static final Logger log = LoggerFactory.getLogger(DatabaseQueue.class.getSimpleName());
 
     private final Database database;
 
@@ -52,7 +53,8 @@ public class DatabaseQueue extends Manager {
         task = null;
 
         if (!sessionRequestsQueue.isEmpty() || !recordsSavingQueue.isEmpty()) {
-            log.warn("There is {} database queries in queue. Blocking the thread and executing them all...", sessionRequestsQueue.size() + recordsSavingQueue.size());
+            int size = sessionRequestsQueue.size() + recordsSavingQueue.size();
+            log.warn("There is {} database queries in queue. Blocking the thread and executing them all...", size);
             pushAll();
         }
 
@@ -65,6 +67,25 @@ public class DatabaseQueue extends Manager {
         // Раніше була перевірка тільки sessionRequestsQueue. Як воно взагалі працювало нафіг?
         if (sessionRequestsQueue.isEmpty() && recordsSavingQueue.isEmpty()) {
             return;
+        }
+
+        // Якщо база даних наїбнулась...
+        // Повідомимо адміну найщасливішу новину: База даних наїбнулась та усі дані втрачені! Юху!
+        if (!database.isValid() || database.isFailed()) {
+
+            int size = sessionRequestsQueue.size() + recordsSavingQueue.size();
+            log.error("There is {} database queries in queue. But database just crashed. All data in queue was lost. Womp womp.", size);
+
+            DinosaurDeathException exception = new DinosaurDeathException("Could not process request. Database was completely destroyed. Your data was fucked. Womp Womp.");
+
+            while (!sessionRequestsQueue.isEmpty()) {
+                sessionRequestsQueue.poll().future.completeExceptionally(exception);
+            }
+
+            recordsSavingQueue.clear();
+
+            return;
+
         }
 
         try (Session session = database.createSession()) {

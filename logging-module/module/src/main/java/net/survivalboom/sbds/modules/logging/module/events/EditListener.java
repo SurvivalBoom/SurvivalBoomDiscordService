@@ -54,9 +54,11 @@ public class EditListener implements EventListener {
             boolean group = config.get("events.message", Boolean.class).join().orElseThrow();
             boolean specific = config.get("events.message.edit", Boolean.class).join().orElseThrow();
 
-            TextChannel logChannel = config.get("channel", TextChannel.class).join().orElseThrow();
+            TextChannel logChannel = config.get("channel", TextChannel.class).join().orElse(null);
 
-            if (!enabled || !group || !specific) return;
+            if (logChannel == null || !enabled || !group || !specific) {
+                return;
+            }
 
             ILoggedMessage pusak = module.getCachedMessage(messageId).join();
             if (pusak == null) {

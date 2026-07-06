@@ -30,17 +30,6 @@ public record SemanticVersion(int major, int minor, int patch, @Nullable String 
     }
 
     @Override
-    public boolean equals(Object o) {
-
-        if (!(o instanceof SemanticVersion(int major1, int minor1, int patch1, String release0, String original0))) {
-            return false;
-        }
-
-        return major1 == this.major && minor1 == this.minor && patch1 == this.patch && Objects.equals(release, release0) && Objects.equals(original, original0);
-
-    }
-
-    @Override
     public int compareTo(@NotNull SemanticVersion o) {
 
         if (this.major != o.major) return Integer.compare(this.major, o.major);

@@ -65,7 +65,7 @@ public class ModulesClasspath extends Manager {
 
         Class<?> clazz = null;
         for (ILibrary library : libraries) {
-            clazz = librariesManager.requestClass(library, name);
+            clazz = librariesManager.requestClass(library, name, true);
         }
 
         if (clazz != null) {

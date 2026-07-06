@@ -66,7 +66,7 @@ public class VoiceManager extends Manager implements EventListener {
         task.tryCancel();
         task = null;
 
-        voiceMap.values().forEach(this::deleteVoice);
+        getVoices().forEach(voice -> deleteVoice(voice).join());
         voiceMap.clear();
 
     }
