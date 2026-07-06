@@ -8,45 +8,6 @@ permission:
   command:
     description: Manage SurvivalBoom Discord Service permissions
 
-    global:
-      description: Manage global permissions
-
-      list:
-        description: Show list of global permission groups
-
-        empty:
-          $embed:
-            description: "No global permission groups found"
-            color: ff0000
-
-        success:
-          $embed:
-            title: Global permission groups
-            description: "{groups}"
-            color: 2B00FF
-
-      info:
-        description: Show information about a global group
-
-        group:
-          name: group
-          description: Name of the global group
-
-        not-found:
-          $embed:
-            description: "Group named **{group}** not found."
-            color: ff0000
-
-        success:
-          $embed:
-            title: "Group information {group.name}"
-            color: 2B00FF
-            description: |
-              **Key:** `{group.key}`
-              
-              **Permissions:**
-              {group.permissions}
-
     member:
       description: Manage member permissions on the server
 
@@ -95,6 +56,11 @@ permission:
         not-found:
           $embed:
             description: "User not found on this server."
+            color: ff0000
+
+        bot:
+          $embed:
+            description: "You cannot set permissions to a bot."
             color: ff0000
 
         invalid-value:
