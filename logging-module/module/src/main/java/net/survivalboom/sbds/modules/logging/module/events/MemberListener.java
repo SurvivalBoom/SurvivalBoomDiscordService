@@ -33,7 +33,7 @@ public class MemberListener implements EventListener {
                 "events.member",
                 "events.member.join",
                 "logging.message.member.join",
-                event.getUser().getJDA().getSelfUser(),
+                "user", event.getUser().getJDA().getSelfUser(),
                 "name", memberName,
                 "user_id", event.getUser().getId()
         );
@@ -50,7 +50,7 @@ public class MemberListener implements EventListener {
                 "events.member",
                 "events.member.leave",
                 "logging.message.member.leave",
-                event.getUser().getJDA().getSelfUser(),
+                "user", event.getUser().getJDA().getSelfUser(),
                 "name", memberName,
                 "user_id", event.getUser().getId()
         );
