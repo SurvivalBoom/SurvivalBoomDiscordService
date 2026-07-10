@@ -13,24 +13,24 @@ change-interval: 30 # 30 хвилин
 statuses:
 
   - status: IDLE
-    activity: LISTENING
-    text: "ричання динозаврика"
+    activity: CUSTOM_STATUS
+    text: "Слухає ричання динозаврика"
 
   - status: IDLE
-    activity: LISTENING
-    text: "базу даних"
+    activity: CUSTOM_STATUS
+    text: "Слухає базу даних"
 
   - status: IDLE
     activity: CUSTOM_STATUS
     text: "Гризе сервер..."
 
   - status: IDLE
-    activity: PLAYING
-    text: "mc.survivalboom.net"
+    activity: CUSTOM_STATUS
+    text: "Грає у mc.survivalboom.net"
 
   - status: IDLE
-    activity: LISTENING
-    text: "смарагдове небо"
+    activity: CUSTOM_STATUS
+    text: "Слухає смарагдове небо"
 
   - status: IDLE
     activity: CUSTOM_STATUS
@@ -41,8 +41,8 @@ statuses:
     text: "*чути ричання дракона*"
 
   - status: IDLE
-    activity: LISTENING
-    text: "гр-р-р-р!"
+    activity: CUSTOM_STATUS
+    text: "Слухає гр-р-р-р!"
 
   - status: IDLE
     activity: CUSTOM_STATUS
@@ -93,8 +93,8 @@ statuses:
     text: "java -jar SBDS-4.0.0.jar"
 
   - status: IDLE
-    activity: WATCHING
-    text: "configuration.nix"
+    activity: CUSTOM_STATUS
+    text: "Дивиться configuration.nix"
 
   - status: IDLE
     activity: CUSTOM_STATUS
@@ -125,33 +125,33 @@ statuses:
     text: "свінтус 🐷"
 
   - status: IDLE
-    activity: PLAYING
-    text: "survivalboom.host"
+    activity: CUSTOM_STATUS
+    text: "Грає у survivalboom.host"
 
   - status: IDLE
-    activity: PLAYING
-    text: "BedWars"
+    activity: CUSTOM_STATUS
+    text: "Грає у BedWars"
 
   - status: IDLE
-    activity: PLAYING
-    text: "AntWars"
+    activity: CUSTOM_STATUS
+    text: "Грає у AntWars"
 
   - status: IDLE
-    activity: PLAYING
-    text: "OneBlock"
+    activity: CUSTOM_STATUS
+    text: "Грає у OneBlock"
 
   - status: IDLE
-    activity: PLAYING
-    text: "Factorio"
+    activity: CUSTOM_STATUS
+    text: "Грає у Factorio"
 
   - status: IDLE
-    activity: PLAYING
-    text: "REPO"
+    activity: CUSTOM_STATUS
+    text: "Грає у REPO"
 
   - status: IDLE
-    activity: PLAYING
-    text: "Path Of Titans"
+    activity: CUSTOM_STATUS
+    text: "Грає у Path Of Titans"
 
   - status: IDLE
-    activity: PLAYING
-    text: "SurvivalBoom"
+    activity: CUSTOM_STATUS
+    text: "Грає у SurvivalBoom"
