@@ -135,7 +135,7 @@ public class ButtonTemplate implements MessageInteractableComponentTemplate<Butt
 
         if (url != null) {
             return String.format(
-                    "ButtonTemplate{url=%s, label=%s, emoji=%s, style=%s, index=%s, slot=%s, static=%s}",
+                    "ButtonTemplate{url=%s, label=%s, emoji=%s, style=%s, index=%s, row=%s, static=%s}",
                     url,
                     label,
                     emoji,
@@ -147,7 +147,7 @@ public class ButtonTemplate implements MessageInteractableComponentTemplate<Butt
         }
 
         return String.format(
-                "ButtonTemplate{name=%s, label=%s, emoji=%s, style=%s, index=%s, slot=%s, static=%s}",
+                "ButtonTemplate{name=%s, label=%s, emoji=%s, style=%s, index=%s, row=%s, static=%s}",
                 name,
                 label,
                 emoji,
@@ -190,7 +190,7 @@ public class ButtonTemplate implements MessageInteractableComponentTemplate<Butt
                 .setLabel(label)
                 .setStyle(style)
                 .setEmoji(emoji)
-                .setSlot(row)
+                .setRow(row)
                 .setIndex(index)
                 .setStatic(isStatic);
 
@@ -215,7 +215,7 @@ public class ButtonTemplate implements MessageInteractableComponentTemplate<Butt
 
         private int index;
 
-        private int slot;
+        private int row;
 
         private boolean isStatic;
 
@@ -232,7 +232,7 @@ public class ButtonTemplate implements MessageInteractableComponentTemplate<Butt
             this.style = builder.style;
 
             this.index = builder.index;
-            this.slot = builder.slot;
+            this.row = builder.row;
 
             this.isStatic = builder.isStatic;
 
@@ -247,8 +247,8 @@ public class ButtonTemplate implements MessageInteractableComponentTemplate<Butt
             this.emoji = template.emoji;
             this.style = template.style;
 
-            this.index = template.row;
-            this.slot = template.index;
+            this.index = template.index;
+            this.row = template.row;
 
             this.isStatic = template.isStatic;
 
@@ -309,22 +309,22 @@ public class ButtonTemplate implements MessageInteractableComponentTemplate<Butt
             return style;
         }
         
-        // SLOT //
+        // ROW //
 
-        public @NotNull Builder setSlot(int slot) {
+        public @NotNull Builder setRow(int row) {
 
-            if (slot < 0 || slot > 5) {
-                throw new IllegalArgumentException("Slot must be between 0 and 5, got " + slot);
+            if (row < 0 || row > 5) {
+                throw new IllegalArgumentException("Row must be between 0 and 5, got " + row);
             }
 
-            this.slot = slot;
+            this.row = row;
 
             return this;
 
         }
         
-        public int getSlot() {
-            return slot;
+        public int getRow() {
+            return row;
         }
         
         // INDEX //
@@ -354,10 +354,10 @@ public class ButtonTemplate implements MessageInteractableComponentTemplate<Butt
         public @NotNull ButtonTemplate build() {
 
             if (url != null) {
-                return new ButtonTemplate(url, label, emoji, style, index, slot);
+                return new ButtonTemplate(url, label, emoji, style, row, index);
             }
 
-            return new ButtonTemplate(name, label, emoji, style, index, slot, isStatic);
+            return new ButtonTemplate(name, label, emoji, style, row, index, isStatic);
 
         }
 
