@@ -17,6 +17,7 @@ import net.survivalboom.sbds.api.commands.slash.SlashExecutionInfo;
 import net.survivalboom.sbds.api.commands.string.StringCommandExecutor;
 import net.survivalboom.sbds.api.commands.string.StringExecutionInfo;
 import net.survivalboom.sbds.api.interaction.InteractionHolder;
+import net.survivalboom.sbds.api.permissions.Permission;
 import net.survivalboom.sbds.modules.music.MusicModule;
 import net.survivalboom.sbds.modules.music.music.MusicManager;
 import net.survivalboom.sbds.modules.music.music.GuildPlayer;
@@ -47,7 +48,8 @@ public class LockCommand extends CommandBase implements SlashCommandExecutor, St
                 module,
                 "lock",
                 ButtonInteractionEvent.class,
-                click -> executes0(click, true)
+                click -> executes0(click, true),
+                new Permission("music.command.lock", true)
         );
 
     }

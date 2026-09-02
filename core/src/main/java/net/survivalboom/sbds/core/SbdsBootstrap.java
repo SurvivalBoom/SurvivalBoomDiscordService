@@ -68,7 +68,7 @@ public class SbdsBootstrap {
         logger.info("SurvivalBoom Network 2026 | SurvivalBoom Discord Service");
         logger.info("                    By TIMURishche \uD83E\uDD96");
         logger.info("");
-        logger.info("                    Version {}", BuildConstants.VERSION);
+        logger.info("                 Version {}-{}", BuildConstants.VERSION, BuildConstants.GIT_COMMIT);
         logger.info("");
 
         try {

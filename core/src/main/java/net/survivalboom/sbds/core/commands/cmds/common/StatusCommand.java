@@ -21,7 +21,6 @@ import net.survivalboom.sbds.api.monitoring.memory.IMemoryInfo;
 import net.survivalboom.sbds.api.monitoring.os.IOperatingSystemInfo;
 import net.survivalboom.sbds.api.scheduler.IScheduler;
 import net.survivalboom.sbds.api.utils.placeholders.Placeholders;
-import net.survivalboom.sbds.core.BuildConstants;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -64,6 +63,7 @@ public class StatusCommand extends CommandBase implements SlashCommandExecutor, 
                 **Loaded modules**
                 - {modules}
                 
+                *Compiled by: {compiled_by}*
                 """
         ));
 
@@ -98,10 +98,10 @@ public class StatusCommand extends CommandBase implements SlashCommandExecutor, 
         lines.add("> Loaded modules <");
         lines.addAll(info.sbds().getModuleManager().getModules().stream().map(m -> "- " + m.getName() + " v" + m.getMeta().getVersion() + " ~ " + (m.isEnabled() ? "Enabled" : "Disabled")).toList());
 
-        lines = placeholders.parseAll(lines);
-
+        lines.add("* Compiled by: {compiled_by}");
         lines.add("--- ---- ---- ---- ---");
 
+        lines = placeholders.parseAll(lines);
         lines.forEach(l -> info.logger().info(l));
 
     }
@@ -121,7 +121,8 @@ public class StatusCommand extends CommandBase implements SlashCommandExecutor, 
         IModuleManager moduleManager = sbds.getModuleManager();
 
         return Placeholders.of(
-                "version", BuildConstants.VERSION,
+                "version", sbds.getVersionFull(),
+                "compiled_by", sbds.getCompiledBy(),
                 "bot", jda.getSelfUser().getName() + "#" + jda.getSelfUser().getDiscriminator(),
                 "servers", jda.getGuilds().size(),
                 "runtime", osInfo.fullName(),

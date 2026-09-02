@@ -189,6 +189,8 @@ public class GuildPlayer {
         this.playingIndex = 0;
         this.playlist.clear();
 
+        this.adminLock = false;
+
     }
 
     private void task() {

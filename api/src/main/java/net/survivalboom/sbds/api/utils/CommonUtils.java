@@ -13,6 +13,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
@@ -229,16 +230,20 @@ public class CommonUtils {
 
     public static void sleep(int millis) {
         if (millis <= 0) return;
-//        if (Bukkit.isPrimaryThread()) throw new IllegalStateException("Do not attempt to freeze main thread! Fuck yourself!");
         try { Thread.sleep(millis); }
         catch (InterruptedException ignored) {}
         catch (Exception e) { throw new RuntimeException(e); }
     }
 
-    public static void waitUntil(@NotNull Supplier<Boolean> supplier, int timeOutInMillis, int checkIntervalMillis, @Nullable Runnable onCheck) {
+    public static boolean waitUntil(
+            @NotNull Supplier<Boolean> supplier,
+            int timeOutInMillis,
+            int checkIntervalMillis,
+            @Nullable Runnable onCheck,
+            @Nullable Runnable onFail
+    ) {
 
         long startTime = System.currentTimeMillis();
-
         while (!supplier.get()) {
 
             if (onCheck != null) {
@@ -247,21 +252,41 @@ public class CommonUtils {
 
             long currentTime = System.currentTimeMillis();
             if (timeOutInMillis > 0 && (currentTime - startTime) > timeOutInMillis) {
-                throw new RuntimeException("waitUntil method time out");
+
+                if (onFail != null) {
+                    onFail.run();
+                }
+
+                return false;
+
             }
 
             sleep(checkIntervalMillis);
 
         }
 
+        return true;
+
+    }
+
+    public static void waitUntil(@NotNull Supplier<Boolean> supplier, int timeOutMillis, int checkInterval) {
+        waitUntil(supplier, timeOutMillis, checkInterval, null, null);
+    }
+
+    public static void waitUntil(@NotNull Supplier<Boolean> supplier, int timeOutMillis, @NotNull Runnable onFail) {
+        waitUntil(supplier, timeOutMillis, 10, null, onFail);
     }
 
     public static void waitUntil(@NotNull Supplier<Boolean> supplier, int timeOutMillis) {
-        waitUntil(supplier, timeOutMillis, 10, null);
+        waitUntil(supplier, timeOutMillis, 10, null, () -> { throw new RuntimeException("waitUntil method timeout"); });
+    }
+
+    public static void waitUntil(@NotNull Supplier<Boolean> supplier, int timeOutMillis, @NotNull String msg) {
+        waitUntil(supplier, timeOutMillis, 10, null, () -> { throw new RuntimeException(msg); });
     }
 
     public static void waitUntil(@NotNull Supplier<Boolean> supplier) {
-        waitUntil(supplier, 0, 10, null);
+        waitUntil(supplier, 0);
     }
 
     //
@@ -317,7 +342,6 @@ public class CommonUtils {
 
     }
 
-
     //
     // REFLECTION
     //
@@ -332,10 +356,37 @@ public class CommonUtils {
 
     }
 
-    public static @Nullable Object invokeMethod(@NotNull Object origin, @NotNull Method method, Object... resources) {
+    // method //
+
+    public static <V> V invokeMethod(@NotNull Object origin, @NotNull String method, Object... resources) {
+
+        Class<?> clazz = origin.getClass();
+        Class<?>[] types = Arrays.stream(resources).map(Object::getClass).toList().toArray(new Class[0]);
+
+        Method method0;
+        try {
+            method0 = clazz.getMethod(method, types);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+
+        return invokeMethod(origin, method0, resources);
+
+    }
+
+    public static <V> V invokeMethod(@NotNull Object origin, @NotNull Method method, Object... resources) {
+        return invokeMethod(origin, method, List.of(resources));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <V> V invokeMethod(@NotNull Object origin, @NotNull Method method, @Nullable Collection<Object> resources) {
 
         Class<?>[] parameterTypes = method.getParameterTypes();
         Object[] arguments = new Object[parameterTypes.length];
+
+        if (resources == null) {
+            resources = Collections.EMPTY_LIST;
+        }
 
         for (int i = 0; i < parameterTypes.length; i++) {
             Class<?> paramType = parameterTypes[i];
@@ -367,8 +418,77 @@ public class CommonUtils {
         }
 
         try {
-            return method.invoke(origin, arguments);
+            return (V) method.invoke(origin, arguments);
         } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // constructor //
+
+    @SuppressWarnings("unchecked")
+    public static <V> V newObject(@NotNull Object origin, Object... resources) {
+
+        Class<?> clazz = origin.getClass();
+        Class<?>[] types = Arrays.stream(resources).map(Object::getClass).toList().toArray(new Class[0]);
+
+        Constructor<V> constructor;
+        try {
+            constructor = (Constructor<V>) clazz.getConstructor(types);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+
+        return newObject(origin, constructor, resources);
+
+    }
+
+    public static <V> V newObject(@NotNull Object origin, @NotNull Constructor<V> constructor, Object... resources) {
+        return newObject(origin, constructor, List.of(resources));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <V> V newObject(@NotNull Object origin, @NotNull Constructor<V> constructor, @Nullable Collection<Object> resources) {
+
+        Class<?>[] parameterTypes = constructor.getParameterTypes();
+        Object[] arguments = new Object[parameterTypes.length];
+
+        if (resources == null) {
+            resources = Collections.EMPTY_LIST;
+        }
+
+        for (int i = 0; i < parameterTypes.length; i++) {
+            Class<?> paramType = parameterTypes[i];
+            Object matchedResource = null;
+
+            // Перебираем массив ресурсов и ищем подходящий по типу
+            for (Object resource : resources) {
+                if (resource == null) continue;
+
+                // Если тип параметра можно присвоить из класса ресурса (paramType = ResourceClass)
+                if (paramType.isAssignableFrom(resource.getClass())) {
+                    matchedResource = resource;
+                    break; // Нашли первое подходящее совпадение
+                }
+            }
+
+            if (matchedResource != null) {
+                arguments[i] = matchedResource;
+            } else {
+                throw new IllegalArgumentException(
+                        String.format("Failed to invoke %s.%s. No resource found for parameter type: %s",
+                                constructor.getDeclaringClass().getSimpleName(), constructor.getName(), paramType.getName())
+                );
+            }
+        }
+
+        if (!constructor.canAccess(origin)) {
+            constructor.setAccessible(true);
+        }
+
+        try {
+            return constructor.newInstance(origin, arguments);
+        } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
             throw new RuntimeException(e);
         }
     }
@@ -721,7 +841,7 @@ public class CommonUtils {
         while (index <= attempts) {
 
             try {
-                value = supplier.getThrowing();
+                value = supplier.get();
                 break;
             }
 

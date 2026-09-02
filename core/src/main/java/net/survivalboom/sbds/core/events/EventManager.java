@@ -94,7 +94,7 @@ public class EventManager extends Manager implements net.dv8tion.jda.api.hooks.E
     @SuppressWarnings("unchecked") // <- Сасі хуй і нє псіхуй.
     private <T> void rawrrr(@NotNull ThrowingConsumer<?> consumer, @NotNull T you) throws Throwable {
         var dragonGayPorn = (ThrowingConsumer<T>) consumer;
-        dragonGayPorn.acceptThrowing(you);
+        dragonGayPorn.accept(you);
     }
 
     @Override

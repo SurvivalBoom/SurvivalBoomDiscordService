@@ -32,10 +32,10 @@ public interface IDatabase extends IManager {
 
     // CREATION //
 
-    @NotNull <T extends DataRecord> IRepository<T> createRepository(@NotNull IModule module, @NotNull String name, @NotNull Class<T> clazz);
+    @NotNull <T extends DataRecord> IRepository<T> createRepository(@NotNull IModule module, @NotNull Class<T> clazz);
 
-    default <T extends DataRecord> @NotNull IRepository<T> createRepository(@NotNull ModuleMain module, @NotNull String name, @NotNull Class<T> clazz) {
-        return createRepository(module.getModule(), name, clazz);
+    default <T extends DataRecord> @NotNull IRepository<T> createRepository(@NotNull ModuleMain module, @NotNull Class<T> clazz) {
+        return createRepository(module.getModule(), clazz);
     }
 
     // REMOVE //

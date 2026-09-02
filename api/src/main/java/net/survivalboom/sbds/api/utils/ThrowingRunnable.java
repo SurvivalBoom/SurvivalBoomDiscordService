@@ -1,22 +1,22 @@
 package net.survivalboom.sbds.api.utils;
 
-import java.util.function.Supplier;
+import org.jetbrains.annotations.NotNull;
 
 @FunctionalInterface
-public interface ThrowingSupplier<T> {
+public interface ThrowingRunnable {
 
-    T get() throws Throwable;
+    void run() throws Throwable;
 
-    static <T> Supplier<T> transform(ThrowingSupplier<T> supplier) {
+    static Runnable transform(ThrowingRunnable runnable) {
 
-        if (supplier == null) {
+        if (runnable == null) {
             return null;
         }
 
         return () -> {
 
             try {
-                return supplier.get();
+                runnable.run();
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }

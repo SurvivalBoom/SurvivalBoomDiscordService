@@ -32,7 +32,7 @@ public class TestModule extends ModuleMain {
         registerEvents(new MessageReplier(this));
         registerEvents(new EventListenerTest(this));
 
-        getSbds().getDatabase().createRepository(this, "test", TestRecord.class);
+        getSbds().getDatabase().createRepository(this, TestRecord.class);
 
         getLogger().info("Бугага! Мєня включілі! Вам всім кабздєц!");
 

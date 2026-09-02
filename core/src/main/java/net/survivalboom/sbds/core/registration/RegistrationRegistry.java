@@ -12,12 +12,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public class RegistrationRegistry extends Manager implements IRegistrationRegistry {
 
     private static final Logger log = LoggerFactory.getLogger(RegistrationRegistry.class);
-    private final Map<NamespacedKey, Registration<?>> registrationMap = new HashMap<>();
+
+    private final Map<NamespacedKey, Registration<?>> registrationMap = new ConcurrentHashMap<>();
 
     private final SBDS sbds;
 

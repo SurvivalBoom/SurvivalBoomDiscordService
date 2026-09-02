@@ -1,3 +1,4 @@
+import java.io.ByteArrayOutputStream
 
 plugins {
     application
@@ -45,7 +46,32 @@ sourceSets {
         blossom {
             javaSources {
                 property("version", project.version.toString())
+                property("commit", getGitCommitHash())
+                property("compiled_by", getBuildUser())
             }
         }
     }
+}
+
+fun getGitCommitHash(): String {
+    return try {
+
+        val process = ProcessBuilder("git", "rev-parse", "--short", "HEAD")
+            .directory(project.rootDir)
+            .redirectError(ProcessBuilder.Redirect.DISCARD)
+            .start()
+
+        val output = process.inputStream.bufferedReader().readText().trim()
+        if (process.waitFor() == 0 && output.isNotEmpty()) output else "NO-GIT"
+    } catch (e: Exception) {
+        "NO-GIT"
+    }
+}
+
+fun getBuildUser(): String {
+    val ciUser = System.getenv("GITHUB_ACTOR") // GitHub Actions
+        ?: System.getenv("GITLAB_USER_LOGIN")  // GitLab CI
+        ?: System.getenv("BUILD_USER")         // Jenkins
+
+    return ciUser ?: System.getProperty("user.name") ?: "UNKNOWN"
 }

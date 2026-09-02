@@ -44,6 +44,7 @@ import net.survivalboom.sbds.api.service.IServiceProvider;
 import net.survivalboom.sbds.api.translations.ITranslationManager;
 import net.survivalboom.sbds.api.utils.CommonUtils;
 import net.survivalboom.sbds.api.utils.ThrowingConsumer;
+import net.survivalboom.sbds.api.utils.ThrowingRunnable;
 import net.survivalboom.sbds.api.utils.placeholders.IPlaceholderRegistry;
 import net.survivalboom.sbds.api.utils.placeholders.IPlaceholders;
 import org.jetbrains.annotations.ApiStatus;
@@ -237,8 +238,8 @@ public abstract class ModuleMain {
 
     // DATABASE //
 
-    public <T extends DataRecord> IRepository<T> createRepository(@NotNull String name, @NotNull Class<T> clazz) {
-        return getDatabase().createRepository(this, name, clazz);
+    public <T extends DataRecord> IRepository<T> createRepository(@NotNull Class<T> clazz) {
+        return getDatabase().createRepository(this, clazz);
     }
 
     public <T extends DataRecord> IRepository<T> getRepository(@NotNull String name, @NotNull Class<T> clazz) {
@@ -472,23 +473,23 @@ public abstract class ModuleMain {
 
     // SCHEDULER //
 
-    public @NotNull ISchedulerTask schedule(@Nullable String name, @NotNull Consumer<ISchedulerTask> task, int delay, int period) {
+    public @NotNull ISchedulerTask schedule(@Nullable String name, @NotNull ThrowingConsumer<ISchedulerTask> task, int delay, int period) {
         return getScheduler().schedule(this, name, task, delay, period);
     }
 
-    public @NotNull ISchedulerTask schedule(@NotNull Consumer<ISchedulerTask> task, int delay, int period) {
+    public @NotNull ISchedulerTask schedule(@NotNull ThrowingConsumer<ISchedulerTask> task, int delay, int period) {
         return getScheduler().schedule(this, task, delay, period);
     }
 
-    public @NotNull ISchedulerTask schedule(@Nullable String name, @NotNull Runnable task, int delay, int period) {
+    public @NotNull ISchedulerTask schedule(@Nullable String name, @NotNull ThrowingRunnable task, int delay, int period) {
         return getScheduler().schedule(this, name, task, delay, period);
     }
 
-    public @NotNull ISchedulerTask schedule(@NotNull Runnable task, int delay, int period) {
+    public @NotNull ISchedulerTask schedule(@NotNull ThrowingRunnable task, int delay, int period) {
         return getScheduler().schedule(this, task, delay, period);
     }
 
-    public @NotNull ISchedulerTask schedule(@NotNull Runnable runnable) {
+    public @NotNull ISchedulerTask schedule(@NotNull ThrowingRunnable runnable) {
         return getScheduler().schedule(this, runnable);
     }
 

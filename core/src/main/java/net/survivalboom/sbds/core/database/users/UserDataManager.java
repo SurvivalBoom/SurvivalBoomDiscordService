@@ -3,11 +3,13 @@ package net.survivalboom.sbds.core.database.users;
 import net.survivalboom.sbds.api.database.IRepository;
 import net.survivalboom.sbds.api.database.users.IUserData;
 import net.survivalboom.sbds.api.database.users.IUserDataManager;
+import net.survivalboom.sbds.api.utils.map.SoftRefHashMap;
 import net.survivalboom.sbds.api.utils.valid.Manager;
 import net.survivalboom.sbds.core.SBDS;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.CompletableFuture;
 
@@ -17,7 +19,7 @@ public class UserDataManager extends Manager implements IUserDataManager {
 
     private IRepository<UserDataRecord> repository;
 
-    private final WeakHashMap<Long, IUserData> cache = new WeakHashMap<>();
+    private final Map<Long, IUserData> cache = new SoftRefHashMap<>();
 
 
     public UserDataManager(@NotNull SBDS sbds) {
@@ -36,7 +38,7 @@ public class UserDataManager extends Manager implements IUserDataManager {
 
     @Override
     protected void init0() {
-        this.repository = sbds.getDatabase().createRepository0(null, "users", UserDataRecord.class);
+        this.repository = sbds.getDatabase().createRepository0(null, UserDataRecord.class);
     }
 
     @Override

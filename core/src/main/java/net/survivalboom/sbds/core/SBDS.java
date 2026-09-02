@@ -269,7 +269,7 @@ public class SBDS implements ISBDS {
         }
 
         // Входимо у нескінченний цикл очікування запиту на вимкнення бота //
-        CommonUtils.waitUntil(() -> shutdownInitiated, 0, 1000, null);
+        CommonUtils.waitUntil(() -> shutdownInitiated, 0, 1000, null, null);
 
         ready = false;
 
@@ -474,6 +474,16 @@ public class SBDS implements ISBDS {
     @Override
     public @NotNull String getVersion() {
         return BuildConstants.VERSION;
+    }
+
+    @Override
+    public @NotNull String getGitCommit() {
+        return BuildConstants.GIT_COMMIT;
+    }
+
+    @Override
+    public @NotNull String getCompiledBy() {
+        return BuildConstants.COMPILED_BY;
     }
 
     @Override

@@ -5,6 +5,7 @@ import net.survivalboom.sbds.api.database.IRepository;
 import net.survivalboom.sbds.api.database.members.IMemberData;
 import net.survivalboom.sbds.api.database.members.IMemberDataManager;
 import net.survivalboom.sbds.api.utils.CommonUtils;
+import net.survivalboom.sbds.api.utils.map.SoftRefHashMap;
 import net.survivalboom.sbds.api.utils.valid.Manager;
 import net.survivalboom.sbds.core.SBDS;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +21,7 @@ public class MemberDataManager extends Manager implements IMemberDataManager {
 
     private IRepository<MemberDataRecord> repository;
 
-    private final Map<Long, IMemberData> cache = new WeakHashMap<>();
+    private final Map<Long, IMemberData> cache = new SoftRefHashMap<>();
 
 
     public MemberDataManager(@NotNull SBDS sbds) {
@@ -38,7 +39,7 @@ public class MemberDataManager extends Manager implements IMemberDataManager {
 
     @Override
     protected void init0() {
-        this.repository = sbds.getDatabase().createRepository0(null, "members", MemberDataRecord.class);
+        this.repository = sbds.getDatabase().createRepository0(null, MemberDataRecord.class);
     }
 
     @Override

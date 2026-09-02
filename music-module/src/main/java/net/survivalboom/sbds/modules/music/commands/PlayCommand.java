@@ -211,11 +211,12 @@ public class PlayCommand extends CommandBase implements SlashCommandExecutor, St
         // Запускаємо плеєр та завантажуємо треки //
 
         boolean newBot = !player.isActive();
-        player.addTracks(tracks);
-
         if (newBot) {
+            player.connect(channel);
             player.setIdleDisconnect(false);
         }
+
+        player.addTracks(tracks);
 
         // Готуємо плейсхолдери та відправляємо повідомлення, відповідно до того що ми зробили //
 

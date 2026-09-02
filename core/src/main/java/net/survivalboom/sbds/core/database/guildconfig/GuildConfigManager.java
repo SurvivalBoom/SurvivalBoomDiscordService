@@ -10,6 +10,7 @@ import net.survivalboom.sbds.api.registrations.Registration;
 import net.survivalboom.sbds.api.registrations.RegistrationManager;
 import net.survivalboom.sbds.api.translations.ITranslation;
 import net.survivalboom.sbds.api.utils.NamespacedKey;
+import net.survivalboom.sbds.api.utils.map.SoftRefHashMap;
 import net.survivalboom.sbds.api.utils.valid.Manager;
 import net.survivalboom.sbds.core.SBDS;
 import net.survivalboom.sbds.core.registration.InternalRegistrationManager;
@@ -24,7 +25,7 @@ public class GuildConfigManager extends Manager implements IGuildConfigManager, 
 
     private final InternalRegistrationManager<IGuildConfigTemplate> registry;
 
-    private final Map<Long, Map<IGuildConfigTemplate, IGuildConfig>> guildConfigCache = new WeakHashMap<>();
+    private final Map<Long, Map<IGuildConfigTemplate, IGuildConfig>> guildConfigCache = new SoftRefHashMap<>();
 
     protected final SBDS sbds;
 

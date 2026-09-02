@@ -1,17 +1,17 @@
 #
 # SURVIVALBOOM DISCORD | SURVIVALBOOM NETWORK 2026
-#      Русский перевод | By TIMURishche
+#      Свинособачий перевод | By TIMURishche
 #
 
 $name: "russian"
 $displayName: "$[lang.russian]"
-$icon: "🇷🇺"
+$icon: "🐷"
 $locale: RUSSIAN
 
 lang:
-  ukrainian: "Украинский"
-  russian: "Русский"
-  english: "Английский"
+  ukrainian: "🇺🇦 Человеческий"
+  russian: "🐷 Свинособачий"
+  english: "🇺🇸 Международный"
 
 values:
   true: "Да"

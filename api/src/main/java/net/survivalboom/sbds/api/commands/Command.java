@@ -264,7 +264,7 @@ public class Command {
             this.executor = new ConsoleCommandExecutor() {
                 @Override
                 public void executes(@NotNull ConsoleExecutionInfo info) throws Throwable {
-                    executor.acceptThrowing(info);
+                    executor.accept(info);
                 }
             };
             return this;
@@ -274,7 +274,7 @@ public class Command {
             this.executor = new StringCommandExecutor() {
                 @Override
                 public void executes(@NotNull StringExecutionInfo info) throws Throwable {
-                    executor.acceptThrowing(info);
+                    executor.accept(info);
                 }
             };
             return this;
@@ -284,14 +284,14 @@ public class Command {
             this.executor = new SlashCommandExecutor() {
                 @Override
                 public void executes(@NotNull SlashExecutionInfo info) throws Throwable {
-                    executor.acceptThrowing(info);
+                    executor.accept(info);
                 }
             };
             return this;
         }
 
         public @NotNull Builder setContextExecutor(@NotNull ThrowingConsumer<ContextInteractionInfo<?>> executor) {
-            this.executor = (ContextCommandExecutor<ContextInteractionInfo<?>>) executor::acceptThrowing;
+            this.executor = (ContextCommandExecutor<ContextInteractionInfo<?>>) executor::accept;
             return this;
         }
 

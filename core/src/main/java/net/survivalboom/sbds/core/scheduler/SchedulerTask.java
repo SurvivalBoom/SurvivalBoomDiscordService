@@ -3,6 +3,7 @@ package net.survivalboom.sbds.core.scheduler;
 import net.survivalboom.sbds.api.registrations.Registration;
 import net.survivalboom.sbds.api.scheduler.ISchedulerTask;
 import net.survivalboom.sbds.api.utils.CommonUtils;
+import net.survivalboom.sbds.api.utils.ThrowingConsumer;
 import net.survivalboom.sbds.core.modules.Module;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +23,7 @@ public class SchedulerTask implements ISchedulerTask {
     protected Registration<ISchedulerTask> registration;
 
 
-    private final Consumer<ISchedulerTask> consumer;
+    private final ThrowingConsumer<ISchedulerTask> consumer;
 
     private final int delay;
 
@@ -39,7 +40,7 @@ public class SchedulerTask implements ISchedulerTask {
 
 
     public SchedulerTask(
-            @NotNull Consumer<ISchedulerTask> consumer,
+            @NotNull ThrowingConsumer<ISchedulerTask> consumer,
             int delay,
             int period,
             @NotNull Scheduler scheduler

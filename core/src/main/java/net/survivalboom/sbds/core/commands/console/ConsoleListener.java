@@ -14,16 +14,14 @@ import net.survivalboom.sbds.api.registrations.Registration;
 import net.survivalboom.sbds.core.SBDS;
 import net.survivalboom.sbds.core.commands.AbstractCommandManager;
 import net.survivalboom.sbds.core.commands.cmds.common.StatusCommand;
-import net.survivalboom.sbds.core.commands.cmds.console.ServersCommand;
-import net.survivalboom.sbds.core.commands.cmds.console.SuicideCommand;
+import net.survivalboom.sbds.core.commands.cmds.console.*;
 import net.survivalboom.sbds.core.commands.cmds.console.database.DatabaseCommand;
 import net.survivalboom.sbds.core.commands.cmds.console.guildconfig.GuildConfigCommand;
 import net.survivalboom.sbds.core.commands.cmds.console.libraries.LibrariesCommand;
 import net.survivalboom.sbds.core.commands.cmds.console.permission.PermissionCommand;
+import net.survivalboom.sbds.core.commands.cmds.console.permission.guild.group.CommandRegistratorImpl;
 import net.survivalboom.sbds.core.commands.cmds.console.registration.RegistrationCommand;
 import net.survivalboom.sbds.core.commands.parser.StringCommandParser;
-import net.survivalboom.sbds.core.commands.cmds.console.HelpCommand;
-import net.survivalboom.sbds.core.commands.cmds.console.ShutdownCommand;
 import net.survivalboom.sbds.core.commands.cmds.console.modules.ModulesCommand;
 import net.survivalboom.sbds.core.scheduler.SchedulerTask;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +33,8 @@ public class ConsoleListener extends AbstractCommandManager<IConsoleListener.IRe
     private final Scanner scanner = new Scanner(System.in);
 
     private SchedulerTask task;
+
+    private final CommandRegistratorImpl commandRegistrator = new CommandRegistratorImpl();
 
 
     public ConsoleListener(@NotNull SBDS sbds) {
@@ -53,6 +53,8 @@ public class ConsoleListener extends AbstractCommandManager<IConsoleListener.IRe
         registerCommand0(null, new ModulesCommand());
         registerCommand0(null, new RegistrationCommand());
 
+        registerCommand0(null, new SayCommand());
+
         registerCommand0(null, new DatabaseCommand());
         registerCommand0(null, new GuildConfigCommand());
         registerCommand0(null, new PermissionCommand());
@@ -63,6 +65,8 @@ public class ConsoleListener extends AbstractCommandManager<IConsoleListener.IRe
 
         task = sbds.getScheduler().schedule0(null, "ConsoleListener", task -> this.consoleListener(), 0, 50);
 
+        this.commandRegistrator.init();
+
     }
 
     @Override
@@ -70,6 +74,8 @@ public class ConsoleListener extends AbstractCommandManager<IConsoleListener.IRe
 
         task.cancelAndWaitOrKill(100, false);
         task = null;
+
+        this.commandRegistrator.shutdown();
 
         super.shutdown0();
 

@@ -67,7 +67,7 @@ public abstract class CommandBase implements CommandExecutor {
 
             Argument<?> argument;
             try {
-                argument = (Argument<?>) CommonUtils.invokeMethod(this, method, SbdsProvider.getInstance());
+                argument = CommonUtils.invokeMethod(this, method, SbdsProvider.getInstance());
             }
 
             catch (Exception e) {

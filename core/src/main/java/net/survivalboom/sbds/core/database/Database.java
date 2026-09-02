@@ -107,7 +107,10 @@ public class Database extends Manager implements IDatabase {
 
         if (sessionFactory != null) {
             sessionFactory.close();
+            sessionFactory = null;
         }
+
+        currentAttachedRepositories.clear();
 
     }
 
@@ -290,18 +293,17 @@ public class Database extends Manager implements IDatabase {
     // CREATE //
 
     @Override
-    public <T extends DataRecord> @NotNull Repository<T> createRepository(@NotNull IModule module, @NotNull String name, @NotNull Class<T> clazz) {
+    public <T extends DataRecord> @NotNull Repository<T> createRepository(@NotNull IModule module, @NotNull Class<T> clazz) {
 
         Objects.requireNonNull(module, "module == null");
-        Objects.requireNonNull(name, "name == null");
         Objects.requireNonNull(clazz, "clazz == null");
 
-        return createRepository0(module, name, clazz);
+        return createRepository0(module, clazz);
 
     }
 
     @SuppressWarnings("unchecked")
-    public synchronized <T extends DataRecord> @NotNull Repository<T> createRepository0(@Nullable IModule module, @NotNull String name, @NotNull Class<T> clazz) {
+    public synchronized <T extends DataRecord> @NotNull Repository<T> createRepository0(@Nullable IModule module, @NotNull Class<T> clazz) {
 
         checkValid();
 
@@ -329,7 +331,7 @@ public class Database extends Manager implements IDatabase {
         }
 
         Repository<T> repository = new Repository<>(clazz, this);
-        repository.registration = (Registration<IRepository<T>>) (Registration<?>) repositoriesRegistry.register0(module, name, repository);
+        repository.registration = (Registration<IRepository<T>>) (Registration<?>) repositoriesRegistry.register0(module, tableName, repository);
 
         rebuildQueue.append(repository);
 
@@ -342,13 +344,9 @@ public class Database extends Manager implements IDatabase {
 
     @Override
     public synchronized boolean removeRepository(@NotNull IRepository<?> repository) {
-
         checkValid();
-
-        var reg = repositoriesRegistry.unregister(repository);
-
-        return reg != null;
-
+        currentAttachedRepositories.remove(repository);
+        return repositoriesRegistry.unregister(repository) != null;
     }
 
     // GETTERS //
@@ -402,6 +400,7 @@ public class Database extends Manager implements IDatabase {
 
     @Override
     public void queueSave(@NotNull DataRecord record) {
+        checkValid();
         checkRepository(record);
         queue.queueRecordSave(record);
     }

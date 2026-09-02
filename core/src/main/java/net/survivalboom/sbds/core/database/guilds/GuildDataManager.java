@@ -4,11 +4,13 @@ import net.survivalboom.sbds.api.ISBDS;
 import net.survivalboom.sbds.api.database.IRepository;
 import net.survivalboom.sbds.api.database.guilds.IGuildData;
 import net.survivalboom.sbds.api.database.guilds.IGuildDataManager;
+import net.survivalboom.sbds.api.utils.map.SoftRefHashMap;
 import net.survivalboom.sbds.api.utils.valid.Manager;
 import net.survivalboom.sbds.core.SBDS;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.CompletableFuture;
 
@@ -18,7 +20,7 @@ public class GuildDataManager extends Manager implements IGuildDataManager {
 
     private IRepository<GuildDataRecord> repository;
 
-    private final WeakHashMap<Long, IGuildData> cache = new WeakHashMap<>();
+    private final Map<Long, IGuildData> cache = new SoftRefHashMap<>();
 
 
     public GuildDataManager(@NotNull SBDS sbds) {
@@ -36,7 +38,7 @@ public class GuildDataManager extends Manager implements IGuildDataManager {
 
     @Override
     protected void init0() {
-        this.repository = sbds.getDatabase().createRepository0(null, "guilds", GuildDataRecord.class);
+        this.repository = sbds.getDatabase().createRepository0(null, GuildDataRecord.class);
     }
 
     @Override

@@ -69,6 +69,8 @@ public class ChangeStatusModule extends ModuleMain {
 
     private void changeStatus() {
 
+        CommonUtils.waitUntil(getSbds()::isReady);
+
         if (statusList.isEmpty()) {
             return;
         }

@@ -10,6 +10,21 @@ val runModules = File(runDir, "modules")
 
 subprojects {
 
+    plugins.matching { it is JavaPlugin }.configureEach {
+        configure<JavaPluginExtension> {
+            toolchain {
+                languageVersion.set(JavaLanguageVersion.of(21))
+            }
+        }
+
+        tasks.named<ProcessResources>("processResources") {
+            filesMatching("module.yml") {
+                duplicatesStrategy = DuplicatesStrategy.INCLUDE
+                expand(mapOf("version" to project.version))
+            }
+        }
+    }
+
     afterEvaluate {
 
         val resourcesDir = file("src/main/resources")
@@ -34,15 +49,7 @@ subprojects {
             }
 
         }
-    }
 
-    plugins.withType<JavaPlugin> {
-        tasks.named<ProcessResources>("processResources") {
-            filesMatching("module.yml") {
-                duplicatesStrategy = DuplicatesStrategy.INCLUDE
-                expand(mapOf("version" to project.version))
-            }
-        }
     }
 
 }

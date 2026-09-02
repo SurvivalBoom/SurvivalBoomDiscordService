@@ -34,6 +34,14 @@ public interface ISBDS {
 
     @NotNull String getVersion();
 
+    @NotNull String getGitCommit();
+
+    @NotNull String getCompiledBy();
+
+    default @NotNull String getVersionFull() {
+        return getVersion() + "-" + getGitCommit();
+    }
+
 
     @NotNull IScheduler getScheduler();
 

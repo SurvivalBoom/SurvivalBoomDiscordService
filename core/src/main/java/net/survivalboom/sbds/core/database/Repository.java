@@ -58,6 +58,7 @@ public class Repository<T extends DataRecord> extends Valid implements IReposito
 
     @Override
     public @NotNull Session requestSession() {
+        checkValid();
         return database.requestSession(this);
     }
 

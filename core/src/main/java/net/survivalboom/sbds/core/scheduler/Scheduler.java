@@ -6,6 +6,8 @@ import net.survivalboom.sbds.api.registrations.RegistrationManager;
 import net.survivalboom.sbds.api.scheduler.IScheduler;
 import net.survivalboom.sbds.api.scheduler.ISchedulerTask;
 import net.survivalboom.sbds.api.utils.CommonUtils;
+import net.survivalboom.sbds.api.utils.ThrowingConsumer;
+import net.survivalboom.sbds.api.utils.ThrowingRunnable;
 import net.survivalboom.sbds.core.SBDS;
 import net.survivalboom.sbds.api.utils.valid.Manager;
 import net.survivalboom.sbds.core.registration.InternalRegistrationManager;
@@ -16,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 public class Scheduler extends Manager implements IScheduler, RegistrationManager.Callback<ISchedulerTask> {
 
@@ -86,7 +87,7 @@ public class Scheduler extends Manager implements IScheduler, RegistrationManage
     public @NotNull SchedulerTask schedule(
             @NotNull IModule imodule,
             @Nullable String name,
-            @NotNull Consumer<ISchedulerTask> consumer,
+            @NotNull ThrowingConsumer<ISchedulerTask> consumer,
             int delay,
             int period
     ) {
@@ -97,7 +98,7 @@ public class Scheduler extends Manager implements IScheduler, RegistrationManage
     public @NotNull SchedulerTask schedule0(
             @Nullable IModule module,
             @Nullable String name,
-            @NotNull Consumer<ISchedulerTask> consumer,
+            @NotNull ThrowingConsumer<ISchedulerTask> consumer,
             int delay,
             int period
     ) {
@@ -119,7 +120,7 @@ public class Scheduler extends Manager implements IScheduler, RegistrationManage
 
     }
 
-    public @NotNull SchedulerTask schedule0(@Nullable IModule module, @Nullable String name, @NotNull Runnable runnable, int delay, int period) {
+    public @NotNull SchedulerTask schedule0(@Nullable IModule module, @Nullable String name, @NotNull ThrowingRunnable runnable, int delay, int period) {
         return schedule0(module, name, task -> runnable.run(), delay, period);
     }
 

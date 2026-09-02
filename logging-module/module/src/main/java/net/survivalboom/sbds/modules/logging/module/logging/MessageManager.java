@@ -36,7 +36,7 @@ public class MessageManager extends Manager {
     @Override
     protected void init0() {
 
-        this.messageRepository = module.createRepository("messages", MessageRecord.class);
+        this.messageRepository = module.createRepository(MessageRecord.class);
 
         ConfigurationNode config = module.getConfig();
 

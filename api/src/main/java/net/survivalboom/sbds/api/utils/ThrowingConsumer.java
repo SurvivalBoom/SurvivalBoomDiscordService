@@ -1,28 +1,28 @@
 package net.survivalboom.sbds.api.utils;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.function.Consumer;
 
 @FunctionalInterface
-public interface ThrowingConsumer<T> extends Consumer<T> {
+public interface ThrowingConsumer<T> {
 
-    @Override
-    default void accept(T t) {
+    void accept(T t) throws Throwable;
 
-        try {
-            acceptThrowing(t);
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
+    static <T> Consumer<T> transform(ThrowingConsumer<T> consumer) {
+
+        if (consumer == null) {
+            return null;
         }
 
-    }
+        return t -> {
 
-    void acceptThrowing(T t) throws Throwable;
+            try {
+                consumer.accept(t);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
 
+        };
 
-    static @NotNull <V> ThrowingConsumer<V> create(@NotNull ThrowingConsumer<V> supplier) {
-        return supplier;
     }
 
 }

@@ -54,7 +54,7 @@ public class HttpFileDownloader {
 
     public synchronized @NotNull CompletableFuture<File> downloadAsync() {
         if (used) throw new IllegalStateException("cannot reuse used object");
-        return CompletableFuture.supplyAsync(ThrowingSupplier.create(this::download));
+        return CompletableFuture.supplyAsync(ThrowingSupplier.transform(this::download));
     }
 
     public @NotNull File getDestination() {
