@@ -1,5 +1,6 @@
 package net.survivalboom.sbds.api.messages.builder;
 
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import net.survivalboom.sbds.api.interaction.component.ComponentInteractionRequest;
@@ -26,6 +27,18 @@ public abstract class AbstractMessageBuilder<it extends AbstractMessageBuilder<i
     protected Map<String, String> generatedComponentsIds = null;
 
     protected final String messageKey;
+
+    protected final List<java.util.function.BiFunction<Map<String,
+            String>,
+            StringParser,
+            ActionRow>>
+            dynamicComponentsTop = new ArrayList<>();
+
+    protected final List<java.util.function.BiFunction<Map<String,
+            String>,
+            StringParser,
+            ActionRow>>
+            dynamicComponentsBottom = new ArrayList<>();
 
     public AbstractMessageBuilder(
             @NotNull IMessages messages,
@@ -77,6 +90,16 @@ public abstract class AbstractMessageBuilder<it extends AbstractMessageBuilder<i
     // COMPONENTS
     //
 
+    public @NotNull it addDynamicComponentsTop(@NotNull java.util.function.BiFunction<Map<String, String>, net.survivalboom.sbds.api.messages.parsers.StringParser, net.dv8tion.jda.api.components.actionrow.ActionRow> row) {
+        this.dynamicComponentsTop.add(row);
+        return it();
+    }
+
+    public @NotNull it addDynamicComponentsBottom(@NotNull java.util.function.BiFunction<Map<String, String>, net.survivalboom.sbds.api.messages.parsers.StringParser, net.dv8tion.jda.api.components.actionrow.ActionRow> row) {
+        this.dynamicComponentsBottom.add(row);
+        return it();
+    }
+
     public @NotNull it setComponents(@Nullable ComponentInteractionRequest request) {
         this.components = request;
         return it();
@@ -114,8 +137,29 @@ public abstract class AbstractMessageBuilder<it extends AbstractMessageBuilder<i
             generatedComponentsIds = null;
         }
 
-        return template.createMessageData(parser, this);
+        MessageCreateBuilder result = template.createMessageData(parser, this);
 
+        if (!dynamicComponentsTop.isEmpty() || !dynamicComponentsBottom.isEmpty()) {
+
+            List<net.dv8tion.jda.api.components.MessageTopLevelComponent> combined = new ArrayList<>();
+            Map<String, String> ids = generatedComponentsIds != null ? generatedComponentsIds : java.util.Collections.emptyMap();
+
+            for (var func : dynamicComponentsTop) {
+                combined.add(func.apply(ids, parser));
+            }
+
+            for (var comp : result.getComponents()) {
+                combined.add((net.dv8tion.jda.api.components.MessageTopLevelComponent) comp);
+            }
+
+            for (var func : dynamicComponentsBottom) {
+                combined.add(func.apply(ids, parser));
+            }
+
+            result.setComponents(combined);
+        }
+
+        return result;
     }
 
     @Override
