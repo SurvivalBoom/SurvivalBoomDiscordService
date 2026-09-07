@@ -126,8 +126,8 @@ public class StringCommandManager extends AbstractCommandManager<IStringCommandM
 
         String argsRaw = string.substring(rootCmdName.length()).strip();
 
-        IRegisteredStringCommand stringCommand = getByAlias(rootCmdName);
-        if (stringCommand == null) {
+        IRegisteredStringCommand command = getByAlias(rootCmdName);
+        if (command == null) {
             message.addReaction(Emoji.fromUnicode("❓")).queue();
             return;
         }
@@ -137,17 +137,15 @@ public class StringCommandManager extends AbstractCommandManager<IStringCommandM
         MessageChannelUnion channel = event.getChannel();
         boolean isDM = channel instanceof PrivateChannel;
 
-        if (isDM && !stringCommand.isDMGlobal() && !stringCommand.getUserRegistrations().contains(author)) {
+        if (isDM && !command.isDMGlobal() && !command.getUserRegistrations().contains(author)) {
             return;
         }
 
-        if (!isDM && !stringCommand.isGuildGlobal() && !stringCommand.getGuildRegistrations().contains(guild)) {
+        if (!isDM && !command.isGuildGlobal() && !command.getGuildRegistrations().contains(guild)) {
             return;
         }
 
         // Виконуємо команду //
-
-        Command command = stringCommand.getCommand();
 
         if (isDM) {
             logger.info("[DM] User &b{} &rused command &e{}", author.getEffectiveName(), content);
@@ -157,13 +155,27 @@ public class StringCommandManager extends AbstractCommandManager<IStringCommandM
             logger.info("[{}:{}] User &b{} &rused command &e{}", guild.getName(), channel.getName(), author.getEffectiveName(), content);
         }
 
+        long userId = author.getIdLong();
+        if (!executingUsers.add(userId)) {
+            messages.reply(event, "sbds.please-wait", author).queue();
+            return;
+        }
+
+        sbds.getScheduler().schedule0(
+                null,
+                "string_cmd_" + userId,
+                () -> executeStringCommand(event, command, argsRaw, isDM),
+                0,
+                0
+        );
+
         Message resp = null;
         try {
 
             resp = command.isDeferReply() ? (Message) messages.reply(message, "sbds.loading", author).send().complete() : null;
 
-            var result = StringCommandParser.parseInput(argsRaw, command, ArgumentScope.STRING, argument -> new ArgumentParsingContext(stringCommand, command, argument));
-            var toExecute = new ArrayList<>(result.foundSubcommands());
+            StringCommandParser.Result result = StringCommandParser.parseInput(argsRaw, command, ArgumentScope.STRING, argument -> new ArgumentParsingContext(rootCommand, command, argument));
+            List<SubCommandArgument.SubCommand> toExecute = new ArrayList<>(result.foundSubcommands());
             toExecute.addFirst(new SubCommandArgument.SubCommand(command, rootCmdName));
 
             if (!isDM) {
@@ -179,8 +191,10 @@ public class StringCommandManager extends AbstractCommandManager<IStringCommandM
             boolean hasReply = false;
             for (SubCommandArgument.SubCommand execute : toExecute) {
 
-                StringExecutionInfo info = new StringExecutionInfo(message, stringCommand, command, rootCmdName, result.arguments());
-                StringCommandExecutor executor = (StringCommandExecutor) execute.command().getExecutor();
+                Command cmd = execute.command();
+
+                StringExecutionInfo info = new StringExecutionInfo(message, rootCommand, cmd, rootCmdName, result.arguments());
+                StringCommandExecutor executor = (StringCommandExecutor) cmd.getExecutor();
 
                 info.response(resp);
 
@@ -238,7 +252,7 @@ public class StringCommandManager extends AbstractCommandManager<IStringCommandM
 
         catch (Throwable t) {
             if (resp != null) resp.delete().queue();
-            logger.error("An exception occurred while attempted to execute string command &b{}", content, t);
+            logger.error("An exception occurred while attempted to execute string command &b{}", event.getMessage().getContentRaw(), t);
             sbds.getMessages().reply(message, "sbds.error", event.getAuthor())
                     .withPlaceholders("exception", t.toString().replace("`", ""))
                     .queue();
@@ -270,7 +284,7 @@ public class StringCommandManager extends AbstractCommandManager<IStringCommandM
     // SIX SEVEN! SEX SEVEN! SIX SEVEN! //
     @EventHandler
     public void onReady(@NotNull ISBDS.SbdsReadyEvent event) {
-        event.setCancelled(Boolean.getBoolean("SIX_SEVEN"));
+        event.setCancelled(System.getenv("SIX_SEVEN") != null);
     }
 
 

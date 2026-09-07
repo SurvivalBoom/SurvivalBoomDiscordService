@@ -175,40 +175,7 @@ public class SlashCommandManager extends AbstractCommandManager<SlashCommandMana
         }
 
         catch (Throwable t) {
-
-            String place = event.getGuild() != null ? event.getGuild().getName() + ":" + event.getUser().getName() : event.getUser().getName();
-
-            logger.error("[{}] An internal error occurred while attempting to perform slash command /{}", place, event.getFullCommandName(), t);
-
-            try {
-
-                messages.reply(event, "sbds.error", event.getUser())
-                        .withPlaceholders("exception", t.toString())
-                        .queue();
-
-            }
-
-            catch (Throwable tt) {
-
-                String msg = """ 
-                **SurvivalBoom Discord Service** *v{v}*
-                A low-level fatal error occurred in SurvivalBoom Discord Service while attempting to process your request!
-                This is an internal error. Looks like something went completely wrong!
-                `{e}`
-                """.replace("{v}", BuildConstants.VERSION).replace("{e}", tt.toString());
-
-                if (event.isAcknowledged()) {
-                    event.getHook().editOriginal(msg).queue();
-                }
-
-                else {
-                    event.reply(msg).queue();
-                }
-
-                throw tt;
-
-            }
-
+            processError(event, t);
         }
 
     }
