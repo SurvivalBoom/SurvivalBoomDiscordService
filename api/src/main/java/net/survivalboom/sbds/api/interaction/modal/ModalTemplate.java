@@ -148,6 +148,26 @@ public class ModalTemplate {
             return this;
         }
 
+        // SELECT MENU //
+
+        public @NotNull Builder addSelectMenu(
+                @NotNull String title,
+                @Nullable String description,
+                @NotNull StringSelectTemplate dropdown
+        ) {
+            this.components.add(new LabelTemplate(title, description, components.size(), dropdown));
+            return this;
+        }
+
+        public @NotNull Builder addSelectMenu(
+                @NotNull String title,
+                @Nullable String description,
+                @NotNull EntitySelectTemplate dropdown
+        ) {
+            this.components.add(new LabelTemplate(title, description, components.size(), dropdown));
+            return this;
+        }
+
         //
         // BUILD
         //
