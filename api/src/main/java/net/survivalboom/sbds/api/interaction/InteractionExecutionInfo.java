@@ -70,8 +70,10 @@ public abstract class InteractionExecutionInfo<event extends GenericInteractionC
     @Override
     public @NotNull RestAction<?> editRaw(@NotNull MessageCreateData data) {
 
-        if (ephemeral) {
-            throw new IllegalStateException("Cannot edit ephemeral message");
+        if (event instanceof net.dv8tion.jda.api.interactions.callbacks.IMessageEditCallback editCallback) {
+            if (!editCallback.isAcknowledged()) {
+                return editCallback.editMessage(MessageEditData.fromCreateData(data));
+            }
         }
 
         if (!(event instanceof IDeferrableCallback callback)) {
@@ -79,18 +81,19 @@ public abstract class InteractionExecutionInfo<event extends GenericInteractionC
         }
 
         if (!callback.isAcknowledged()) {
-            throw new IllegalStateException("No message sent yet");
+            throw new IllegalStateException("Cannot edit original message because no message was sent yet. Did you forget to call deferReply?");
         }
 
         return callback.getHook().editOriginal(MessageEditData.fromCreateData(data));
-
     }
 
     @Override
     public @NotNull RestAction<?> editRaw(@NotNull String txt) {
 
-        if (ephemeral) {
-            throw new IllegalStateException("Cannot edit ephemeral message");
+        if (event instanceof net.dv8tion.jda.api.interactions.callbacks.IMessageEditCallback editCallback) {
+            if (!editCallback.isAcknowledged()) {
+                return editCallback.editMessage(txt);
+            }
         }
 
         if (!(event instanceof IDeferrableCallback callback)) {
@@ -98,11 +101,10 @@ public abstract class InteractionExecutionInfo<event extends GenericInteractionC
         }
 
         if (!callback.isAcknowledged()) {
-            throw new IllegalStateException("No message sent yet");
+            throw new IllegalStateException("Cannot edit original message because no message was sent yet. Did you forget to call deferReply?");
         }
 
         return callback.getHook().editOriginal(txt);
-
     }
 
     // SEND ONLY //
@@ -179,6 +181,9 @@ public abstract class InteractionExecutionInfo<event extends GenericInteractionC
     public void invalidateInputs() {
 
         if (isEphemeral()) {
+            if (event instanceof IDeferrableCallback callback) {
+                callback.getHook().editOriginalComponents().queue(s -> {}, e -> {});
+            }
             return;
         }
 
