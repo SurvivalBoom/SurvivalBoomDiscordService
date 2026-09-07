@@ -31,10 +31,13 @@ import net.survivalboom.sbds.core.interaction.command.CommandInteractionManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SlashCommandManager extends AbstractCommandManager<SlashCommandManager.IRegisteredSlashCommand, ISlashCommandManager> implements ISlashCommandManager, EventListener {
 
     private final CommandInteractionManager commandInteractionManager;
+
+    private final Set<Long> executingUsers = ConcurrentHashMap.newKeySet();
 
     public SlashCommandManager(@NotNull SBDS sbds) {
         super(sbds);
@@ -170,8 +173,19 @@ public class SlashCommandManager extends AbstractCommandManager<SlashCommandMana
                 return;
             }
 
-            executor.executes(info);
+            long userId = event.getUser().getIdLong();
+            if (!executingUsers.add(userId)) {
+                messages.reply(event, "sbds.please-wait", event.getUser()).queue();
+                return;
+            }
 
+            sbds.getScheduler().schedule0(
+                    null,
+                    "slash_cmd_" + userId,
+                    () -> executeSlashCommand(event, userId, executor, info),
+                    0,
+                    0
+            );
         }
 
         catch (Throwable t) {
@@ -180,6 +194,65 @@ public class SlashCommandManager extends AbstractCommandManager<SlashCommandMana
 
     }
 
+    private void executeSlashCommand(
+            @NotNull SlashCommandInteractionEvent event,
+            long userId,
+            @NotNull SlashCommandExecutor executor,
+            @NotNull SlashExecutionInfo info
+    ) {
+
+        try {
+            executor.executes(info);
+        }
+
+        catch (Throwable t) {
+            processError(event, t);
+        }
+
+        finally {
+            executingUsers.remove(userId);
+        }
+
+    }
+
+    private void processError(@NotNull SlashCommandInteractionEvent event, @NotNull Throwable t) {
+
+        String place = event.getGuild() != null ? event.getGuild().getName() + ":" + event.getUser().getName() : event.getUser().getName();
+
+        logger.error("[{}] An internal error occurred while attempting to perform slash command /{}", place, event.getFullCommandName(), t);
+
+        try {
+
+            messages.reply(event, "sbds.error", event.getUser())
+                    .withPlaceholders("exception", t.toString())
+                    .queue();
+
+        }
+
+        catch (Throwable tt) {
+
+            String msg = """ 
+                **SurvivalBoom Discord Service** *v{v}*
+                A low-level fatal error occurred in SurvivalBoom Discord Service while attempting to process your request!
+                This is an internal error. Looks like something went completely wrong!
+                `{e}`
+                """.replace("{v}", BuildConstants.VERSION).replace("{e}", tt.toString());
+
+            if (event.isAcknowledged()) {
+                event.getHook().editOriginal(msg).queue();
+            }
+
+            else {
+                event.reply(msg).queue();
+            }
+
+            throw tt;
+
+        }
+
+    }
+
+    @SuppressWarnings("unused")
     @EventHandler
     public void onAutoComplete(@NotNull CommandAutoCompleteInteractionEvent event) {
 
