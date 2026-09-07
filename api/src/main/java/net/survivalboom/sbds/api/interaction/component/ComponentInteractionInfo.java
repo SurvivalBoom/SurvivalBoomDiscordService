@@ -19,6 +19,11 @@ public class ComponentInteractionInfo<event extends GenericComponentInteractionC
         this.component = component;
     }
 
+    @Override
+    public void invalidateInputs() {
+        invalidateInputs0(event.getMessage());
+    }
+
     public @NotNull IComponentInteractionManager.IRegisteredComponent component() {
         return component;
     }
