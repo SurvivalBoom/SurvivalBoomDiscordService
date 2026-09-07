@@ -677,7 +677,7 @@ public class CommonUtils {
     // TIME
     //
 
-    private static final Pattern periodPattern = Pattern.compile("([0-9]+)([shdwmy])");
+    private static final Pattern periodPattern = Pattern.compile("([0-9]+)\\s*([a-z]+)");
 
     public static @Nullable String durationToString(Duration duration) {
 
@@ -700,7 +700,7 @@ public class CommonUtils {
 
     public static @Nullable Duration getDurationFromStr(String string) {
 
-        if (string == null) {
+        if (string == null || string.isBlank()) {
             return null;
         }
 
@@ -708,28 +708,23 @@ public class CommonUtils {
 
         Matcher matcher = periodPattern.matcher(string);
         Duration duration = Duration.ZERO;
+        boolean found = false;
 
         while (matcher.find()) {
 
-            int num = Integer.parseInt(matcher.group(1));
+            found = true;
+            long num = Long.parseLong(matcher.group(1));
             String typ = matcher.group(2);
 
             Duration d = switch (typ) {
-
-                case "s" -> Duration.ofSeconds(num);
-
-                case "h" -> Duration.ofHours(num);
-
-                case "d" -> Duration.ofDays(num);
-
-                case "w" -> Duration.ofDays(num * 7L);
-
-                case "m" -> Duration.ofDays(num * 30L);
-
-                case "y" -> Duration.ofDays(num * 365L);
-
+                case "s", "sec", "secs", "second", "seconds" -> Duration.ofSeconds(num);
+                case "m", "min", "mins", "minute", "minutes" -> Duration.ofMinutes(num);
+                case "h", "hr", "hrs", "hour", "hours" -> Duration.ofHours(num);
+                case "d", "day", "days" -> Duration.ofDays(num);
+                case "w", "week", "weeks" -> Duration.ofDays(num * 7L);
+                case "mo", "mon", "month", "months" -> Duration.ofDays(num * 30L);
+                case "y", "yr", "yrs", "year", "years" -> Duration.ofDays(num * 365L);
                 default -> null;
-
             };
 
             if (d == null) {
@@ -737,10 +732,9 @@ public class CommonUtils {
             }
 
             duration = duration.plus(d);
-
         }
 
-        return duration;
+        return found ? duration : null;
 
     }
 
