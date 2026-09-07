@@ -1,8 +1,7 @@
-
 main: "net.survivalboom.sbds.modules.logging.module.LoggingModule"
 
 name: "LoggingModule"
-description: "Модуль логування для SBDS."
+description: "Модуль логування для SBDS. Це бібліотека яка логує усі події в дискорді та надає API іншим модулям"
 version: "1.0"
 
 author: Mycetik

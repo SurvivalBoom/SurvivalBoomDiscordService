@@ -1,98 +1,64 @@
 package net.survivalboom.sbds.modules.logging.module;
 
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.survivalboom.sbds.modules.logging.module.events.*;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 import net.survivalboom.sbds.api.modules.ModuleMain;
-import net.survivalboom.sbds.modules.logging.api.ILoggedMessage;
 import net.survivalboom.sbds.modules.logging.api.ILoggingModule;
-import net.survivalboom.sbds.modules.logging.module.logging.MessageManager;
+import net.survivalboom.sbds.modules.logging.api.storage.ILogDataManager;
+import net.survivalboom.sbds.modules.logging.api.storage.ILogRecordData;
+import net.survivalboom.sbds.modules.logging.module.kostily.InviteTracker;
+import net.survivalboom.sbds.modules.logging.module.listeners.*;
+import net.survivalboom.sbds.modules.logging.module.storage.LogDataManager;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class LoggingModule extends ModuleMain implements ILoggingModule {
 
-    // Окрема подяка розробникам дискорда за всрате API де не можна отримати половину інформації про евент і треба танцвюати з бубном.
-    private final MessageManager messageManager = new MessageManager(this);;
+    private LogDataManager logDataManager;
+    private InviteTracker inviteTracker;
 
     @Override
     public void onEnable() {
 
         checkAndLoadConfig();
+        /*
         addModuleTranslations2(
                 "translation_uk.yml",
                 "translation_en.yml",
                 "translation_ru.yml"
         );
+         */
 
-        messageManager.init();
+        this.logDataManager = new LogDataManager(this);
+        this.logDataManager.init();
 
-        setupGuildConfig();
+        this.inviteTracker = new InviteTracker(this);
+        this.inviteTracker.init();
 
-        // Як же круто писати цей модуль коли API ще не дописано і не має документації
-        // YOU ARE DEPRECATED <-- No, you are! KUUUURRRRWAAAA - TIMURishche
+        registerEvents(this.inviteTracker);
+        registerEvents(new MemberListener(this, this.inviteTracker));
+        registerEvents(new MessageListener(this));
+        registerEvents(new ChannelListener(this));
+        registerEvents(new VoiceListener(this));
+        registerEvents(new StageListener(this));
 
         registerService(ILoggingModule.class, this);
-
-        registerEvents(new MessageReceiveListener(this));
-        registerEvents(new DeleteListener(this));
-        registerEvents(new EditListener(this));
-        registerEvents(new MemberListener(this));
-        registerEvents(new StageListener(this));
-        registerEvents(new VoiceListener(this));
-
-        getLogger().info("Logging Module has been enabled.");
-
     }
 
     @Override
     public void onDisable() {
-        messageManager.shutdown();
-        getLogger().info("Logging Module has been disabled.");
-    }
-
-    private void setupGuildConfig() {
-        createGuildConfig(builder -> {
-            builder.setTranslation("logging.config");
-
-            builder.addField("enabled", Boolean.class, false);
-            builder.addField("channel", TextChannel.class, null);
-
-            builder.addField("events.message", Boolean.class, true);
-            builder.addField("events.message.edit", Boolean.class, true);
-            builder.addField("events.message.delete", Boolean.class, true);
-
-            builder.addField("events.member", Boolean.class, true);
-            builder.addField("events.member.join", Boolean.class, true);
-            builder.addField("events.member.leave", Boolean.class, true);
-            builder.addField("events.member.nickname", Boolean.class, true);
-            builder.addField("events.member.role_add", Boolean.class, true);
-            builder.addField("events.member.role_remove", Boolean.class, true);
-
-            builder.addField("events.voice", Boolean.class, true);
-            builder.addField("events.voice.join", Boolean.class, true);
-            builder.addField("events.voice.leave", Boolean.class, true);
-            builder.addField("events.voice.move", Boolean.class, true);
-
-            builder.addField("events.stage", Boolean.class, true);
-            builder.addField("events.stage.start", Boolean.class, true);
-            builder.addField("events.stage.end", Boolean.class, true);
-            builder.addField("events.stage.topic", Boolean.class, true);
-
-            // Сєкрєтікі
-            builder.addField("database_logging", Boolean.class, false, true);
-        });
-    }
-
-    public MessageManager getMessageManager() {
-        return messageManager;
+        this.inviteTracker.shutdown();
+        this.logDataManager.shutdown();
     }
 
     @Override
-    public @NotNull CompletableFuture<@Nullable ILoggedMessage> getCachedMessage(long messageId) {
-        return messageManager.getCachedMessage(messageId);
+    public @NotNull ILogDataManager getLogDataManager() {
+        return logDataManager;
     }
 
+    @Override
+    public @NotNull CompletableFuture<List<ILogRecordData>> getUserHistory(@NotNull Guild guild, @NotNull User user) {
+        return logDataManager.getHistory(guild, user);
+    }
 }
