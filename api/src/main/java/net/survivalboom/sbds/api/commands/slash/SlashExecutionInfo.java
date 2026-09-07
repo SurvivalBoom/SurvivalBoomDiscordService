@@ -72,11 +72,17 @@ public class SlashExecutionInfo extends CommandExecutionInfo<ISlashCommandManage
 
     @Override
     public @NotNull RestAction<?> editRaw(@NotNull String txt) {
+        if (!interaction.isAcknowledged()) {
+            throw new IllegalStateException("Cannot edit original message because no message was sent yet. Did you forget to call deferReply?");
+        }
         return interaction.getHook().editOriginal(txt);
     }
 
     @Override
     public @NotNull RestAction<?> editRaw(@NotNull MessageCreateData data) {
+        if (!interaction.isAcknowledged()) {
+            throw new IllegalStateException("Cannot edit original message because no message was sent yet. Did you forget to call deferReply?");
+        }
         return interaction.getHook().editOriginal(MessageEditData.fromCreateData(data));
     }
 
@@ -108,36 +114,20 @@ public class SlashExecutionInfo extends CommandExecutionInfo<ISlashCommandManage
 
     @Override
     public @NotNull RestAction<?> replyRaw(@NotNull String txt) {
-
-        if (currentCommand.isEphemeral()) {
-            return sendRaw(txt);
-        }
-
         if (interaction.isAcknowledged()) {
             return editRaw(txt);
-        }
-
-        else {
+        } else {
             return sendRaw(txt);
         }
-
     }
 
     @Override
     public @NotNull RestAction<?> replyRaw(@NotNull MessageCreateData data) {
-
-        if (currentCommand.isEphemeral()) {
-            return sendRaw(data);
-        }
-
         if (interaction.isAcknowledged()) {
             return editRaw(data);
-        }
-
-        else {
+        } else {
             return sendRaw(data);
         }
-
     }
 
     // COMPONENT //
