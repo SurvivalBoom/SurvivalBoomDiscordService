@@ -64,6 +64,15 @@ sbds:
         Contact server admin, if you think that this is an error.
         Permission: `{permission}`.
 
+  please-wait:
+    $embed:
+      title: "Please wait!"
+      color: ff0000
+      description: |
+        It seems that the previous command hasn't finished executing yet.
+        Wait until the previous command completes its execution.
+        If you think this is an error, contact the developer.
+
   invalid-interaction:
     $embed:
       title: "Invalid interaction!"
